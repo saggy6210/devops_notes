@@ -2,8 +2,8 @@ name: Daily DevOps Content
 
 on:
   schedule:
-    # Run daily at 6 AM UTC (11:30 AM IST)
-    - cron: "0 6 * * *"
+    # Run daily at 2:30 AM UTC (8:00 AM IST)
+    - cron: "30 2 * * *"
   workflow_dispatch:
     inputs:
       force_topic:
