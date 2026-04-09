@@ -1,0 +1,140 @@
+# DevOps Learning Hub - Jekyll Configuration
+title: DevOps Learning Hub
+description: Daily DevOps notes, concepts, and interview preparation
+author: Sagar Chavan
+url: "https://saggy6210.github.io"
+baseurl: "/devops_notes/devops"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Collections for topics
+collections:
+  docker:
+    output: true
+    permalink: /topics/docker/:name/
+  kubernetes:
+    output: true
+    permalink: /topics/kubernetes/:name/
+  terraform:
+    output: true
+    permalink: /topics/terraform/:name/
+  ansible:
+    output: true
+    permalink: /topics/ansible/:name/
+  azure:
+    output: true
+    permalink: /topics/azure/:name/
+  aws:
+    output: true
+    permalink: /topics/aws/:name/
+  bash:
+    output: true
+    permalink: /topics/bash/:name/
+  python:
+    output: true
+    permalink: /topics/python/:name/
+  monitoring:
+    output: true
+    permalink: /topics/monitoring/:name/
+  cicd:
+    output: true
+    permalink: /topics/cicd/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "topic"
+  - scope:
+      path: "topics"
+    values:
+      layout: "topic"
+
+# Exclude from build
+exclude:
+  - scripts/
+  - prompts/
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/
+
+# Navigation
+navigation:
+  - title: Home
+    url: /
+  - title: Docker
+    url: /topics/docker/
+  - title: Kubernetes
+    url: /topics/kubernetes/
+  - title: Terraform
+    url: /topics/terraform/
+  - title: Ansible
+    url: /topics/ansible/
+  - title: Azure
+    url: /topics/azure/
+  - title: AWS
+    url: /topics/aws/
+  - title: Bash
+    url: /topics/bash/
+  - title: Python
+    url: /topics/python/
+  - title: Monitoring
+    url: /topics/monitoring/
+  - title: CI/CD
+    url: /topics/cicd/
+
+# Topics metadata
+topics:
+  docker:
+    name: Docker
+    icon: 🐳
+    description: Container technology fundamentals
+  kubernetes:
+    name: Kubernetes
+    icon: ☸️
+    description: Container orchestration platform
+  terraform:
+    name: Terraform
+    icon: 🏗️
+    description: Infrastructure as Code
+  ansible:
+    name: Ansible
+    icon: ⚙️
+    description: Configuration management
+  azure:
+    name: Azure
+    icon: ☁️
+    description: Microsoft Cloud Platform
+  aws:
+    name: AWS
+    icon: 🌩️
+    description: Amazon Web Services
+  bash:
+    name: Bash Scripting
+    icon: 💻
+    description: Shell scripting fundamentals
+  python:
+    name: Python
+    icon: 🐍
+    description: Python for DevOps
+  monitoring:
+    name: Monitoring
+    icon: 📊
+    description: Grafana, Prometheus, Datadog
+  cicd:
+    name: CI/CD
+    icon: 🔄
+    description: GitLab, GitHub Actions, Jenkins

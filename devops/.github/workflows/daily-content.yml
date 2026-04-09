@@ -1,0 +1,141 @@
+name: Daily DevOps Content
+
+on:
+  schedule:
+    # Run daily at 6 AM UTC (11:30 AM IST)
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    inputs:
+      force_topic:
+        description: 'Force specific topic (e.g., docker, kubernetes)'
+        required: false
+        type: string
+
+jobs:
+  generate-content:
+    name: Generate Daily Content
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      
+      - name: Install dependencies
+        run: |
+          pip install -r devops/scripts/requirements.txt
+      
+      - name: Verify Gemini API key
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "❌ GEMINI_API_KEY secret is not set"
+            echo "Please add GEMINI_API_KEY to repository secrets"
+            exit 1
+          fi
+          echo "✅ GEMINI_API_KEY is configured"
+      
+      - name: Generate daily content
+        run: |
+          cd devops
+          python scripts/content_generator.py
+      
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Commit and push changes
+        run: |
+          git add devops/topics/
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No new content generated"
+            exit 0
+          fi
+          
+          # Get the topic and day from the latest file
+          LATEST_FILE=$(git diff --staged --name-only | head -1)
+          TOPIC=$(echo $LATEST_FILE | cut -d'/' -f3)
+          DAY=$(echo $LATEST_FILE | grep -oP 'day-\d+' || echo "new")
+          
+          git commit -m "📚 Daily content: ${TOPIC} ${DAY}
+
+          Automated content generation via GitHub Actions.
+          Generated on: $(date -u '+%Y-%m-%d %H:%M UTC')"
+          
+          git push
+      
+      - name: Summary
+        run: |
+          echo "## 📚 Daily Content Generated" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "New content has been added to the DevOps Learning Hub." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "View the site: https://saggy6210.github.io/devops_notes/devops/" >> $GITHUB_STEP_SUMMARY
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: generate-content
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+          bundler-cache: true
+      
+      - name: Install Jekyll
+        run: |
+          cd devops
+          gem install bundler jekyll
+          bundle init || true
+          echo 'gem "jekyll"' >> Gemfile
+          echo 'gem "minima"' >> Gemfile
+          echo 'gem "jekyll-feed"' >> Gemfile
+          echo 'gem "jekyll-seo-tag"' >> Gemfile
+          echo 'gem "jekyll-sitemap"' >> Gemfile
+          bundle install
+      
+      - name: Build Jekyll site
+        run: |
+          cd devops
+          bundle exec jekyll build --baseurl "/devops_notes/devops"
+        env:
+          JEKYLL_ENV: production
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: devops/_site
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
