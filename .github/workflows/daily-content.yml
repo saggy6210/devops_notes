@@ -104,24 +104,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: master
       
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
-          bundler-cache: true
       
-      - name: Install Jekyll
+      - name: Install dependencies
         run: |
           cd devops
           gem install bundler jekyll
-          bundle init || true
-          echo 'gem "jekyll"' >> Gemfile
-          echo 'gem "minima"' >> Gemfile
-          echo 'gem "jekyll-feed"' >> Gemfile
-          echo 'gem "jekyll-seo-tag"' >> Gemfile
-          echo 'gem "jekyll-sitemap"' >> Gemfile
           bundle install
       
       - name: Build Jekyll site
