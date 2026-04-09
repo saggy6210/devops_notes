@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Docker Learning - Container fundamentals, commands, and interview preparation">
+    <title>Docker | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/topic.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo">
+                <i class="fas fa-terminal"></i>
+                <span>DevOps Hub</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="../../" class="nav-link">Home</a></li>
+                <li><a href="../../#topics" class="nav-link">Topics</a></li>
+                <li><a href="../../#learning-path" class="nav-link">Learning Path</a></li>
+                <li><a href="../../#about" class="nav-link">About</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Topic Header -->
+    <header class="topic-hero docker-theme">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../../#topics">Topics</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Docker</span>
+            </div>
+            <div class="topic-hero-content">
+                <div class="topic-hero-text">
+                    <div class="topic-badge">
+                        <i class="fab fa-docker"></i>
+                        <span>Container Technology</span>
+                    </div>
+                    <h1>Docker</h1>
+                    <p>Master containerization from basics to production. Learn to build, ship, and run applications anywhere with Docker.</p>
+                    <div class="topic-stats">
+                        <div class="topic-stat">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>10 Days</span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-question-circle"></i>
+                            <span>50+ Q&A</span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-code"></i>
+                            <span>Hands-on Labs</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="topic-hero-icon">
+                    <i class="fab fa-docker"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="topic-main">
+        <div class="container">
+            <div class="topic-layout">
+                <!-- Sidebar -->
+                <aside class="topic-sidebar">
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-list"></i> Course Content</h3>
+                        <ul class="day-list">
+                            <li class="active">
+                                <a href="day-01-core-concepts.html">
+                                    <span class="day-number">01</span>
+                                    <span class="day-title">Core Concepts</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="locked">
+                                <a href="#">
+                                    <span class="day-number">02</span>
+                                    <span class="day-title">Networking</span>
+                                    <i class="fas fa-lock"></i>
+                                </a>
+                            </li>
+                            <li class="locked">
+                                <a href="#">
+                                    <span class="day-number">03</span>
+                                    <span class="day-title">Volumes & Storage</span>
+                                    <i class="fas fa-lock"></i>
+                                </a>
+                            </li>
+                            <li class="locked">
+                                <a href="#">
+                                    <span class="day-number">04</span>
+                                    <span class="day-title">Dockerfile Best Practices</span>
+                                    <i class="fas fa-lock"></i>
+                                </a>
+                            </li>
+                            <li class="locked">
+                                <a href="#">
+                                    <span class="day-number">05</span>
+                                    <span class="day-title">Multi-stage Builds</span>
+                                    <i class="fas fa-lock"></i>
+                                </a>
+                            </li>
+                            <li class="locked">
+                                <a href="#">
+                                    <span class="day-number">06</span>
+                                    <span class="day-title">Docker Compose</span>
+                                    <i class="fas fa-lock"></i>
+                                </a>
+                            </li>
+                            <li class="locked">
+                                <a href="#">
+                                    <span class="day-number">07</span>
+                                    <span class="day-title">Security Best Practices</span>
+                                    <i class="fas fa-lock"></i>
+                                </a>
+                            </li>
+                            <li class="locked">
+                                <a href="#">
+                                    <span class="day-number">08</span>
+                                    <span class="day-title">Logging & Debugging</span>
+                                    <i class="fas fa-lock"></i>
+                                </a>
+                            </li>
+                            <li class="locked">
+                                <a href="#">
+                                    <span class="day-number">09</span>
+                                    <span class="day-title">Production Deployment</span>
+                                    <i class="fas fa-lock"></i>
+                                </a>
+                            </li>
+                            <li class="locked">
+                                <a href="#">
+                                    <span class="day-number">10</span>
+                                    <span class="day-title">Interview Deep Dive</span>
+                                    <i class="fas fa-lock"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sidebar-card quick-ref">
+                        <h3><i class="fas fa-terminal"></i> Quick Reference</h3>
+                        <div class="quick-commands">
+                            <code>docker run -d nginx</code>
+                            <code>docker ps</code>
+                            <code>docker logs &lt;id&gt;</code>
+                            <code>docker exec -it &lt;id&gt; sh</code>
+                            <code>docker build -t app .</code>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Content Area -->
+                <div class="topic-content">
+                    <div class="content-card start-card">
+                        <div class="start-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h2>Start Your Docker Journey</h2>
+                        <p>Begin with the fundamentals and progressively build your container expertise. Each day covers concepts, hands-on commands, and interview preparation.</p>
+                        <a href="day-01-core-concepts.html" class="btn btn-primary btn-large">
+                            <i class="fas fa-play"></i> Start Day 1: Core Concepts
+                        </a>
+                    </div>
+
+                    <div class="content-card learning-path-card">
+                        <h3><i class="fas fa-road"></i> What You'll Learn</h3>
+                        <div class="learning-grid">
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-cube"></i></div>
+                                <h4>Container Basics</h4>
+                                <p>Understand containers, images, and registries</p>
+                            </div>
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-network-wired"></i></div>
+                                <h4>Networking</h4>
+                                <p>Bridge, host, overlay networks and DNS</p>
+                            </div>
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-database"></i></div>
+                                <h4>Storage</h4>
+                                <p>Volumes, bind mounts, and data persistence</p>
+                            </div>
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-file-code"></i></div>
+                                <h4>Dockerfile</h4>
+                                <p>Write optimized, production-ready images</p>
+                            </div>
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-layer-group"></i></div>
+                                <h4>Compose</h4>
+                                <p>Multi-container applications made easy</p>
+                            </div>
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-shield-alt"></i></div>
+                                <h4>Security</h4>
+                                <p>Best practices for secure containers</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card prereq-card">
+                        <h3><i class="fas fa-clipboard-check"></i> Prerequisites</h3>
+                        <ul class="prereq-list">
+                            <li><i class="fas fa-check"></i> Basic Linux command line knowledge</li>
+                            <li><i class="fas fa-check"></i> Understanding of processes and filesystem</li>
+                            <li><i class="fas fa-check"></i> Docker installed on your machine</li>
+                        </ul>
+                        <div class="install-note">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Install Docker: <a href="https://docs.docker.com/get-docker/" target="_blank">docs.docker.com/get-docker</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="../../" class="footer-logo">
+                        <i class="fas fa-terminal"></i>
+                        <span>DevOps Hub</span>
+                    </a>
+                    <p>Your daily companion for DevOps learning and interview preparation.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Topics</h4>
+                    <ul>
+                        <li><a href="../docker/">Docker</a></li>
+                        <li><a href="../kubernetes/">Kubernetes</a></li>
+                        <li><a href="../terraform/">Terraform</a></li>
+                        <li><a href="../ansible/">Ansible</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="../../#learning-path">Learning Path</a></li>
+                        <li><a href="https://github.com/saggy6210/devops_notes" target="_blank">GitHub</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 DevOps Learning Hub. Made with <i class="fas fa-heart"></i> for the DevOps community.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile nav toggle
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+            this.classList.toggle('active');
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
