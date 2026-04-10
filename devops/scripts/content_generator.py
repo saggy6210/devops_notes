@@ -160,8 +160,14 @@ def load_prompt() -> str:
     return "You are a DevOps expert creating educational content."
 
 
+import re
+
 def get_existing_content(topics_dir: Path) -> dict:
-    """Scan existing content to determine progress."""
+    """
+    Scan existing content to determine progress.
+    Returns the highest day number found for each topic.
+    This ensures we always generate the next day, even if some days are missing.
+    """
     progress = {}
     
     for topic in CURRICULUM.keys():
@@ -170,9 +176,15 @@ def get_existing_content(topics_dir: Path) -> dict:
             progress[topic] = 0
             continue
         
-        # Count day-XX files
-        day_files = list(topic_dir.glob("day-*.html"))
-        progress[topic] = len(day_files)
+        # Find all day-XX files (both .html and .md) and extract day numbers
+        max_day = 0
+        for filepath in topic_dir.iterdir():
+            match = re.match(r'day-(\d+)', filepath.name)
+            if match:
+                day_num = int(match.group(1))
+                max_day = max(max_day, day_num)
+        
+        progress[topic] = max_day
     
     return progress
 
@@ -181,6 +193,8 @@ def get_next_topic(progress: dict) -> tuple[str, int, str]:
     """
     Determine the next topic to generate based on progress.
     Returns: (topic_name, day_number, subtopic_name)
+    
+    Always generates the next sequential day for the first incomplete topic.
     """
     # Order of topics
     topic_order = list(CURRICULUM.keys())
