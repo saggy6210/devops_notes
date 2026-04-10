@@ -1,170 +1,1207 @@
----
-layout: topic
-title: Networking
-category: docker
-day: 2
-date: 2026-04-10
-description: Docker - Networking
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Docker Networking - Day 2: Learn network drivers, bridge, host, overlay networks with interview Q&A">
+    <title>Day 2: Docker Networking | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2496ed;
+            --primary-dark: #1a7cc4;
+            --secondary: #0f172a;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --bg: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-dark: #0f172a;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
 
-# Networking
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+        }
 
-Docker networking allows containers to communicate with each other and with the outside world. Docker provides several network drivers, each suited for different use cases.
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            z-index: 9999;
+            transition: width 0.3s;
+        }
 
-## Core Concepts
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+        }
 
-Docker uses a pluggable network driver system. Key drivers include:
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-*   **Bridge (Default)**:
-    *   Creates a private internal network on the host.
-    *   Containers on the *default bridge* network can communicate with each other by IP address, but not by name.
-    *   Containers on a *user-defined bridge* network can communicate by IP address or container name/alias.
-    *   Provides network isolation and allows port mapping (e.g., `-p 80:80`).
-*   **Host**:
-    *   Removes network isolation between the container and the Docker host.
-    *   The container uses the host's network stack directly.
-    *   No port mapping is needed or possible (container ports are directly exposed on the host).
-    *   Useful for performance-sensitive applications or when the container needs to see all network interfaces of the host.
-*   **None**:
-    *   Disables all networking for the container.
-    *   The container has a loopback interface only.
-    *   Useful for batch jobs that don't require network access.
-*   **Overlay**:
-    *   Used in Docker Swarm mode to enable communication between containers running on different Docker hosts.
-    *   Creates a distributed network across multiple hosts.
-*   **Macvlan**:
-    *   Assigns a MAC address to a container, making it appear as a physical device on the network.
-    *   Allows containers to connect directly to the physical network, bypassing the Docker host's network stack.
-    *   Useful for legacy applications that expect to be directly connected to the physical network.
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            color: var(--secondary);
+            text-decoration: none;
+        }
 
-## Key Points
+        .nav-logo i {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-*   **User-defined bridge networks** are preferred over the default bridge for better isolation, interoperability, and DNS resolution (containers can resolve each other by name).
-*   Containers on the same user-defined bridge network can communicate with each other without exposing ports to the host.
-*   Port mapping (`-p`) is used to expose container ports to the Docker host's network.
-*   `docker network inspect` provides detailed information about a network.
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+        }
 
-## Commands/Syntax
+        .nav-links a {
+            padding: 8px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
 
-1.  **List Docker networks:**
-    ```bash
-    docker network ls
-    ```
+        .nav-links a:hover {
+            color: var(--primary);
+            background: var(--bg-secondary);
+        }
 
-2.  **Create a user-defined bridge network:**
-    ```bash
-    docker network create my-app-network
-    ```
+        .hero {
+            padding: 140px 24px 80px;
+            background: linear-gradient(180deg, #e0f2fe 0%, var(--bg) 100%);
+            position: relative;
+            overflow: hidden;
+        }
 
-3.  **Run a container on a specific network:**
-    ```bash
-    docker run -d --name webserver --network my-app-network -p 80:80 nginx
-    docker run -d --name database --network my-app-network postgres
-    ```
-    *Note: `webserver` and `database` can now communicate by their names.*
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 100px;
+            right: -200px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(36,150,237,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
 
-4.  **Connect a running container to a network:**
-    ```bash
-    docker network connect my-app-network my-existing-container
-    ```
+        .hero-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
 
-5.  **Disconnect a container from a network:**
-    ```bash
-    docker network disconnect my-app-network my-container
-    ```
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.875rem;
+            margin-bottom: 24px;
+        }
 
-6.  **Inspect a network:**
-    ```bash
-    docker network inspect my-app-network
-    ```
-    *Shows connected containers, IP addresses, gateway, etc.*
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
 
-7.  **Run a container using the host network:**
-    ```bash
-    docker run -d --name my-host-app --network host my-image
-    ```
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb i { font-size: 0.7rem; color: var(--text-light); }
+        .breadcrumb span { color: var(--text); font-weight: 500; }
 
-## Interview Questions
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
 
-1.  **What are the different network drivers available in Docker?**
-    *   **Answer:** The main drivers are `bridge` (default and user-defined), `host`, `none`, `overlay` (for Swarm), and `macvlan`.
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
 
-2.  **What is the difference between the default bridge network and a user-defined bridge network?**
-    *   **Answer:**
-        *   **Default Bridge:** Containers can communicate by IP, but not by name. Provides less isolation.
-        *   **User-defined Bridge:** Containers can communicate by IP or by container name/alias. Provides better isolation and built-in DNS resolution. Recommended for most applications.
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-3.  **How do containers on the same user-defined bridge network communicate with each other?**
-    *   **Answer:** They can communicate directly using their container names or aliases as hostnames, or by their IP addresses. Docker's embedded DNS server handles name resolution.
+        .hero-description {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 32px;
+        }
 
-4.  **When would you use the `host` network driver?**
-    *   **Answer:** When you need the container to have direct access to the host's network stack, bypassing network isolation. This can be useful for performance-sensitive applications, monitoring tools, or when the container needs to expose a large range of ports directly on the host.
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
 
-5.  **Explain the purpose of port mapping (`-p` or `--publish`) in Docker.**
-    *   **Answer:** Port mapping maps a port on the Docker host to a port inside the container. This allows external traffic to reach a service running inside the container. For example, `-p 8080:80` maps host port 8080 to container port 80.
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: var(--bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
 
-6.  **What is the `overlay` network driver primarily used for?**
-    *   **Answer:** The `overlay` network driver is primarily used in Docker Swarm mode to enable communication between containers running on different Docker hosts in a Swarm cluster. It creates a distributed network across multiple nodes.
+        .meta-item i {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, rgba(36,150,237,0.1), rgba(6,182,212,0.1));
+            color: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-## Scenario Questions
+        .meta-item span {
+            font-weight: 600;
+            color: var(--secondary);
+        }
 
-1.  **Scenario:** You have two Docker containers, `web-app` (running Nginx) and `database` (running PostgreSQL), on the same Docker host. `web-app` needs to connect to `database`. Currently, they are both running on the default bridge network and `web-app` cannot resolve `database` by name.
-    *   **How would you ensure they can communicate securely and by name without exposing the database port to the host?**
-    *   **Answer:**
-        1.  Create a user-defined bridge network: `docker network create my-app-network`.
-        2.  Stop and remove the existing containers (if running).
-        3.  Run both containers on the new network:
-            ```bash
-            docker run -d --name database --network my-app-network postgres
-            docker run -d --name web-app --network my-app-network -p 80:80 nginx
-            ```
-        Now, `web-app` can connect to `database` using the hostname `database` on port 5432 (PostgreSQL default) without exposing port 5432 to the Docker host.
+        .meta-item small {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
 
-2.  **Scenario:** You have a containerized application that needs to send UDP packets to a specific multicast address on your local network. The default bridge network is blocking this.
-    *   **Which network driver would you use to allow the container to directly participate in the host's network for multicast communication?**
-    *   **Answer:** The `host` network driver would be most suitable. By running the container with `--network host`, it will share the host's network stack and can directly access the physical network interfaces, allowing it to send/receive multicast traffic.
+        .main-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
 
-## Architecture Questions
+        .section-card {
+            background: var(--bg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            margin-bottom: 40px;
+            overflow: hidden;
+            transition: box-shadow 0.3s;
+        }
 
-1.  **Design a network setup for a three-tier application (Web, Application, Database) running on a single Docker host, ensuring isolation and secure communication.**
-    *   **Answer:**
-        *   Create a single user-defined bridge network, e.g., `app-network`.
-        *   Run all three containers (Web, Application, Database) on this `app-network`.
-        *   **Web Container:** Expose port 80/443 to the host using `-p 80:80 -p 443:443` so external users can access it.
-        *   **Application Container:** Connects to the Database container using its name (e.g., `database:5432`).
-        *   **Database Container:** Does not expose any ports to the host. It is only accessible by other containers on the `app-network`.
-        *   **Diagram:**
-            ```
-            [Internet]
-                |
-                v
-            [Docker Host]
-                |
-                +---[app-network (user-defined bridge)]---+
-                |                                         |
-                v                                         v
-            [Web Container] <---> [App Container] <---> [DB Container]
-            (Port 80/443 mapped)  (Connects to DB by name)
-            ```
+        .section-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
 
-2.  **How would your network design change if you needed to scale this three-tier application across multiple Docker hosts using Docker Swarm?**
-    *   **Answer:**
-        *   Instead of a user-defined bridge network, an **overlay network** would be used.
-        *   The overlay network would be created once in the Swarm manager and span across all participating Docker hosts.
-        *   All service replicas (Web, App, DB) would be deployed onto this single overlay network.
-        *   Containers (or service tasks) on the overlay network can communicate by service name, regardless of which host they are running on.
-        *   **Diagram (Simplified):**
-            ```
-            [Internet]
-                |
-                v
-            [Docker Swarm Cluster]
-                |
-                +---[Overlay Network]---+
-                |                       |
-                v                       v
-            [Host 1]                [Host 2]
-            [Web-1]                 [Web-2]
-            [App-1] <---> [Overlay Network] <---> [App-2]
-            [DB-1]                  [DB-2]
-            ```
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px 28px;
+            background: linear-gradient(135deg, rgba(36,150,237,0.05), rgba(6,182,212,0.02));
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .section-body {
+            padding: 28px;
+        }
+
+        .info-box {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: linear-gradient(135deg, #eff6ff, #f0fdfa);
+            border-radius: var(--radius);
+            margin-bottom: 24px;
+        }
+
+        .info-box i {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .info-box p {
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        .info-box strong {
+            color: var(--secondary);
+        }
+
+        .analogy-card {
+            display: flex;
+            gap: 20px;
+            padding: 24px;
+            background: linear-gradient(135deg, #fef3c7, #fef9c3);
+            border-radius: var(--radius);
+            border-left: 4px solid var(--warning);
+        }
+
+        .analogy-card .icon {
+            width: 50px;
+            height: 50px;
+            background: var(--warning);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .analogy-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .analogy-card p {
+            color: var(--text-secondary);
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .concept-item {
+            padding: 24px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .concept-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .concept-item .icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+        }
+
+        .concept-item h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--secondary);
+        }
+
+        .concept-item p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .concept-item code {
+            display: block;
+            padding: 10px 14px;
+            background: var(--bg-dark);
+            color: var(--success);
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+
+        .command-cards {
+            display: grid;
+            gap: 12px;
+        }
+
+        .command-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .command-card:hover {
+            border-color: var(--primary);
+            background: var(--bg);
+        }
+
+        .command-card code {
+            flex: 1;
+            padding: 10px 14px;
+            background: var(--bg-dark);
+            color: #22d3ee;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+
+        .command-card .desc {
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .copy-btn {
+            padding: 8px 12px;
+            background: var(--bg-dark);
+            border: none;
+            border-radius: 6px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            color: var(--primary);
+        }
+
+        .qa-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .qa-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .qa-item:hover {
+            border-color: var(--primary);
+        }
+
+        .qa-item.active {
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .qa-question {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            cursor: pointer;
+            background: var(--bg);
+            transition: background 0.2s;
+        }
+
+        .qa-question:hover {
+            background: var(--bg-secondary);
+        }
+
+        .qa-number {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .qa-question h4 {
+            flex: 1;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .qa-question .toggle {
+            color: var(--text-light);
+            transition: transform 0.3s;
+        }
+
+        .qa-item.active .qa-question .toggle {
+            transform: rotate(180deg);
+        }
+
+        .qa-answer {
+            display: none;
+            padding: 0 20px 20px 72px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .qa-item.active .qa-answer {
+            display: block;
+        }
+
+        .qa-answer ul, .qa-answer ol {
+            margin: 12px 0;
+            padding-left: 20px;
+        }
+
+        .qa-answer li {
+            margin-bottom: 8px;
+        }
+
+        .qa-answer strong {
+            color: var(--text);
+        }
+
+        .qa-answer code {
+            background: var(--bg-dark);
+            color: var(--success);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .scenario-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(6,182,212,0.05));
+            border-bottom: 1px solid var(--border);
+        }
+
+        .scenario-header .icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scenario-header h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .scenario-body {
+            padding: 20px;
+        }
+
+        .scenario-body h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 16px 0 12px;
+        }
+
+        .scenario-body h5:first-child {
+            margin-top: 0;
+        }
+
+        .scenario-body ol, .scenario-body ul {
+            padding-left: 24px;
+        }
+
+        .scenario-body li {
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .scenario-body code {
+            background: var(--bg-dark);
+            color: var(--success);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .arch-visual {
+            background: var(--bg-dark);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            margin: 24px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .arch-diagram {
+            position: relative;
+            z-index: 1;
+        }
+
+        .arch-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .arch-box {
+            text-align: center;
+            color: white;
+        }
+
+        .arch-box .box {
+            padding: 16px 24px;
+            border-radius: var(--radius);
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            min-width: 120px;
+        }
+
+        .arch-box .box.bridge { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .arch-box .box.host { background: linear-gradient(135deg, #10b981, #059669); }
+        .arch-box .box.overlay { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .arch-box .box.none { background: #64748b; }
+        .arch-box .box.macvlan { background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+        .arch-box small {
+            display: block;
+            color: var(--text-light);
+            font-size: 0.75rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            background: var(--secondary);
+            color: var(--text-light);
+            padding: 60px 24px;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+            text-decoration: none;
+        }
+
+        .footer-logo i {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-links h4 {
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2rem; }
+            .hero-meta { flex-direction: column; gap: 12px; }
+            .concept-grid { grid-template-columns: 1fr; }
+            .command-card { flex-direction: column; align-items: stretch; }
+            .footer-content { flex-direction: column; }
+            .nav-buttons { flex-direction: column; }
+            .arch-row { gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo">
+                <i class="fas fa-terminal"></i>
+                <span>DevOps Hub</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="../../">Home</a></li>
+                <li><a href="../../#topics">Topics</a></li>
+                <li><a href="./">Docker</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="./">Docker</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Day 2</span>
+            </div>
+
+            <div class="hero-badge">
+                <i class="fas fa-network-wired"></i>
+                Day 2 of 10
+            </div>
+
+            <h1>Docker <span>Networking</span></h1>
+            <p class="hero-description">
+                Master Docker networking concepts. Learn about network drivers, bridge networks, 
+                container communication, and ace those interview questions.
+            </p>
+
+            <div class="hero-meta">
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <span>20-25 min</span>
+                        <small>Reading time</small>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-question-circle"></i>
+                    <div>
+                        <span>6 Q&A</span>
+                        <small>Interview prep</small>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-lightbulb"></i>
+                    <div>
+                        <span>2 Scenarios</span>
+                        <small>Real-world</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <!-- What is Docker Networking -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-network-wired"></i></div>
+                <h2>What is Docker Networking?</h2>
+            </div>
+            <div class="section-body">
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Docker networking allows containers to communicate with each other, the Docker host, and external networks. Docker uses a <strong>pluggable network driver system</strong> with different drivers for different use cases.</p>
+                </div>
+
+                <div class="analogy-card">
+                    <div class="icon">💡</div>
+                    <div>
+                        <h4>Think of it like a building's network</h4>
+                        <p>Bridge network is like an internal office network where departments (containers) can talk. Host network is like connecting directly to the building's main line. Overlay is like a VPN connecting multiple office buildings together.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Network Drivers -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-plug"></i></div>
+                <h2>Network Drivers</h2>
+            </div>
+            <div class="section-body">
+                <p style="margin-bottom: 20px; color: var(--text-secondary);">Docker provides several network drivers. Understanding these is <strong>crucial for interviews</strong>!</p>
+
+                <div class="arch-visual">
+                    <div class="arch-diagram">
+                        <div class="arch-row">
+                            <div class="arch-box">
+                                <div class="box bridge">
+                                    <i class="fas fa-bridge"></i> Bridge
+                                </div>
+                                <small>Default driver</small>
+                            </div>
+                            <div class="arch-box">
+                                <div class="box host">
+                                    <i class="fas fa-server"></i> Host
+                                </div>
+                                <small>No isolation</small>
+                            </div>
+                            <div class="arch-box">
+                                <div class="box overlay">
+                                    <i class="fas fa-layer-group"></i> Overlay
+                                </div>
+                                <small>Multi-host</small>
+                            </div>
+                            <div class="arch-box">
+                                <div class="box none">
+                                    <i class="fas fa-ban"></i> None
+                                </div>
+                                <small>Disabled</small>
+                            </div>
+                            <div class="arch-box">
+                                <div class="box macvlan">
+                                    <i class="fas fa-ethernet"></i> Macvlan
+                                </div>
+                                <small>Physical device</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="concept-grid">
+                    <div class="concept-item">
+                        <div class="icon"><i class="fas fa-bridge"></i></div>
+                        <h4>Bridge (Default)</h4>
+                        <p>Creates private internal network. Containers communicate by IP. User-defined bridges allow DNS resolution by name.</p>
+                        <code>docker network create my-bridge</code>
+                    </div>
+                    <div class="concept-item">
+                        <div class="icon"><i class="fas fa-server"></i></div>
+                        <h4>Host</h4>
+                        <p>Container shares host's network stack. No isolation, no port mapping needed. Best for performance-sensitive apps.</p>
+                        <code>docker run --network host nginx</code>
+                    </div>
+                    <div class="concept-item">
+                        <div class="icon"><i class="fas fa-layer-group"></i></div>
+                        <h4>Overlay</h4>
+                        <p>Enables multi-host communication in Docker Swarm. Creates distributed network across nodes.</p>
+                        <code>docker network create -d overlay my-overlay</code>
+                    </div>
+                    <div class="concept-item">
+                        <div class="icon"><i class="fas fa-ethernet"></i></div>
+                        <h4>Macvlan</h4>
+                        <p>Assigns MAC address to container. Appears as physical device on network. Useful for legacy apps.</p>
+                        <code>docker network create -d macvlan my-macvlan</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Commands -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-terminal"></i></div>
+                <h2>Essential Commands</h2>
+            </div>
+            <div class="section-body">
+                <div class="command-cards">
+                    <div class="command-card">
+                        <code>docker network ls</code>
+                        <span class="desc">List all Docker networks</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <div class="command-card">
+                        <code>docker network create my-app-network</code>
+                        <span class="desc">Create user-defined bridge network</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <div class="command-card">
+                        <code>docker run -d --network my-app-network --name web nginx</code>
+                        <span class="desc">Run container on specific network</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <div class="command-card">
+                        <code>docker network connect my-network my-container</code>
+                        <span class="desc">Connect running container to network</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <div class="command-card">
+                        <code>docker network disconnect my-network my-container</code>
+                        <span class="desc">Disconnect container from network</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <div class="command-card">
+                        <code>docker network inspect my-network</code>
+                        <span class="desc">View network details, connected containers, IPs</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <div class="command-card">
+                        <code>docker run -d -p 8080:80 nginx</code>
+                        <span class="desc">Port mapping: host 8080 → container 80</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interview Q&A -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-question-circle"></i></div>
+                <h2>Interview Questions</h2>
+            </div>
+            <div class="section-body">
+                <div class="qa-accordion">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">1</span>
+                            <h4>What are the different network drivers in Docker?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <p>Docker provides these main network drivers:</p>
+                            <ul>
+                                <li><strong>Bridge</strong> - Default driver for standalone containers</li>
+                                <li><strong>Host</strong> - Removes network isolation, shares host networking</li>
+                                <li><strong>Overlay</strong> - Multi-host networking for Swarm services</li>
+                                <li><strong>Macvlan</strong> - Assigns MAC address, appears as physical device</li>
+                                <li><strong>None</strong> - Disables all networking</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">2</span>
+                            <h4>What's the difference between default bridge and user-defined bridge?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>Default Bridge:</strong> Containers communicate by IP only, not by name. Less isolation.</li>
+                                <li><strong>User-defined Bridge:</strong> Containers can communicate by name (DNS resolution). Better isolation. Automatic DNS. Recommended for production.</li>
+                            </ul>
+                            <p>Create user-defined: <code>docker network create my-network</code></p>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">3</span>
+                            <h4>How do containers on the same network communicate?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <p>On a user-defined bridge network, containers can communicate using:</p>
+                            <ul>
+                                <li><strong>Container name</strong> as hostname (e.g., <code>ping database</code>)</li>
+                                <li><strong>Container IP address</strong></li>
+                                <li><strong>Network alias</strong> if specified</li>
+                            </ul>
+                            <p>Docker's embedded DNS server handles name resolution automatically.</p>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">4</span>
+                            <h4>When would you use the host network driver?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <p>Use host network when:</p>
+                            <ul>
+                                <li>Performance is critical (no NAT overhead)</li>
+                                <li>Container needs access to all host network interfaces</li>
+                                <li>Running monitoring tools that need host network visibility</li>
+                                <li>Exposing many ports (avoids port mapping complexity)</li>
+                            </ul>
+                            <p>⚠️ Tradeoff: No network isolation between container and host.</p>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">5</span>
+                            <h4>Explain port mapping in Docker.</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <p>Port mapping exposes container ports to the host:</p>
+                            <ul>
+                                <li><code>-p 8080:80</code> - Map host port 8080 to container port 80</li>
+                                <li><code>-p 80</code> - Map random host port to container port 80</li>
+                                <li><code>-p 127.0.0.1:8080:80</code> - Bind only to localhost</li>
+                                <li><code>-P</code> - Publish all exposed ports to random ports</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">6</span>
+                            <h4>What is the overlay network used for?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <p>Overlay networks are used in Docker Swarm for:</p>
+                            <ul>
+                                <li>Multi-host communication between containers</li>
+                                <li>Connecting services across different Docker hosts</li>
+                                <li>Creating distributed networks spanning multiple nodes</li>
+                                <li>Enabling service discovery across the cluster</li>
+                            </ul>
+                            <p>Create: <code>docker network create -d overlay my-swarm-network</code></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scenarios -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-project-diagram"></i></div>
+                <h2>Scenario-Based Questions</h2>
+            </div>
+            <div class="section-body">
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div class="icon"><i class="fas fa-database"></i></div>
+                        <h4>Web app can't connect to database container by name</h4>
+                    </div>
+                    <div class="scenario-body">
+                        <h5>🔍 Problem</h5>
+                        <p>Two containers (web-app, database) on default bridge network. web-app cannot resolve "database" hostname.</p>
+                        
+                        <h5>✅ Solution</h5>
+                        <ol>
+                            <li>Create user-defined network: <code>docker network create app-network</code></li>
+                            <li>Run database: <code>docker run -d --name database --network app-network postgres</code></li>
+                            <li>Run web-app: <code>docker run -d --name web-app --network app-network -p 80:80 myapp</code></li>
+                        </ol>
+                        <p><strong>Result:</strong> web-app can now connect to <code>database:5432</code></p>
+                    </div>
+                </div>
+
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div class="icon"><i class="fas fa-network-wired"></i></div>
+                        <h4>Design network for 3-tier application</h4>
+                    </div>
+                    <div class="scenario-body">
+                        <h5>📋 Requirements</h5>
+                        <p>Web (Nginx), App (Node.js), Database (PostgreSQL) on single host. Only Web should be accessible externally.</p>
+                        
+                        <h5>✅ Solution</h5>
+                        <ol>
+                            <li>Create network: <code>docker network create app-tier</code></li>
+                            <li>Database (no port exposed): <code>docker run -d --name db --network app-tier postgres</code></li>
+                            <li>App: <code>docker run -d --name app --network app-tier myapp</code></li>
+                            <li>Web (expose port): <code>docker run -d --name web --network app-tier -p 80:80 nginx</code></li>
+                        </ol>
+                        <p><strong>Security:</strong> DB is isolated, only internal containers can access it via <code>db:5432</code></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <a href="day-01-core-concepts.html" class="nav-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>Day 1: Core Concepts</span>
+            </a>
+            <a href="day-03-volumes-and-storage.html" class="nav-btn">
+                <span>Day 3: Volumes & Storage</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="../../" class="footer-logo">
+                    <i class="fas fa-terminal"></i>
+                    <span>DevOps Hub</span>
+                </a>
+                <p>Your daily companion for DevOps learning and interview preparation.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Topics</h4>
+                <ul>
+                    <li><a href="../docker/">Docker</a></li>
+                    <li><a href="../kubernetes/">Kubernetes</a></li>
+                    <li><a href="../terraform/">Terraform</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="../../#learning-path">Learning Path</a></li>
+                    <li><a href="https://github.com/saggy6210/devops_notes" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Sagar Chavan. DevOps Learning Hub.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        function toggleQA(element) {
+            const item = element.parentElement;
+            item.classList.toggle('active');
+        }
+
+        function copyCode(button) {
+            const code = button.parentElement.querySelector('code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                button.innerHTML = '<i class="fas fa-check"></i>';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-copy"></i>';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
