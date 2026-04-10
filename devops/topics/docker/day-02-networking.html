@@ -1,0 +1,170 @@
+---
+layout: topic
+title: Networking
+category: docker
+day: 2
+date: 2026-04-10
+description: Docker - Networking
+---
+
+# Networking
+
+Docker networking allows containers to communicate with each other and with the outside world. Docker provides several network drivers, each suited for different use cases.
+
+## Core Concepts
+
+Docker uses a pluggable network driver system. Key drivers include:
+
+*   **Bridge (Default)**:
+    *   Creates a private internal network on the host.
+    *   Containers on the *default bridge* network can communicate with each other by IP address, but not by name.
+    *   Containers on a *user-defined bridge* network can communicate by IP address or container name/alias.
+    *   Provides network isolation and allows port mapping (e.g., `-p 80:80`).
+*   **Host**:
+    *   Removes network isolation between the container and the Docker host.
+    *   The container uses the host's network stack directly.
+    *   No port mapping is needed or possible (container ports are directly exposed on the host).
+    *   Useful for performance-sensitive applications or when the container needs to see all network interfaces of the host.
+*   **None**:
+    *   Disables all networking for the container.
+    *   The container has a loopback interface only.
+    *   Useful for batch jobs that don't require network access.
+*   **Overlay**:
+    *   Used in Docker Swarm mode to enable communication between containers running on different Docker hosts.
+    *   Creates a distributed network across multiple hosts.
+*   **Macvlan**:
+    *   Assigns a MAC address to a container, making it appear as a physical device on the network.
+    *   Allows containers to connect directly to the physical network, bypassing the Docker host's network stack.
+    *   Useful for legacy applications that expect to be directly connected to the physical network.
+
+## Key Points
+
+*   **User-defined bridge networks** are preferred over the default bridge for better isolation, interoperability, and DNS resolution (containers can resolve each other by name).
+*   Containers on the same user-defined bridge network can communicate with each other without exposing ports to the host.
+*   Port mapping (`-p`) is used to expose container ports to the Docker host's network.
+*   `docker network inspect` provides detailed information about a network.
+
+## Commands/Syntax
+
+1.  **List Docker networks:**
+    ```bash
+    docker network ls
+    ```
+
+2.  **Create a user-defined bridge network:**
+    ```bash
+    docker network create my-app-network
+    ```
+
+3.  **Run a container on a specific network:**
+    ```bash
+    docker run -d --name webserver --network my-app-network -p 80:80 nginx
+    docker run -d --name database --network my-app-network postgres
+    ```
+    *Note: `webserver` and `database` can now communicate by their names.*
+
+4.  **Connect a running container to a network:**
+    ```bash
+    docker network connect my-app-network my-existing-container
+    ```
+
+5.  **Disconnect a container from a network:**
+    ```bash
+    docker network disconnect my-app-network my-container
+    ```
+
+6.  **Inspect a network:**
+    ```bash
+    docker network inspect my-app-network
+    ```
+    *Shows connected containers, IP addresses, gateway, etc.*
+
+7.  **Run a container using the host network:**
+    ```bash
+    docker run -d --name my-host-app --network host my-image
+    ```
+
+## Interview Questions
+
+1.  **What are the different network drivers available in Docker?**
+    *   **Answer:** The main drivers are `bridge` (default and user-defined), `host`, `none`, `overlay` (for Swarm), and `macvlan`.
+
+2.  **What is the difference between the default bridge network and a user-defined bridge network?**
+    *   **Answer:**
+        *   **Default Bridge:** Containers can communicate by IP, but not by name. Provides less isolation.
+        *   **User-defined Bridge:** Containers can communicate by IP or by container name/alias. Provides better isolation and built-in DNS resolution. Recommended for most applications.
+
+3.  **How do containers on the same user-defined bridge network communicate with each other?**
+    *   **Answer:** They can communicate directly using their container names or aliases as hostnames, or by their IP addresses. Docker's embedded DNS server handles name resolution.
+
+4.  **When would you use the `host` network driver?**
+    *   **Answer:** When you need the container to have direct access to the host's network stack, bypassing network isolation. This can be useful for performance-sensitive applications, monitoring tools, or when the container needs to expose a large range of ports directly on the host.
+
+5.  **Explain the purpose of port mapping (`-p` or `--publish`) in Docker.**
+    *   **Answer:** Port mapping maps a port on the Docker host to a port inside the container. This allows external traffic to reach a service running inside the container. For example, `-p 8080:80` maps host port 8080 to container port 80.
+
+6.  **What is the `overlay` network driver primarily used for?**
+    *   **Answer:** The `overlay` network driver is primarily used in Docker Swarm mode to enable communication between containers running on different Docker hosts in a Swarm cluster. It creates a distributed network across multiple nodes.
+
+## Scenario Questions
+
+1.  **Scenario:** You have two Docker containers, `web-app` (running Nginx) and `database` (running PostgreSQL), on the same Docker host. `web-app` needs to connect to `database`. Currently, they are both running on the default bridge network and `web-app` cannot resolve `database` by name.
+    *   **How would you ensure they can communicate securely and by name without exposing the database port to the host?**
+    *   **Answer:**
+        1.  Create a user-defined bridge network: `docker network create my-app-network`.
+        2.  Stop and remove the existing containers (if running).
+        3.  Run both containers on the new network:
+            ```bash
+            docker run -d --name database --network my-app-network postgres
+            docker run -d --name web-app --network my-app-network -p 80:80 nginx
+            ```
+        Now, `web-app` can connect to `database` using the hostname `database` on port 5432 (PostgreSQL default) without exposing port 5432 to the Docker host.
+
+2.  **Scenario:** You have a containerized application that needs to send UDP packets to a specific multicast address on your local network. The default bridge network is blocking this.
+    *   **Which network driver would you use to allow the container to directly participate in the host's network for multicast communication?**
+    *   **Answer:** The `host` network driver would be most suitable. By running the container with `--network host`, it will share the host's network stack and can directly access the physical network interfaces, allowing it to send/receive multicast traffic.
+
+## Architecture Questions
+
+1.  **Design a network setup for a three-tier application (Web, Application, Database) running on a single Docker host, ensuring isolation and secure communication.**
+    *   **Answer:**
+        *   Create a single user-defined bridge network, e.g., `app-network`.
+        *   Run all three containers (Web, Application, Database) on this `app-network`.
+        *   **Web Container:** Expose port 80/443 to the host using `-p 80:80 -p 443:443` so external users can access it.
+        *   **Application Container:** Connects to the Database container using its name (e.g., `database:5432`).
+        *   **Database Container:** Does not expose any ports to the host. It is only accessible by other containers on the `app-network`.
+        *   **Diagram:**
+            ```
+            [Internet]
+                |
+                v
+            [Docker Host]
+                |
+                +---[app-network (user-defined bridge)]---+
+                |                                         |
+                v                                         v
+            [Web Container] <---> [App Container] <---> [DB Container]
+            (Port 80/443 mapped)  (Connects to DB by name)
+            ```
+
+2.  **How would your network design change if you needed to scale this three-tier application across multiple Docker hosts using Docker Swarm?**
+    *   **Answer:**
+        *   Instead of a user-defined bridge network, an **overlay network** would be used.
+        *   The overlay network would be created once in the Swarm manager and span across all participating Docker hosts.
+        *   All service replicas (Web, App, DB) would be deployed onto this single overlay network.
+        *   Containers (or service tasks) on the overlay network can communicate by service name, regardless of which host they are running on.
+        *   **Diagram (Simplified):**
+            ```
+            [Internet]
+                |
+                v
+            [Docker Swarm Cluster]
+                |
+                +---[Overlay Network]---+
+                |                       |
+                v                       v
+            [Host 1]                [Host 2]
+            [Web-1]                 [Web-2]
+            [App-1] <---> [Overlay Network] <---> [App-2]
+            [DB-1]                  [DB-2]
+            ```
