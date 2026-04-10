@@ -171,7 +171,7 @@ def get_existing_content(topics_dir: Path) -> dict:
             continue
         
         # Count day-XX files
-        day_files = list(topic_dir.glob("day-*.md"))
+        day_files = list(topic_dir.glob("day-*.html"))
         progress[topic] = len(day_files)
     
     return progress
@@ -255,7 +255,7 @@ def save_content(topics_dir: Path, topic: str, day: int, content: str):
     topic_dir.mkdir(parents=True, exist_ok=True)
     
     # Create filename
-    filename = f"day-{day:02d}-{slugify(content)}.md"
+    filename = f"day-{day:02d}-{slugify(content)}.html"
     filepath = topic_dir / filename
     
     filepath.write_text(content)
