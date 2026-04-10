@@ -655,7 +655,7 @@ Generate content exactly like this structure:
 4. 5-7 interview questions with qa-accordion
 5. 2-3 scenario questions with scenario-card
 6. Commands with copy buttons
-7. Footer: © 2026 Sagar Chavan. DevOps Learning Hub.
+7. Footer: © 2026 Sagar Chavan. Made with ❤️ for DevOps Learning Hub.
 
 ## Topic Icons
 - Docker: fab fa-docker
