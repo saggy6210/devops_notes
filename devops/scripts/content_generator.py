@@ -227,19 +227,21 @@ def slugify(text: str) -> str:
 
 
 def validate_content(content: str) -> bool:
-    """Validate that generated content is valid and complete."""
-    if not content or len(content) < 500:
+    """Validate that generated content is valid HTML."""
+    if not content or len(content) < 1000:
         print(f"❌ Content too short: {len(content)} chars")
         return False
     
-    if not content.strip().startswith('---'):
-        print("❌ Missing front matter")
+    # Check for HTML structure
+    content_lower = content.lower()
+    if '<!doctype html>' not in content_lower and '<html' not in content_lower:
+        print("❌ Missing HTML doctype or html tag")
         return False
     
-    required_markers = ['#', 'day:', 'category:']
+    required_markers = ['<head>', '<body>', '</html>', '<nav', '<main', '<footer']
     for marker in required_markers:
-        if marker not in content.lower():
-            print(f"❌ Missing required marker: {marker}")
+        if marker not in content_lower:
+            print(f"❌ Missing required HTML element: {marker}")
             return False
     
     print(f"✅ Content validation passed ({len(content)} chars)")
@@ -258,32 +260,34 @@ def generate_content(topic: str, day: int, subtopic: str) -> str:
     
     today = datetime.now().strftime("%Y-%m-%d")
     
-    prompt = f"""Generate DevOps learning content for:
+    # Get total days for this topic
+    total_days = len(CURRICULUM.get(topic, []))
+    
+    prompt = f"""Generate a complete HTML page for DevOps learning content:
 
 Topic: {topic.capitalize()}
-Day: {day}
+Day: {day} of {total_days}
 Subtopic: {subtopic}
 Date: {today}
 
-Create comprehensive but concise notes following the template in your instructions.
-Include:
-1. Core concepts explanation
-2. Practical commands/examples
-3. 5-7 interview questions with answers
-4. 2-3 scenario-based questions
-5. 1-2 architecture/design questions
+Follow the HTML template in your instructions exactly. Create a full, self-contained HTML page with:
+1. Complete <!DOCTYPE html> structure
+2. All CSS embedded in <style> tag
+3. Navigation bar with links to ../../ (home) and ./ (topic index)
+4. Hero section with Day {day} of {total_days} badge
+5. Core concepts with info-box and analogy-card
+6. Key points using concept-grid
+7. Practical commands using command-card components
+8. 5-7 interview questions using qa-card components
+9. 2-3 scenario questions using scenario-card
+10. Previous/Next navigation buttons
+11. Footer with: © 2026 Sagar Chavan. DevOps Learning Hub.
+12. JavaScript for progress bar
 
-Use this EXACT front matter format:
----
-layout: topic
-title: {subtopic}
-category: {topic}
-day: {day}
-date: {today}
-description: {topic.capitalize()} - {subtopic}
----
+Previous day file: day-{day-1:02d}-*.html (if day > 1)
+Next day file: day-{day+1:02d}-*.html (if day < {total_days})
 
-Output ONLY the Markdown content starting with the front matter, nothing else."""
+Output ONLY the complete HTML starting with <!DOCTYPE html>. No explanations."""
 
     last_error = None
     
@@ -295,7 +299,7 @@ Output ONLY the Markdown content starting with the front matter, nothing else.""
                 prompt,
                 generation_config=genai.types.GenerationConfig(
                     temperature=0.3,
-                    max_output_tokens=8000,
+                    max_output_tokens=32000,
                 )
             )
             
