@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Docker Security Best Practices - Day 7: Learn container security, image scanning, and hardening techniques">
+    <title>Day 7: Security Best Practices | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #2496ed; --primary-dark: #1a7cc4; --secondary: #0f172a; --accent: #06b6d4; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --text: #1e293b; --text-secondary: #64748b; --text-light: #94a3b8; --bg: #ffffff; --bg-secondary: #f8fafc; --bg-dark: #0f172a; --border: #e2e8f0; --radius: 12px; --radius-lg: 20px; --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+        .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: linear-gradient(90deg, var(--primary), var(--accent)); z-index: 9999; transition: width 0.3s; }
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 16px 0; }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--secondary); text-decoration: none; }
+        .nav-logo i { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .nav-links { display: flex; gap: 8px; list-style: none; }
+        .nav-links a { padding: 8px 16px; color: var(--text-secondary); text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 0.9rem; transition: all 0.2s; }
+        .nav-links a:hover { color: var(--primary); background: var(--bg-secondary); }
+
+        .hero { padding: 140px 24px 80px; background: linear-gradient(180deg, #fef2f2 0%, var(--bg) 100%); position: relative; overflow: hidden; }
+        .hero-container { max-width: 1000px; margin: 0 auto; }
+        .breadcrumb { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; margin-bottom: 24px; }
+        .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb i { font-size: 0.7rem; color: var(--text-light); }
+        .breadcrumb span { color: var(--text); font-weight: 500; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--danger); color: white; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 20px; }
+        .hero h1 { font-size: 3rem; font-weight: 800; color: var(--secondary); margin-bottom: 16px; line-height: 1.2; }
+        .hero h1 span { background: linear-gradient(135deg, var(--danger), var(--warning)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-description { font-size: 1.2rem; color: var(--text-secondary); max-width: 600px; margin-bottom: 32px; }
+        .hero-meta { display: flex; flex-wrap: wrap; gap: 24px; }
+        .meta-item { display: flex; align-items: center; gap: 10px; padding: 12px 20px; background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border); }
+        .meta-item i { width: 36px; height: 36px; background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(245,158,11,0.1)); color: var(--danger); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .meta-item span { font-weight: 600; color: var(--secondary); }
+        .meta-item small { display: block; font-size: 0.75rem; color: var(--text-light); }
+
+        .main-content { max-width: 900px; margin: 0 auto; padding: 60px 24px; }
+        .section-card { background: var(--bg); border-radius: var(--radius-lg); border: 1px solid var(--border); margin-bottom: 40px; overflow: hidden; transition: box-shadow 0.3s; }
+        .section-card:hover { box-shadow: var(--shadow-lg); }
+        .section-header { display: flex; align-items: center; gap: 16px; padding: 24px 28px; background: linear-gradient(135deg, rgba(239,68,68,0.05), rgba(245,158,11,0.02)); border-bottom: 1px solid var(--border); }
+        .section-icon { width: 48px; height: 48px; background: linear-gradient(135deg, var(--danger), var(--warning)); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+        .section-header h2 { font-size: 1.4rem; font-weight: 700; color: var(--secondary); }
+        .section-body { padding: 28px; }
+
+        .info-box { display: flex; gap: 16px; padding: 20px; background: linear-gradient(135deg, #fef2f2, #fffbeb); border-radius: var(--radius); margin-bottom: 24px; }
+        .info-box i { width: 40px; height: 40px; background: var(--danger); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .info-box p { font-size: 1.05rem; color: var(--text); }
+        .info-box strong { color: var(--secondary); }
+
+        .code-block { background: var(--bg-dark); border-radius: var(--radius); overflow: hidden; margin: 20px 0; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .code-header span { color: var(--text-light); font-size: 0.85rem; font-weight: 500; }
+        .code-header .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .code-header .badge.secure { background: rgba(16,185,129,0.2); color: var(--success); }
+        .code-block pre { padding: 20px; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #e2e8f0; line-height: 1.7; }
+        .code-block .comment { color: #64748b; }
+        .code-block .keyword { color: #22d3ee; }
+        .code-block .string { color: #a5f3fc; }
+
+        .checklist { list-style: none; margin: 20px 0; }
+        .checklist li { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+        .checklist li:last-child { border-bottom: none; }
+        .checklist i { width: 24px; height: 24px; background: var(--success); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0; margin-top: 2px; }
+        .checklist strong { color: var(--secondary); display: block; margin-bottom: 4px; }
+        .checklist p { color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
+
+        .threat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 24px 0; }
+        .threat-card { padding: 20px; background: var(--bg-secondary); border-radius: var(--radius); border-left: 4px solid var(--danger); }
+        .threat-card h4 { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; color: var(--danger); margin-bottom: 8px; }
+        .threat-card p { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; }
+        .threat-card code { background: var(--bg-dark); color: var(--success); padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
+
+        .qa-accordion { display: flex; flex-direction: column; gap: 12px; }
+        .qa-item { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: all 0.3s; }
+        .qa-item:hover { border-color: var(--primary); }
+        .qa-item.active { border-color: var(--primary); box-shadow: var(--shadow); }
+        .qa-question { display: flex; align-items: center; gap: 16px; padding: 20px; cursor: pointer; background: var(--bg); transition: background 0.2s; }
+        .qa-question:hover { background: var(--bg-secondary); }
+        .qa-number { width: 36px; height: 36px; background: linear-gradient(135deg, var(--danger), var(--warning)); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+        .qa-question h4 { flex: 1; font-size: 1rem; font-weight: 600; color: var(--secondary); }
+        .qa-question .toggle { color: var(--text-light); transition: transform 0.3s; }
+        .qa-item.active .qa-question .toggle { transform: rotate(180deg); }
+        .qa-answer { display: none; padding: 0 20px 20px 72px; color: var(--text-secondary); line-height: 1.7; }
+        .qa-item.active .qa-answer { display: block; }
+        .qa-answer ul, .qa-answer ol { margin: 12px 0; padding-left: 20px; }
+        .qa-answer li { margin-bottom: 8px; }
+        .qa-answer strong { color: var(--text); }
+        .qa-answer code { background: var(--bg-dark); color: var(--success); padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; }
+
+        .highlight-box { display: flex; gap: 12px; padding: 16px; background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(245,158,11,0.05)); border-radius: 8px; margin-top: 16px; }
+        .highlight-box i { color: var(--danger); flex-shrink: 0; }
+
+        .tips-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .tip-item { display: flex; gap: 12px; padding: 16px; background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(6,182,212,0.05)); border-radius: var(--radius); border: 1px solid rgba(16,185,129,0.2); }
+        .tip-item i { color: var(--success); font-size: 1.1rem; flex-shrink: 0; }
+        .tip-item p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+        .tip-item code { background: var(--bg-dark); color: var(--success); padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
+
+        .nav-buttons { display: flex; justify-content: space-between; gap: 20px; margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border); }
+        .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-secondary); border-radius: var(--radius); text-decoration: none; color: var(--text-secondary); font-weight: 500; transition: all 0.2s; }
+        .nav-btn:hover { background: var(--primary); color: white; transform: translateY(-2px); }
+
+        .footer { background: var(--secondary); color: var(--text-light); padding: 60px 24px; margin-top: 80px; }
+        .footer-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; gap: 40px; }
+        .footer-brand { max-width: 300px; }
+        .footer-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; color: white; margin-bottom: 16px; text-decoration: none; }
+        .footer-logo i { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .footer-links h4 { color: white; font-size: 1rem; margin-bottom: 16px; }
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a { color: var(--text-light); text-decoration: none; }
+        .footer-links a:hover { color: white; }
+        .footer-bottom { text-align: center; padding-top: 40px; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; }
+        .footer-bottom i { color: var(--danger); }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2rem; }
+            .hero-meta { flex-direction: column; gap: 12px; }
+            .threat-grid, .tips-grid { grid-template-columns: 1fr; }
+            .footer-content { flex-direction: column; }
+            .nav-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo"><i class="fas fa-terminal"></i><span>DevOps Hub</span></a>
+            <ul class="nav-links">
+                <li><a href="../../">Home</a></li>
+                <li><a href="../../#topics">Topics</a></li>
+                <li><a href="./">Docker</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="./">Docker</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Day 7</span>
+            </div>
+            <div class="hero-badge"><i class="fas fa-shield-alt"></i> Day 7 of 10</div>
+            <h1>Docker <span>Security Best Practices</span></h1>
+            <p class="hero-description">Harden containers, scan for vulnerabilities, and implement defense-in-depth strategies for production environments.</p>
+            <div class="hero-meta">
+                <div class="meta-item"><i class="fas fa-clock"></i><div><span>25-30 min</span><small>Reading time</small></div></div>
+                <div class="meta-item"><i class="fas fa-question-circle"></i><div><span>5 Q&A</span><small>Interview prep</small></div></div>
+                <div class="meta-item"><i class="fas fa-shield-alt"></i><div><span>Security</span><small>Critical topic</small></div></div>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <!-- Security Checklist -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-tasks"></i></div>
+                <h2>Container Security Checklist</h2>
+            </div>
+            <div class="section-body">
+                <div class="info-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Docker containers share the host kernel. A container escape vulnerability can compromise the entire host. <strong>Security is critical!</strong></p>
+                </div>
+
+                <ul class="checklist">
+                    <li>
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>Run as non-root user</strong>
+                            <p>Never run containers as root. Use USER instruction in Dockerfile.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>Use minimal base images</strong>
+                            <p>Alpine, Distroless - fewer packages = smaller attack surface.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>Scan images for vulnerabilities</strong>
+                            <p>Use Trivy, Snyk, or Docker Scout in CI/CD pipeline.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>Use read-only filesystem</strong>
+                            <p>Containers shouldn't need to write to most directories.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>Don't run with --privileged</strong>
+                            <p>Privileged containers have full host access - avoid at all costs.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Non-root User -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-user-shield"></i></div>
+                <h2>Running as Non-Root</h2>
+            </div>
+            <div class="section-body">
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Dockerfile with non-root user</span>
+                        <span class="badge secure">Secure</span>
+                    </div>
+                    <pre><code><span class="keyword">FROM</span> node:18-alpine
+
+<span class="comment"># Create app directory</span>
+<span class="keyword">WORKDIR</span> /app
+
+<span class="comment"># Create non-root user</span>
+<span class="keyword">RUN</span> addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001 -G nodejs
+
+<span class="comment"># Copy with correct ownership</span>
+<span class="keyword">COPY</span> --chown=nodejs:nodejs . .
+
+<span class="comment"># Install dependencies</span>
+<span class="keyword">RUN</span> npm ci --only=production
+
+<span class="comment"># Switch to non-root user</span>
+<span class="keyword">USER</span> nodejs
+
+<span class="keyword">EXPOSE</span> 3000
+<span class="keyword">CMD</span> ["node", "server.js"]</code></pre>
+                </div>
+
+                <p style="margin-top: 16px; color: var(--text-secondary);">Verify: <code>docker run myapp whoami</code> should output <code>nodejs</code>, not <code>root</code></p>
+            </div>
+        </section>
+
+        <!-- Image Scanning -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-search"></i></div>
+                <h2>Vulnerability Scanning</h2>
+            </div>
+            <div class="section-body">
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Trivy - Popular Open Source Scanner</span>
+                    </div>
+                    <pre><code><span class="comment"># Install Trivy</span>
+brew install trivy  <span class="comment"># or apt-get install trivy</span>
+
+<span class="comment"># Scan an image</span>
+trivy image nginx:latest
+
+<span class="comment"># Scan and fail on HIGH/CRITICAL</span>
+trivy image --severity HIGH,CRITICAL --exit-code 1 myapp:latest
+
+<span class="comment"># Scan in CI/CD (GitHub Actions)</span>
+- name: Run Trivy vulnerability scanner
+  uses: aquasecurity/trivy-action@master
+  with:
+    image-ref: 'myapp:${{ github.sha }}'
+    exit-code: '1'
+    severity: 'CRITICAL,HIGH'</code></pre>
+                </div>
+
+                <h4 style="margin: 24px 0 16px; color: var(--secondary);">Other Scanning Tools</h4>
+                <div class="threat-grid">
+                    <div class="threat-card" style="border-color: var(--primary);">
+                        <h4 style="color: var(--primary);"><i class="fas fa-shield-alt"></i> Docker Scout</h4>
+                        <p>Built into Docker Desktop</p>
+                        <code>docker scout cves myapp:latest</code>
+                    </div>
+                    <div class="threat-card" style="border-color: var(--success);">
+                        <h4 style="color: var(--success);"><i class="fas fa-bug"></i> Snyk</h4>
+                        <p>SaaS with CI integration</p>
+                        <code>snyk container test myapp:latest</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Runtime Security -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-lock"></i></div>
+                <h2>Runtime Security</h2>
+            </div>
+            <div class="section-body">
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Secure container run options</span>
+                    </div>
+                    <pre><code><span class="comment"># Read-only filesystem</span>
+docker run --read-only myapp
+
+<span class="comment"># Drop all capabilities, add only what's needed</span>
+docker run --cap-drop=ALL --cap-add=NET_BIND_SERVICE myapp
+
+<span class="comment"># No new privileges escalation</span>
+docker run --security-opt=no-new-privileges myapp
+
+<span class="comment"># Limit resources</span>
+docker run --memory=512m --cpus=1 myapp
+
+<span class="comment"># Full secure example</span>
+docker run -d \
+  --read-only \
+  --cap-drop=ALL \
+  --security-opt=no-new-privileges:true \
+  --user 1000:1000 \
+  --memory=256m \
+  --pids-limit=50 \
+  myapp:latest</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Common Threats -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-skull-crossbones"></i></div>
+                <h2>Common Security Threats</h2>
+            </div>
+            <div class="section-body">
+                <div class="threat-grid">
+                    <div class="threat-card">
+                        <h4><i class="fas fa-exclamation-circle"></i> Container Escape</h4>
+                        <p>Breaking out of container to host</p>
+                        <code>Never use --privileged</code>
+                    </div>
+                    <div class="threat-card">
+                        <h4><i class="fas fa-exclamation-circle"></i> Vulnerable Base Image</h4>
+                        <p>CVEs in outdated packages</p>
+                        <code>Scan images in CI/CD</code>
+                    </div>
+                    <div class="threat-card">
+                        <h4><i class="fas fa-exclamation-circle"></i> Secrets in Image</h4>
+                        <p>API keys, passwords in layers</p>
+                        <code>Use secrets management</code>
+                    </div>
+                    <div class="threat-card">
+                        <h4><i class="fas fa-exclamation-circle"></i> Root User</h4>
+                        <p>Running process as root</p>
+                        <code>USER directive in Dockerfile</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interview Q&A -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-user-tie"></i></div>
+                <h2>Interview Questions</h2>
+            </div>
+            <div class="section-body">
+                <div class="qa-accordion">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">1</span>
+                            <h4>How do you secure Docker containers in production?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ol>
+                                <li>Run as non-root user (USER directive)</li>
+                                <li>Use minimal base images (Alpine, Distroless)</li>
+                                <li>Scan images for CVEs (Trivy, Snyk)</li>
+                                <li>Use read-only filesystems when possible</li>
+                                <li>Drop unnecessary Linux capabilities</li>
+                                <li>Limit container resources (memory, CPU)</li>
+                                <li>Use secrets management (not env vars for sensitive data)</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">2</span>
+                            <h4>What are Docker capabilities?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <p>Linux capabilities divide root privileges into distinct units:</p>
+                            <ul>
+                                <li><strong>CAP_NET_BIND_SERVICE:</strong> Bind to ports below 1024</li>
+                                <li><strong>CAP_SYS_ADMIN:</strong> Broad system admin operations</li>
+                                <li><strong>CAP_CHOWN:</strong> Change file ownership</li>
+                            </ul>
+                            <p>Best practice: <code>--cap-drop=ALL</code> then add only what's needed.</p>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">3</span>
+                            <h4>What is the risk of running containers as root?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li>Container escape gives root access to host</li>
+                                <li>Malicious code can modify system files</li>
+                                <li>Violates principle of least privilege</li>
+                                <li>Many CVEs specifically target root containers</li>
+                            </ul>
+                            <div class="highlight-box">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>85% of container images run as root by default. Always add USER instruction!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">4</span>
+                            <h4>How do you manage secrets in containers?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <p>Never store secrets in:</p>
+                            <ul>
+                                <li>Dockerfile (visible in layers)</li>
+                                <li>Image environment variables</li>
+                                <li>Version control</li>
+                            </ul>
+                            <p>Instead use:</p>
+                            <ul>
+                                <li>Docker Secrets (Swarm/Compose)</li>
+                                <li>HashiCorp Vault</li>
+                                <li>AWS Secrets Manager / Azure Key Vault</li>
+                                <li>Kubernetes Secrets + External Secrets Operator</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">5</span>
+                            <h4>What is --privileged and why avoid it?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <p><code>--privileged</code> gives the container:</p>
+                            <ul>
+                                <li>All Linux capabilities</li>
+                                <li>Access to all host devices</li>
+                                <li>Ability to modify host kernel</li>
+                                <li>Essentially root on the host machine</li>
+                            </ul>
+                            <div class="highlight-box">
+                                <i class="fas fa-skull-crossbones"></i>
+                                <span>If you need privileged mode, your architecture has a security flaw. Redesign instead.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tips -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-lightbulb"></i></div>
+                <h2>Quick Tips</h2>
+            </div>
+            <div class="section-body">
+                <div class="tips-grid">
+                    <div class="tip-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <p>Enable Docker Content Trust: <code>export DOCKER_CONTENT_TRUST=1</code></p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-ban"></i>
+                        <p>Avoid latest tag - pin to specific versions</p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-network-wired"></i>
+                        <p>Use internal networks, don't expose ports unnecessarily</p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-sync"></i>
+                        <p>Rebuild images regularly to get security patches</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <a href="day-06-docker-compose.html" class="nav-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>Day 6: Docker Compose</span>
+            </a>
+            <a href="day-08-logging-debugging.html" class="nav-btn">
+                <span>Day 8: Logging & Debugging</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="../../" class="footer-logo"><i class="fas fa-terminal"></i><span>DevOps Hub</span></a>
+                <p>Your daily companion for DevOps learning and interview preparation.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Topics</h4>
+                <ul>
+                    <li><a href="../docker/">Docker</a></li>
+                    <li><a href="../kubernetes/">Kubernetes</a></li>
+                    <li><a href="../terraform/">Terraform</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="../../#learning-path">Learning Path</a></li>
+                    <li><a href="https://github.com/saggy6210/devops_notes" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 DevOps Learning Hub. Made with <i class="fas fa-heart"></i> for the DevOps community.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById('progressBar').style.width = (winScroll / height) * 100 + '%';
+        });
+        function toggleQA(element) { element.parentElement.classList.toggle('active'); }
+    </script>
+</body>
+</html>

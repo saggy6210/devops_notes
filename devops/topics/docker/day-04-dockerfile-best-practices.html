@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dockerfile Best Practices - Day 4: Learn optimal Dockerfile writing, layer caching, and image optimization">
+    <title>Day 4: Dockerfile Best Practices | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2496ed;
+            --primary-dark: #1a7cc4;
+            --secondary: #0f172a;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --bg: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-dark: #0f172a;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+        }
+
+        .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: linear-gradient(90deg, var(--primary), var(--accent)); z-index: 9999; transition: width 0.3s; }
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 16px 0; }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--secondary); text-decoration: none; }
+        .nav-logo i { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .nav-links { display: flex; gap: 8px; list-style: none; }
+        .nav-links a { padding: 8px 16px; color: var(--text-secondary); text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 0.9rem; transition: all 0.2s; }
+        .nav-links a:hover { color: var(--primary); background: var(--bg-secondary); }
+
+        .hero { padding: 140px 24px 80px; background: linear-gradient(180deg, #e0f2fe 0%, var(--bg) 100%); position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: 100px; right: -200px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(36,150,237,0.1) 0%, transparent 70%); border-radius: 50%; }
+        .hero-container { max-width: 1000px; margin: 0 auto; }
+        .breadcrumb { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; margin-bottom: 24px; }
+        .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb i { font-size: 0.7rem; color: var(--text-light); }
+        .breadcrumb span { color: var(--text); font-weight: 500; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--primary); color: white; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 20px; }
+        .hero h1 { font-size: 3rem; font-weight: 800; color: var(--secondary); margin-bottom: 16px; line-height: 1.2; }
+        .hero h1 span { background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-description { font-size: 1.2rem; color: var(--text-secondary); max-width: 600px; margin-bottom: 32px; }
+        .hero-meta { display: flex; flex-wrap: wrap; gap: 24px; }
+        .meta-item { display: flex; align-items: center; gap: 10px; padding: 12px 20px; background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border); }
+        .meta-item i { width: 36px; height: 36px; background: linear-gradient(135deg, rgba(36,150,237,0.1), rgba(6,182,212,0.1)); color: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .meta-item span { font-weight: 600; color: var(--secondary); }
+        .meta-item small { display: block; font-size: 0.75rem; color: var(--text-light); }
+
+        .main-content { max-width: 900px; margin: 0 auto; padding: 60px 24px; }
+        .section-card { background: var(--bg); border-radius: var(--radius-lg); border: 1px solid var(--border); margin-bottom: 40px; overflow: hidden; transition: box-shadow 0.3s; }
+        .section-card:hover { box-shadow: var(--shadow-lg); }
+        .section-header { display: flex; align-items: center; gap: 16px; padding: 24px 28px; background: linear-gradient(135deg, rgba(36,150,237,0.05), rgba(6,182,212,0.02)); border-bottom: 1px solid var(--border); }
+        .section-icon { width: 48px; height: 48px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+        .section-header h2 { font-size: 1.4rem; font-weight: 700; color: var(--secondary); }
+        .section-body { padding: 28px; }
+
+        .info-box { display: flex; gap: 16px; padding: 20px; background: linear-gradient(135deg, #eff6ff, #f0fdfa); border-radius: var(--radius); margin-bottom: 24px; }
+        .info-box i { width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .info-box p { font-size: 1.05rem; color: var(--text); }
+        .info-box strong { color: var(--secondary); }
+
+        .code-block { background: var(--bg-dark); border-radius: var(--radius); overflow: hidden; margin: 20px 0; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .code-header span { color: var(--text-light); font-size: 0.85rem; font-weight: 500; }
+        .code-header .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .code-header .badge.good { background: rgba(16,185,129,0.2); color: var(--success); }
+        .code-header .badge.bad { background: rgba(239,68,68,0.2); color: var(--danger); }
+        .code-block pre { padding: 20px; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #e2e8f0; line-height: 1.7; }
+        .code-block .comment { color: #64748b; }
+        .code-block .keyword { color: #22d3ee; }
+        .code-block .string { color: #a5f3fc; }
+
+        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 24px 0; }
+        .compare-card { border-radius: var(--radius); overflow: hidden; }
+        .compare-card.bad { border: 2px solid var(--danger); }
+        .compare-card.good { border: 2px solid var(--success); }
+
+        .instruction-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 20px 0; }
+        .instruction-item { padding: 20px; background: var(--bg-secondary); border-radius: var(--radius); border: 1px solid var(--border); }
+        .instruction-item h4 { display: flex; align-items: center; gap: 8px; font-size: 1rem; color: var(--primary); margin-bottom: 8px; }
+        .instruction-item p { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px; }
+        .instruction-item code { display: block; padding: 8px 12px; background: var(--bg-dark); color: var(--success); border-radius: 6px; font-family: 'Fira Code', monospace; font-size: 0.8rem; }
+
+        .qa-accordion { display: flex; flex-direction: column; gap: 12px; }
+        .qa-item { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: all 0.3s; }
+        .qa-item:hover { border-color: var(--primary); }
+        .qa-item.active { border-color: var(--primary); box-shadow: var(--shadow); }
+        .qa-question { display: flex; align-items: center; gap: 16px; padding: 20px; cursor: pointer; background: var(--bg); transition: background 0.2s; }
+        .qa-question:hover { background: var(--bg-secondary); }
+        .qa-number { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+        .qa-question h4 { flex: 1; font-size: 1rem; font-weight: 600; color: var(--secondary); }
+        .qa-question .toggle { color: var(--text-light); transition: transform 0.3s; }
+        .qa-item.active .qa-question .toggle { transform: rotate(180deg); }
+        .qa-answer { display: none; padding: 0 20px 20px 72px; color: var(--text-secondary); line-height: 1.7; }
+        .qa-item.active .qa-answer { display: block; }
+        .qa-answer ul, .qa-answer ol { margin: 12px 0; padding-left: 20px; }
+        .qa-answer li { margin-bottom: 8px; }
+        .qa-answer strong { color: var(--text); }
+        .qa-answer code { background: var(--bg-dark); color: var(--success); padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; }
+
+        .highlight-box { display: flex; gap: 12px; padding: 16px; background: linear-gradient(135deg, rgba(36,150,237,0.1), rgba(6,182,212,0.05)); border-radius: 8px; margin-top: 16px; }
+        .highlight-box i { color: var(--primary); }
+        .highlight-box.warning { background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.05)); }
+        .highlight-box.warning i { color: var(--warning); }
+
+        .tips-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .tip-item { display: flex; gap: 12px; padding: 16px; background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(6,182,212,0.05)); border-radius: var(--radius); border: 1px solid rgba(16,185,129,0.2); }
+        .tip-item i { color: var(--success); font-size: 1.1rem; }
+        .tip-item p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+        .tip-item code { background: var(--bg-dark); color: var(--success); padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
+
+        .nav-buttons { display: flex; justify-content: space-between; gap: 20px; margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border); }
+        .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-secondary); border-radius: var(--radius); text-decoration: none; color: var(--text-secondary); font-weight: 500; transition: all 0.2s; }
+        .nav-btn:hover { background: var(--primary); color: white; transform: translateY(-2px); }
+
+        .footer { background: var(--secondary); color: var(--text-light); padding: 60px 24px; margin-top: 80px; }
+        .footer-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; gap: 40px; }
+        .footer-brand { max-width: 300px; }
+        .footer-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; color: white; margin-bottom: 16px; text-decoration: none; }
+        .footer-logo i { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .footer-links h4 { color: white; font-size: 1rem; margin-bottom: 16px; }
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a { color: var(--text-light); text-decoration: none; transition: color 0.2s; }
+        .footer-links a:hover { color: white; }
+        .footer-bottom { text-align: center; padding-top: 40px; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; }
+        .footer-bottom i { color: var(--danger); }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2rem; }
+            .hero-meta { flex-direction: column; gap: 12px; }
+            .compare-grid, .instruction-grid, .tips-grid { grid-template-columns: 1fr; }
+            .footer-content { flex-direction: column; }
+            .nav-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo">
+                <i class="fas fa-terminal"></i>
+                <span>DevOps Hub</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="../../">Home</a></li>
+                <li><a href="../../#topics">Topics</a></li>
+                <li><a href="./">Docker</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="./">Docker</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Day 4</span>
+            </div>
+
+            <div class="hero-badge">
+                <i class="fas fa-file-code"></i>
+                Day 4 of 10
+            </div>
+
+            <h1>Dockerfile <span>Best Practices</span></h1>
+            <p class="hero-description">
+                Write production-grade Dockerfiles. Learn layer caching, 
+                image optimization, and security hardening techniques.
+            </p>
+
+            <div class="hero-meta">
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <span>25-30 min</span>
+                        <small>Reading time</small>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-question-circle"></i>
+                    <div>
+                        <span>5 Q&A</span>
+                        <small>Interview prep</small>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-code"></i>
+                    <div>
+                        <span>6 Examples</span>
+                        <small>Code samples</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <!-- Dockerfile Basics -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-file-code"></i></div>
+                <h2>Dockerfile Fundamentals</h2>
+            </div>
+            <div class="section-body">
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <p>A <strong>Dockerfile</strong> is a text document containing instructions to build a Docker image. Each instruction creates a <strong>layer</strong> in the image.</p>
+                </div>
+
+                <h4 style="margin-bottom: 16px; color: var(--secondary);">Essential Instructions</h4>
+                <div class="instruction-grid">
+                    <div class="instruction-item">
+                        <h4><i class="fas fa-cube"></i> FROM</h4>
+                        <p>Base image for the build</p>
+                        <code>FROM node:18-alpine</code>
+                    </div>
+                    <div class="instruction-item">
+                        <h4><i class="fas fa-folder"></i> WORKDIR</h4>
+                        <p>Set working directory</p>
+                        <code>WORKDIR /app</code>
+                    </div>
+                    <div class="instruction-item">
+                        <h4><i class="fas fa-copy"></i> COPY</h4>
+                        <p>Copy files from host</p>
+                        <code>COPY package*.json ./</code>
+                    </div>
+                    <div class="instruction-item">
+                        <h4><i class="fas fa-terminal"></i> RUN</h4>
+                        <p>Execute commands</p>
+                        <code>RUN npm install</code>
+                    </div>
+                    <div class="instruction-item">
+                        <h4><i class="fas fa-network-wired"></i> EXPOSE</h4>
+                        <p>Document port</p>
+                        <code>EXPOSE 3000</code>
+                    </div>
+                    <div class="instruction-item">
+                        <h4><i class="fas fa-play"></i> CMD</h4>
+                        <p>Default run command</p>
+                        <code>CMD ["node", "app.js"]</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Layer Optimization -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-layer-group"></i></div>
+                <h2>Layer Caching & Optimization</h2>
+            </div>
+            <div class="section-body">
+                <div class="info-box">
+                    <i class="fas fa-bolt"></i>
+                    <p>Docker caches each layer. If a layer changes, all subsequent layers are rebuilt. <strong>Order matters!</strong></p>
+                </div>
+
+                <div class="compare-grid">
+                    <div class="compare-card bad">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Bad - Rebuilds everything on code change</span>
+                                <span class="badge bad">Slow</span>
+                            </div>
+                            <pre><code><span class="keyword">FROM</span> node:18
+<span class="keyword">WORKDIR</span> /app
+<span class="keyword">COPY</span> . .  <span class="comment"># Code changes = npm install again</span>
+<span class="keyword">RUN</span> npm install
+<span class="keyword">CMD</span> ["node", "app.js"]</code></pre>
+                        </div>
+                    </div>
+                    <div class="compare-card good">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Good - Cache dependencies</span>
+                                <span class="badge good">Fast</span>
+                            </div>
+                            <pre><code><span class="keyword">FROM</span> node:18
+<span class="keyword">WORKDIR</span> /app
+<span class="keyword">COPY</span> package*.json ./  <span class="comment"># Deps first</span>
+<span class="keyword">RUN</span> npm install         <span class="comment"># Cached!</span>
+<span class="keyword">COPY</span> . .               <span class="comment"># Code last</span>
+<span class="keyword">CMD</span> ["node", "app.js"]</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="margin: 24px 0 16px; color: var(--secondary);">Combine RUN Commands</h4>
+                <div class="compare-grid">
+                    <div class="compare-card bad">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Bad - Multiple layers</span>
+                                <span class="badge bad">Large</span>
+                            </div>
+                            <pre><code><span class="keyword">RUN</span> apt-get update
+<span class="keyword">RUN</span> apt-get install -y curl
+<span class="keyword">RUN</span> apt-get install -y git
+<span class="keyword">RUN</span> rm -rf /var/lib/apt/lists/*</code></pre>
+                        </div>
+                    </div>
+                    <div class="compare-card good">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Good - Single layer</span>
+                                <span class="badge good">Small</span>
+                            </div>
+                            <pre><code><span class="keyword">RUN</span> apt-get update && \
+    apt-get install -y \
+        curl \
+        git && \
+    rm -rf /var/lib/apt/lists/*</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Base Image Selection -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-cubes"></i></div>
+                <h2>Choosing Base Images</h2>
+            </div>
+            <div class="section-body">
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Image Size Comparison</span>
+                    </div>
+                    <pre><code>node:18          → ~950MB  <span class="comment"># Full Debian + Node</span>
+node:18-slim     → ~200MB  <span class="comment"># Minimal Debian</span>
+node:18-alpine   → ~120MB  <span class="comment"># Alpine Linux (smallest)</span>
+gcr.io/distroless/nodejs18 → ~110MB <span class="comment"># No shell!</span></code></pre>
+                </div>
+
+                <div class="highlight-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>Use <strong>Alpine</strong> images for smaller size. Use <strong>Distroless</strong> for maximum security (no shell = harder to exploit).</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-shield-alt"></i></div>
+                <h2>Security Best Practices</h2>
+            </div>
+            <div class="section-body">
+                <h4 style="margin-bottom: 16px; color: var(--secondary);">Run as Non-Root User</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Dockerfile with non-root user</span>
+                        <span class="badge good">Secure</span>
+                    </div>
+                    <pre><code><span class="keyword">FROM</span> node:18-alpine
+
+<span class="comment"># Create non-root user</span>
+<span class="keyword">RUN</span> addgroup -S appgroup && adduser -S appuser -G appgroup
+
+<span class="keyword">WORKDIR</span> /app
+<span class="keyword">COPY</span> --chown=appuser:appgroup . .
+<span class="keyword">RUN</span> npm ci --only=production
+
+<span class="comment"># Switch to non-root user</span>
+<span class="keyword">USER</span> appuser
+
+<span class="keyword">EXPOSE</span> 3000
+<span class="keyword">CMD</span> ["node", "app.js"]</code></pre>
+                </div>
+
+                <h4 style="margin: 24px 0 16px; color: var(--secondary);">Use .dockerignore</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>.dockerignore</span>
+                    </div>
+                    <pre><code>node_modules
+npm-debug.log
+.git
+.gitignore
+.env
+*.md
+Dockerfile*
+docker-compose*
+.dockerignore</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interview Q&A -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-user-tie"></i></div>
+                <h2>Interview Questions</h2>
+            </div>
+            <div class="section-body">
+                <div class="qa-accordion">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">1</span>
+                            <h4>What's the difference between CMD and ENTRYPOINT?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>CMD:</strong> Default command, can be overridden at runtime</li>
+                                <li><strong>ENTRYPOINT:</strong> Fixed executable, CMD becomes arguments</li>
+                            </ul>
+                            <p>Example with both:</p>
+                            <code>ENTRYPOINT ["python"]</code><br>
+                            <code>CMD ["app.py"]</code>
+                            <p style="margin-top: 8px;">Running <code>docker run myapp test.py</code> executes <code>python test.py</code></p>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">2</span>
+                            <h4>What's the difference between COPY and ADD?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>COPY:</strong> Simple copy from host to container</li>
+                                <li><strong>ADD:</strong> COPY + auto-extract archives + fetch URLs</li>
+                            </ul>
+                            <div class="highlight-box">
+                                <i class="fas fa-star"></i>
+                                <span>Best practice: Always use COPY unless you specifically need ADD's features.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">3</span>
+                            <h4>How does Docker layer caching work?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ol>
+                                <li>Docker builds images layer by layer</li>
+                                <li>Each instruction creates a new layer</li>
+                                <li>Layers are cached and reused if unchanged</li>
+                                <li>If a layer changes, all subsequent layers are rebuilt</li>
+                            </ol>
+                            <div class="highlight-box warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>Put frequently changing instructions (COPY code) at the end of Dockerfile.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">4</span>
+                            <h4>What is the purpose of ARG and ENV?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>ARG:</strong> Build-time variables, not available in running container</li>
+                                <li><strong>ENV:</strong> Runtime environment variables, persist in container</li>
+                            </ul>
+                            <p>Example:</p>
+                            <code>ARG VERSION=1.0</code><br>
+                            <code>ENV APP_VERSION=$VERSION</code>
+                            <p style="margin-top: 8px;">Build with: <code>docker build --build-arg VERSION=2.0 .</code></p>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">5</span>
+                            <h4>How do you reduce Docker image size?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ol>
+                                <li>Use smaller base images (Alpine, Distroless)</li>
+                                <li>Combine RUN commands to reduce layers</li>
+                                <li>Use multi-stage builds (covered in Day 5)</li>
+                                <li>Clean up cache in same layer: <code>rm -rf /var/lib/apt/lists/*</code></li>
+                                <li>Use .dockerignore to exclude unnecessary files</li>
+                                <li>Install only production dependencies: <code>npm ci --only=production</code></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tips -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-lightbulb"></i></div>
+                <h2>Quick Tips</h2>
+            </div>
+            <div class="section-body">
+                <div class="tips-grid">
+                    <div class="tip-item">
+                        <i class="fas fa-tag"></i>
+                        <p>Always pin versions: <code>FROM node:18.17.0-alpine</code></p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-double"></i>
+                        <p>Use <code>npm ci</code> not <code>npm install</code> for reproducible builds</p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-heartbeat"></i>
+                        <p>Add health checks: <code>HEALTHCHECK CMD curl -f http://localhost/ || exit 1</code></p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-file-alt"></i>
+                        <p>Label images: <code>LABEL maintainer="team@company.com"</code></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <a href="day-03-volumes-storage.html" class="nav-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>Day 3: Volumes & Storage</span>
+            </a>
+            <a href="day-05-multi-stage-builds.html" class="nav-btn">
+                <span>Day 5: Multi-stage Builds</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="../../" class="footer-logo">
+                    <i class="fas fa-terminal"></i>
+                    <span>DevOps Hub</span>
+                </a>
+                <p>Your daily companion for DevOps learning and interview preparation.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Topics</h4>
+                <ul>
+                    <li><a href="../docker/">Docker</a></li>
+                    <li><a href="../kubernetes/">Kubernetes</a></li>
+                    <li><a href="../terraform/">Terraform</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="../../#learning-path">Learning Path</a></li>
+                    <li><a href="https://github.com/saggy6210/devops_notes" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 DevOps Learning Hub. Made with <i class="fas fa-heart"></i> for the DevOps community.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        function toggleQA(element) {
+            const item = element.parentElement;
+            item.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

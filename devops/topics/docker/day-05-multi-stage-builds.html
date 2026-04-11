@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Docker Multi-stage Builds - Day 5: Learn to create optimized production images with multi-stage builds">
+    <title>Day 5: Multi-stage Builds | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2496ed;
+            --primary-dark: #1a7cc4;
+            --secondary: #0f172a;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --bg: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-dark: #0f172a;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+
+        .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: linear-gradient(90deg, var(--primary), var(--accent)); z-index: 9999; transition: width 0.3s; }
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 16px 0; }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--secondary); text-decoration: none; }
+        .nav-logo i { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .nav-links { display: flex; gap: 8px; list-style: none; }
+        .nav-links a { padding: 8px 16px; color: var(--text-secondary); text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 0.9rem; transition: all 0.2s; }
+        .nav-links a:hover { color: var(--primary); background: var(--bg-secondary); }
+
+        .hero { padding: 140px 24px 80px; background: linear-gradient(180deg, #e0f2fe 0%, var(--bg) 100%); position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: 100px; right: -200px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(36,150,237,0.1) 0%, transparent 70%); border-radius: 50%; }
+        .hero-container { max-width: 1000px; margin: 0 auto; }
+        .breadcrumb { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; margin-bottom: 24px; }
+        .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb i { font-size: 0.7rem; color: var(--text-light); }
+        .breadcrumb span { color: var(--text); font-weight: 500; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--primary); color: white; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 20px; }
+        .hero h1 { font-size: 3rem; font-weight: 800; color: var(--secondary); margin-bottom: 16px; line-height: 1.2; }
+        .hero h1 span { background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-description { font-size: 1.2rem; color: var(--text-secondary); max-width: 600px; margin-bottom: 32px; }
+        .hero-meta { display: flex; flex-wrap: wrap; gap: 24px; }
+        .meta-item { display: flex; align-items: center; gap: 10px; padding: 12px 20px; background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border); }
+        .meta-item i { width: 36px; height: 36px; background: linear-gradient(135deg, rgba(36,150,237,0.1), rgba(6,182,212,0.1)); color: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .meta-item span { font-weight: 600; color: var(--secondary); }
+        .meta-item small { display: block; font-size: 0.75rem; color: var(--text-light); }
+
+        .main-content { max-width: 900px; margin: 0 auto; padding: 60px 24px; }
+        .section-card { background: var(--bg); border-radius: var(--radius-lg); border: 1px solid var(--border); margin-bottom: 40px; overflow: hidden; transition: box-shadow 0.3s; }
+        .section-card:hover { box-shadow: var(--shadow-lg); }
+        .section-header { display: flex; align-items: center; gap: 16px; padding: 24px 28px; background: linear-gradient(135deg, rgba(36,150,237,0.05), rgba(6,182,212,0.02)); border-bottom: 1px solid var(--border); }
+        .section-icon { width: 48px; height: 48px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+        .section-header h2 { font-size: 1.4rem; font-weight: 700; color: var(--secondary); }
+        .section-body { padding: 28px; }
+
+        .info-box { display: flex; gap: 16px; padding: 20px; background: linear-gradient(135deg, #eff6ff, #f0fdfa); border-radius: var(--radius); margin-bottom: 24px; }
+        .info-box i { width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .info-box p { font-size: 1.05rem; color: var(--text); }
+        .info-box strong { color: var(--secondary); }
+
+        .analogy-card { display: flex; gap: 20px; padding: 24px; background: linear-gradient(135deg, #fef3c7, #fef9c3); border-radius: var(--radius); border-left: 4px solid var(--warning); margin-bottom: 20px; }
+        .analogy-card .icon { width: 50px; height: 50px; background: var(--warning); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+        .analogy-card h4 { font-size: 1rem; font-weight: 600; color: var(--secondary); margin-bottom: 8px; }
+        .analogy-card p { color: var(--text-secondary); }
+
+        .code-block { background: var(--bg-dark); border-radius: var(--radius); overflow: hidden; margin: 20px 0; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .code-header span { color: var(--text-light); font-size: 0.85rem; font-weight: 500; }
+        .code-header .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .code-header .badge.size { background: rgba(16,185,129,0.2); color: var(--success); }
+        .code-block pre { padding: 20px; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #e2e8f0; line-height: 1.7; }
+        .code-block .comment { color: #64748b; }
+        .code-block .keyword { color: #22d3ee; }
+        .code-block .string { color: #a5f3fc; }
+        .code-block .stage { color: #f472b6; font-weight: 600; }
+
+        .stage-flow { display: flex; align-items: center; justify-content: space-around; padding: 30px; background: var(--bg-secondary); border-radius: var(--radius); margin: 24px 0; flex-wrap: wrap; gap: 20px; }
+        .stage-box { text-align: center; padding: 20px; background: var(--bg); border-radius: var(--radius); border: 2px solid var(--border); min-width: 140px; }
+        .stage-box.build { border-color: var(--warning); }
+        .stage-box.prod { border-color: var(--success); }
+        .stage-box i { font-size: 2rem; margin-bottom: 10px; }
+        .stage-box.build i { color: var(--warning); }
+        .stage-box.prod i { color: var(--success); }
+        .stage-box h4 { font-size: 0.9rem; color: var(--secondary); margin-bottom: 4px; }
+        .stage-box p { font-size: 0.8rem; color: var(--text-light); }
+        .stage-arrow { font-size: 1.5rem; color: var(--text-light); }
+
+        .size-comparison { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin: 24px 0; }
+        .size-card { padding: 24px; border-radius: var(--radius); text-align: center; }
+        .size-card.before { background: linear-gradient(135deg, rgba(239,68,68,0.1), transparent); border: 2px solid var(--danger); }
+        .size-card.after { background: linear-gradient(135deg, rgba(16,185,129,0.1), transparent); border: 2px solid var(--success); }
+        .size-card h4 { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; }
+        .size-card .size { font-size: 2.5rem; font-weight: 800; }
+        .size-card.before .size { color: var(--danger); }
+        .size-card.after .size { color: var(--success); }
+        .size-card .reduction { font-size: 0.85rem; color: var(--success); font-weight: 600; margin-top: 8px; }
+
+        .qa-accordion { display: flex; flex-direction: column; gap: 12px; }
+        .qa-item { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: all 0.3s; }
+        .qa-item:hover { border-color: var(--primary); }
+        .qa-item.active { border-color: var(--primary); box-shadow: var(--shadow); }
+        .qa-question { display: flex; align-items: center; gap: 16px; padding: 20px; cursor: pointer; background: var(--bg); transition: background 0.2s; }
+        .qa-question:hover { background: var(--bg-secondary); }
+        .qa-number { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+        .qa-question h4 { flex: 1; font-size: 1rem; font-weight: 600; color: var(--secondary); }
+        .qa-question .toggle { color: var(--text-light); transition: transform 0.3s; }
+        .qa-item.active .qa-question .toggle { transform: rotate(180deg); }
+        .qa-answer { display: none; padding: 0 20px 20px 72px; color: var(--text-secondary); line-height: 1.7; }
+        .qa-item.active .qa-answer { display: block; }
+        .qa-answer ul, .qa-answer ol { margin: 12px 0; padding-left: 20px; }
+        .qa-answer li { margin-bottom: 8px; }
+        .qa-answer strong { color: var(--text); }
+        .qa-answer code { background: var(--bg-dark); color: var(--success); padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; }
+
+        .highlight-box { display: flex; gap: 12px; padding: 16px; background: linear-gradient(135deg, rgba(36,150,237,0.1), rgba(6,182,212,0.05)); border-radius: 8px; margin-top: 16px; }
+        .highlight-box i { color: var(--primary); flex-shrink: 0; }
+        .highlight-box.warning { background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.05)); }
+        .highlight-box.warning i { color: var(--warning); }
+
+        .tips-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .tip-item { display: flex; gap: 12px; padding: 16px; background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(6,182,212,0.05)); border-radius: var(--radius); border: 1px solid rgba(16,185,129,0.2); }
+        .tip-item i { color: var(--success); font-size: 1.1rem; flex-shrink: 0; }
+        .tip-item p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+        .tip-item code { background: var(--bg-dark); color: var(--success); padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
+
+        .nav-buttons { display: flex; justify-content: space-between; gap: 20px; margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border); }
+        .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-secondary); border-radius: var(--radius); text-decoration: none; color: var(--text-secondary); font-weight: 500; transition: all 0.2s; }
+        .nav-btn:hover { background: var(--primary); color: white; transform: translateY(-2px); }
+
+        .footer { background: var(--secondary); color: var(--text-light); padding: 60px 24px; margin-top: 80px; }
+        .footer-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; gap: 40px; }
+        .footer-brand { max-width: 300px; }
+        .footer-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; color: white; margin-bottom: 16px; text-decoration: none; }
+        .footer-logo i { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .footer-links h4 { color: white; font-size: 1rem; margin-bottom: 16px; }
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a { color: var(--text-light); text-decoration: none; transition: color 0.2s; }
+        .footer-links a:hover { color: white; }
+        .footer-bottom { text-align: center; padding-top: 40px; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; }
+        .footer-bottom i { color: var(--danger); }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2rem; }
+            .hero-meta { flex-direction: column; gap: 12px; }
+            .size-comparison, .tips-grid { grid-template-columns: 1fr; }
+            .stage-flow { flex-direction: column; }
+            .stage-arrow { transform: rotate(90deg); }
+            .footer-content { flex-direction: column; }
+            .nav-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo">
+                <i class="fas fa-terminal"></i>
+                <span>DevOps Hub</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="../../">Home</a></li>
+                <li><a href="../../#topics">Topics</a></li>
+                <li><a href="./">Docker</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="./">Docker</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Day 5</span>
+            </div>
+
+            <div class="hero-badge">
+                <i class="fas fa-layer-group"></i>
+                Day 5 of 10
+            </div>
+
+            <h1>Docker <span>Multi-stage Builds</span></h1>
+            <p class="hero-description">
+                Create lean production images by separating build and runtime environments. 
+                Reduce image sizes by up to 90%.
+            </p>
+
+            <div class="hero-meta">
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <span>20-25 min</span>
+                        <small>Reading time</small>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-question-circle"></i>
+                    <div>
+                        <span>5 Q&A</span>
+                        <small>Interview prep</small>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-compress-arrows-alt"></i>
+                    <div>
+                        <span>90% smaller</span>
+                        <small>Image size</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <!-- What is Multi-stage -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-layer-group"></i></div>
+                <h2>What are Multi-stage Builds?</h2>
+            </div>
+            <div class="section-body">
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Multi-stage builds use <strong>multiple FROM statements</strong> in a single Dockerfile. Each FROM starts a new stage. You copy only what you need from previous stages to the final image.</p>
+                </div>
+
+                <div class="analogy-card">
+                    <div class="icon">💡</div>
+                    <div>
+                        <h4>Think of it like cooking</h4>
+                        <p>You use many tools and ingredients (build dependencies) to cook a meal, but you only serve the finished dish (final binary) to guests. Multi-stage builds let you discard the "kitchen mess" and deliver only the clean result.</p>
+                    </div>
+                </div>
+
+                <div class="stage-flow">
+                    <div class="stage-box build">
+                        <i class="fas fa-hammer"></i>
+                        <h4>Build Stage</h4>
+                        <p>Compilers, SDKs, dev deps</p>
+                    </div>
+                    <span class="stage-arrow"><i class="fas fa-arrow-right"></i></span>
+                    <div class="stage-box">
+                        <i class="fas fa-copy"></i>
+                        <h4>Copy Artifacts</h4>
+                        <p>Only built files</p>
+                    </div>
+                    <span class="stage-arrow"><i class="fas fa-arrow-right"></i></span>
+                    <div class="stage-box prod">
+                        <i class="fas fa-rocket"></i>
+                        <h4>Production Stage</h4>
+                        <p>Minimal runtime only</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Node.js Example -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fab fa-node-js"></i></div>
+                <h2>Node.js Multi-stage Build</h2>
+            </div>
+            <div class="section-body">
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Dockerfile - Node.js App</span>
+                        <span class="badge size">~50MB final</span>
+                    </div>
+                    <pre><code><span class="comment"># Stage 1: Build</span>
+<span class="keyword">FROM</span> node:18-alpine <span class="stage">AS builder</span>
+<span class="keyword">WORKDIR</span> /app
+<span class="keyword">COPY</span> package*.json ./
+<span class="keyword">RUN</span> npm ci
+<span class="keyword">COPY</span> . .
+<span class="keyword">RUN</span> npm run build
+
+<span class="comment"># Stage 2: Production</span>
+<span class="keyword">FROM</span> node:18-alpine <span class="stage">AS production</span>
+<span class="keyword">WORKDIR</span> /app
+<span class="keyword">COPY</span> package*.json ./
+<span class="keyword">RUN</span> npm ci --only=production
+<span class="keyword">COPY</span> --from=builder /app/dist ./dist
+
+<span class="keyword">USER</span> node
+<span class="keyword">EXPOSE</span> 3000
+<span class="keyword">CMD</span> ["node", "dist/index.js"]</code></pre>
+                </div>
+
+                <div class="size-comparison">
+                    <div class="size-card before">
+                        <h4>Without Multi-stage</h4>
+                        <div class="size">~950MB</div>
+                    </div>
+                    <div class="size-card after">
+                        <h4>With Multi-stage</h4>
+                        <div class="size">~50MB</div>
+                        <div class="reduction">↓ 95% reduction!</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Go Example -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-code"></i></div>
+                <h2>Go Multi-stage Build</h2>
+            </div>
+            <div class="section-body">
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Dockerfile - Go App (Scratch base)</span>
+                        <span class="badge size">~10MB final</span>
+                    </div>
+                    <pre><code><span class="comment"># Stage 1: Build</span>
+<span class="keyword">FROM</span> golang:1.21-alpine <span class="stage">AS builder</span>
+<span class="keyword">WORKDIR</span> /app
+<span class="keyword">COPY</span> go.mod go.sum ./
+<span class="keyword">RUN</span> go mod download
+<span class="keyword">COPY</span> . .
+<span class="keyword">RUN</span> CGO_ENABLED=0 GOOS=linux go build -o main .
+
+<span class="comment"># Stage 2: Minimal Production</span>
+<span class="keyword">FROM</span> scratch
+<span class="keyword">COPY</span> --from=builder /app/main /main
+<span class="keyword">COPY</span> --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+<span class="keyword">ENTRYPOINT</span> ["/main"]</code></pre>
+                </div>
+
+                <div class="highlight-box">
+                    <i class="fas fa-star"></i>
+                    <span><strong>Scratch</strong> is an empty base image — no OS, no shell, just your binary. Perfect for compiled languages like Go and Rust.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Java Example -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fab fa-java"></i></div>
+                <h2>Java/Spring Boot Multi-stage Build</h2>
+            </div>
+            <div class="section-body">
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Dockerfile - Spring Boot with Maven</span>
+                        <span class="badge size">~200MB final</span>
+                    </div>
+                    <pre><code><span class="comment"># Stage 1: Build with Maven</span>
+<span class="keyword">FROM</span> maven:3.9-eclipse-temurin-17 <span class="stage">AS builder</span>
+<span class="keyword">WORKDIR</span> /app
+<span class="keyword">COPY</span> pom.xml .
+<span class="keyword">RUN</span> mvn dependency:go-offline
+<span class="keyword">COPY</span> src ./src
+<span class="keyword">RUN</span> mvn package -DskipTests
+
+<span class="comment"># Stage 2: Runtime only</span>
+<span class="keyword">FROM</span> eclipse-temurin:17-jre-alpine
+<span class="keyword">WORKDIR</span> /app
+<span class="keyword">COPY</span> --from=builder /app/target/*.jar app.jar
+
+<span class="keyword">USER</span> 1000
+<span class="keyword">EXPOSE</span> 8080
+<span class="keyword">ENTRYPOINT</span> ["java", "-jar", "app.jar"]</code></pre>
+                </div>
+
+                <div class="size-comparison">
+                    <div class="size-card before">
+                        <h4>Full JDK + Maven</h4>
+                        <div class="size">~800MB</div>
+                    </div>
+                    <div class="size-card after">
+                        <h4>JRE Alpine Only</h4>
+                        <div class="size">~200MB</div>
+                        <div class="reduction">↓ 75% reduction!</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interview Q&A -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-user-tie"></i></div>
+                <h2>Interview Questions</h2>
+            </div>
+            <div class="section-body">
+                <div class="qa-accordion">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">1</span>
+                            <h4>What is a multi-stage Docker build?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <p>Multi-stage builds allow you to use multiple FROM statements in a single Dockerfile:</p>
+                            <ul>
+                                <li>Each FROM starts a new build stage</li>
+                                <li>You can copy artifacts from one stage to another</li>
+                                <li>Only the final stage becomes your image</li>
+                                <li>Build tools and dependencies don't end up in production</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">2</span>
+                            <h4>Why use multi-stage builds?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ol>
+                                <li><strong>Smaller images:</strong> No build tools in final image</li>
+                                <li><strong>Security:</strong> Fewer packages = smaller attack surface</li>
+                                <li><strong>Single Dockerfile:</strong> No need for separate build/runtime files</li>
+                                <li><strong>Faster deployments:</strong> Smaller images transfer faster</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">3</span>
+                            <h4>How do you copy files between stages?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <p>Use <code>COPY --from=stage_name</code> or <code>COPY --from=0</code> (stage number):</p>
+                            <ul>
+                                <li>Named: <code>COPY --from=builder /app/dist ./dist</code></li>
+                                <li>Numbered: <code>COPY --from=0 /app/binary ./</code></li>
+                                <li>External: <code>COPY --from=nginx:alpine /etc/nginx/nginx.conf ./</code></li>
+                            </ul>
+                            <div class="highlight-box">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>You can even copy from external images, not just previous stages!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">4</span>
+                            <h4>What is "scratch" base image?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <p><code>FROM scratch</code> is an empty image with:</p>
+                            <ul>
+                                <li>No operating system</li>
+                                <li>No shell</li>
+                                <li>No utilities</li>
+                                <li>Just your binary</li>
+                            </ul>
+                            <div class="highlight-box warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>Only works with statically compiled binaries (Go, Rust). Not for interpreted languages.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">5</span>
+                            <h4>How do you build a specific stage?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <p>Use <code>--target</code> flag to build up to a specific stage:</p>
+                            <code>docker build --target builder -t myapp:builder .</code>
+                            <p style="margin-top: 12px;">Useful for:</p>
+                            <ul>
+                                <li>Running tests in CI without building production image</li>
+                                <li>Debugging build issues</li>
+                                <li>Creating development-specific images</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tips -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-lightbulb"></i></div>
+                <h2>Quick Tips</h2>
+            </div>
+            <div class="section-body">
+                <div class="tips-grid">
+                    <div class="tip-item">
+                        <i class="fas fa-tag"></i>
+                        <p>Name stages with <code>AS name</code> for readability</p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <p>Use distroless images: <code>gcr.io/distroless/base</code></p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-search"></i>
+                        <p>Check final size: <code>docker images myapp</code></p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-vial"></i>
+                        <p>Add test stage: <code>FROM builder AS test</code></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <a href="day-04-dockerfile-best-practices.html" class="nav-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>Day 4: Dockerfile Best Practices</span>
+            </a>
+            <a href="day-06-docker-compose.html" class="nav-btn">
+                <span>Day 6: Docker Compose</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="../../" class="footer-logo">
+                    <i class="fas fa-terminal"></i>
+                    <span>DevOps Hub</span>
+                </a>
+                <p>Your daily companion for DevOps learning and interview preparation.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Topics</h4>
+                <ul>
+                    <li><a href="../docker/">Docker</a></li>
+                    <li><a href="../kubernetes/">Kubernetes</a></li>
+                    <li><a href="../terraform/">Terraform</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="../../#learning-path">Learning Path</a></li>
+                    <li><a href="https://github.com/saggy6210/devops_notes" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 DevOps Learning Hub. Made with <i class="fas fa-heart"></i> for the DevOps community.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        function toggleQA(element) {
+            const item = element.parentElement;
+            item.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

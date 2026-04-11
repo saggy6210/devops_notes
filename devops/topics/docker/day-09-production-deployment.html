@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Docker Production Deployment - Day 9: Learn CI/CD integration, orchestration, and production best practices">
+    <title>Day 9: Production Deployment | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #2496ed; --primary-dark: #1a7cc4; --secondary: #0f172a; --accent: #06b6d4; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --text: #1e293b; --text-secondary: #64748b; --text-light: #94a3b8; --bg: #ffffff; --bg-secondary: #f8fafc; --bg-dark: #0f172a; --border: #e2e8f0; --radius: 12px; --radius-lg: 20px; --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+        .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: linear-gradient(90deg, var(--primary), var(--accent)); z-index: 9999; transition: width 0.3s; }
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 16px 0; }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--secondary); text-decoration: none; }
+        .nav-logo i { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .nav-links { display: flex; gap: 8px; list-style: none; }
+        .nav-links a { padding: 8px 16px; color: var(--text-secondary); text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 0.9rem; }
+        .nav-links a:hover { color: var(--primary); background: var(--bg-secondary); }
+
+        .hero { padding: 140px 24px 80px; background: linear-gradient(180deg, #ecfdf5 0%, var(--bg) 100%); position: relative; }
+        .hero-container { max-width: 1000px; margin: 0 auto; }
+        .breadcrumb { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; margin-bottom: 24px; }
+        .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb i { font-size: 0.7rem; color: var(--text-light); }
+        .breadcrumb span { color: var(--text); font-weight: 500; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--success); color: white; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 20px; }
+        .hero h1 { font-size: 3rem; font-weight: 800; color: var(--secondary); margin-bottom: 16px; line-height: 1.2; }
+        .hero h1 span { background: linear-gradient(135deg, var(--success), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-description { font-size: 1.2rem; color: var(--text-secondary); max-width: 600px; margin-bottom: 32px; }
+        .hero-meta { display: flex; flex-wrap: wrap; gap: 24px; }
+        .meta-item { display: flex; align-items: center; gap: 10px; padding: 12px 20px; background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border); }
+        .meta-item i { width: 36px; height: 36px; background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(6,182,212,0.1)); color: var(--success); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .meta-item span { font-weight: 600; color: var(--secondary); }
+        .meta-item small { display: block; font-size: 0.75rem; color: var(--text-light); }
+
+        .main-content { max-width: 900px; margin: 0 auto; padding: 60px 24px; }
+        .section-card { background: var(--bg); border-radius: var(--radius-lg); border: 1px solid var(--border); margin-bottom: 40px; overflow: hidden; transition: box-shadow 0.3s; }
+        .section-card:hover { box-shadow: var(--shadow-lg); }
+        .section-header { display: flex; align-items: center; gap: 16px; padding: 24px 28px; background: linear-gradient(135deg, rgba(16,185,129,0.05), rgba(6,182,212,0.02)); border-bottom: 1px solid var(--border); }
+        .section-icon { width: 48px; height: 48px; background: linear-gradient(135deg, var(--success), var(--accent)); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+        .section-header h2 { font-size: 1.4rem; font-weight: 700; color: var(--secondary); }
+        .section-body { padding: 28px; }
+
+        .info-box { display: flex; gap: 16px; padding: 20px; background: linear-gradient(135deg, #ecfdf5, #f0fdfa); border-radius: var(--radius); margin-bottom: 24px; }
+        .info-box i { width: 40px; height: 40px; background: var(--success); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .info-box p { font-size: 1.05rem; color: var(--text); }
+        .info-box strong { color: var(--secondary); }
+
+        .code-block { background: var(--bg-dark); border-radius: var(--radius); overflow: hidden; margin: 20px 0; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .code-header span { color: var(--text-light); font-size: 0.85rem; font-weight: 500; }
+        .code-block pre { padding: 20px; margin: 0; overflow-x: auto; }
+        .code-block code { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #e2e8f0; line-height: 1.7; }
+        .code-block .comment { color: #64748b; }
+        .code-block .keyword { color: #22d3ee; }
+        .code-block .string { color: #a5f3fc; }
+
+        .checklist { list-style: none; margin: 20px 0; }
+        .checklist li { display: flex; align-items: flex-start; gap: 12px; padding: 16px; background: var(--bg-secondary); border-radius: var(--radius); margin-bottom: 12px; }
+        .checklist i { width: 24px; height: 24px; background: var(--success); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0; margin-top: 2px; }
+        .checklist strong { color: var(--secondary); display: block; margin-bottom: 4px; }
+        .checklist p { color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
+
+        .pipeline-flow { display: flex; align-items: center; justify-content: space-between; padding: 30px; background: var(--bg-secondary); border-radius: var(--radius); margin: 24px 0; flex-wrap: wrap; gap: 12px; }
+        .pipeline-step { text-align: center; padding: 16px; background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border); min-width: 100px; }
+        .pipeline-step i { font-size: 1.5rem; margin-bottom: 8px; color: var(--primary); }
+        .pipeline-step span { display: block; font-size: 0.8rem; font-weight: 600; color: var(--secondary); }
+        .pipeline-arrow { color: var(--text-light); font-size: 1.2rem; }
+
+        .qa-accordion { display: flex; flex-direction: column; gap: 12px; }
+        .qa-item { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+        .qa-item:hover { border-color: var(--primary); }
+        .qa-item.active { border-color: var(--primary); box-shadow: var(--shadow); }
+        .qa-question { display: flex; align-items: center; gap: 16px; padding: 20px; cursor: pointer; background: var(--bg); }
+        .qa-question:hover { background: var(--bg-secondary); }
+        .qa-number { width: 36px; height: 36px; background: linear-gradient(135deg, var(--success), var(--accent)); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+        .qa-question h4 { flex: 1; font-size: 1rem; font-weight: 600; color: var(--secondary); }
+        .qa-question .toggle { color: var(--text-light); transition: transform 0.3s; }
+        .qa-item.active .qa-question .toggle { transform: rotate(180deg); }
+        .qa-answer { display: none; padding: 0 20px 20px 72px; color: var(--text-secondary); line-height: 1.7; }
+        .qa-item.active .qa-answer { display: block; }
+        .qa-answer ul, .qa-answer ol { margin: 12px 0; padding-left: 20px; }
+        .qa-answer li { margin-bottom: 8px; }
+        .qa-answer strong { color: var(--text); }
+        .qa-answer code { background: var(--bg-dark); color: var(--success); padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; }
+
+        .highlight-box { display: flex; gap: 12px; padding: 16px; background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(6,182,212,0.05)); border-radius: 8px; margin-top: 16px; }
+        .highlight-box i { color: var(--success); flex-shrink: 0; }
+
+        .tips-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .tip-item { display: flex; gap: 12px; padding: 16px; background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(6,182,212,0.05)); border-radius: var(--radius); border: 1px solid rgba(16,185,129,0.2); }
+        .tip-item i { color: var(--success); font-size: 1.1rem; flex-shrink: 0; }
+        .tip-item p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+        .tip-item code { background: var(--bg-dark); color: var(--success); padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
+
+        .nav-buttons { display: flex; justify-content: space-between; gap: 20px; margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border); }
+        .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-secondary); border-radius: var(--radius); text-decoration: none; color: var(--text-secondary); font-weight: 500; transition: all 0.2s; }
+        .nav-btn:hover { background: var(--primary); color: white; transform: translateY(-2px); }
+
+        .footer { background: var(--secondary); color: var(--text-light); padding: 60px 24px; margin-top: 80px; }
+        .footer-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; gap: 40px; }
+        .footer-brand { max-width: 300px; }
+        .footer-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; color: white; margin-bottom: 16px; text-decoration: none; }
+        .footer-logo i { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .footer-links h4 { color: white; font-size: 1rem; margin-bottom: 16px; }
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a { color: var(--text-light); text-decoration: none; }
+        .footer-links a:hover { color: white; }
+        .footer-bottom { text-align: center; padding-top: 40px; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; }
+        .footer-bottom i { color: var(--danger); }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2rem; }
+            .hero-meta { flex-direction: column; gap: 12px; }
+            .pipeline-flow { flex-direction: column; }
+            .pipeline-arrow { transform: rotate(90deg); }
+            .tips-grid { grid-template-columns: 1fr; }
+            .footer-content { flex-direction: column; }
+            .nav-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo"><i class="fas fa-terminal"></i><span>DevOps Hub</span></a>
+            <ul class="nav-links">
+                <li><a href="../../">Home</a></li>
+                <li><a href="../../#topics">Topics</a></li>
+                <li><a href="./">Docker</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="./">Docker</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Day 9</span>
+            </div>
+            <div class="hero-badge"><i class="fas fa-rocket"></i> Day 9 of 10</div>
+            <h1>Docker <span>Production Deployment</span></h1>
+            <p class="hero-description">Deploy containers to production with CI/CD pipelines, container orchestration, and enterprise-grade practices.</p>
+            <div class="hero-meta">
+                <div class="meta-item"><i class="fas fa-clock"></i><div><span>25-30 min</span><small>Reading time</small></div></div>
+                <div class="meta-item"><i class="fas fa-question-circle"></i><div><span>5 Q&A</span><small>Interview prep</small></div></div>
+                <div class="meta-item"><i class="fas fa-rocket"></i><div><span>Production</span><small>Ready</small></div></div>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <!-- CI/CD Pipeline -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-code-branch"></i></div>
+                <h2>Docker in CI/CD Pipeline</h2>
+            </div>
+            <div class="section-body">
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <p>In modern DevOps, Docker is central to CI/CD. <strong>Build once, deploy everywhere</strong> - the same container runs in dev, staging, and production.</p>
+                </div>
+
+                <div class="pipeline-flow">
+                    <div class="pipeline-step">
+                        <i class="fas fa-code"></i>
+                        <span>Code Push</span>
+                    </div>
+                    <span class="pipeline-arrow"><i class="fas fa-arrow-right"></i></span>
+                    <div class="pipeline-step">
+                        <i class="fas fa-hammer"></i>
+                        <span>Build Image</span>
+                    </div>
+                    <span class="pipeline-arrow"><i class="fas fa-arrow-right"></i></span>
+                    <div class="pipeline-step">
+                        <i class="fas fa-search"></i>
+                        <span>Scan & Test</span>
+                    </div>
+                    <span class="pipeline-arrow"><i class="fas fa-arrow-right"></i></span>
+                    <div class="pipeline-step">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Push Registry</span>
+                    </div>
+                    <span class="pipeline-arrow"><i class="fas fa-arrow-right"></i></span>
+                    <div class="pipeline-step">
+                        <i class="fas fa-rocket"></i>
+                        <span>Deploy</span>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>GitHub Actions - Docker Build & Push</span>
+                    </div>
+                    <pre><code><span class="keyword">name:</span> Docker CI/CD
+
+<span class="keyword">on:</span>
+  push:
+    branches: [main]
+
+<span class="keyword">jobs:</span>
+  <span class="keyword">build:</span>
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: myrepo/myapp:${{ github.sha }}
+      
+      - name: Scan for vulnerabilities
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: myrepo/myapp:${{ github.sha }}
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Production Checklist -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-tasks"></i></div>
+                <h2>Production Readiness Checklist</h2>
+            </div>
+            <div class="section-body">
+                <ul class="checklist">
+                    <li>
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>Health Checks</strong>
+                            <p>Add HEALTHCHECK instruction or configure orchestrator health probes</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>Resource Limits</strong>
+                            <p>Set memory and CPU limits to prevent resource starvation</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>Graceful Shutdown</strong>
+                            <p>Handle SIGTERM signal for clean shutdown (connections, cleanup)</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>Log to stdout</strong>
+                            <p>Application logs to stdout/stderr, configure log driver for aggregation</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>Non-root User</strong>
+                            <p>Run containers as non-root for security</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>Immutable Tags</strong>
+                            <p>Use SHA or semantic versioning, never :latest in production</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Container Registries -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-warehouse"></i></div>
+                <h2>Container Registries</h2>
+            </div>
+            <div class="section-body">
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Push to different registries</span>
+                    </div>
+                    <pre><code><span class="comment"># Docker Hub</span>
+docker push username/myapp:v1.0.0
+
+<span class="comment"># AWS ECR</span>
+aws ecr get-login-password | docker login --username AWS --password-stdin 123456789.dkr.ecr.us-east-1.amazonaws.com
+docker tag myapp:latest 123456789.dkr.ecr.us-east-1.amazonaws.com/myapp:v1.0.0
+docker push 123456789.dkr.ecr.us-east-1.amazonaws.com/myapp:v1.0.0
+
+<span class="comment"># Azure ACR</span>
+az acr login --name myregistry
+docker push myregistry.azurecr.io/myapp:v1.0.0
+
+<span class="comment"># Google GCR</span>
+gcloud auth configure-docker
+docker push gcr.io/myproject/myapp:v1.0.0</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Orchestration -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-dharmachakra"></i></div>
+                <h2>Container Orchestration</h2>
+            </div>
+            <div class="section-body">
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <p>For production workloads, use container orchestration: <strong>Kubernetes</strong> (most popular), Docker Swarm, or managed services like ECS/Fargate.</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Kubernetes Deployment example</span>
+                    </div>
+                    <pre><code><span class="keyword">apiVersion:</span> apps/v1
+<span class="keyword">kind:</span> Deployment
+<span class="keyword">metadata:</span>
+  name: myapp
+<span class="keyword">spec:</span>
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: myapp
+        image: myrepo/myapp:v1.0.0
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3000</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interview Q&A -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-user-tie"></i></div>
+                <h2>Interview Questions</h2>
+            </div>
+            <div class="section-body">
+                <div class="qa-accordion">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">1</span>
+                            <h4>How do you deploy Docker containers in production?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ol>
+                                <li>Build image in CI/CD pipeline</li>
+                                <li>Push to private container registry</li>
+                                <li>Deploy using orchestrator (Kubernetes, ECS)</li>
+                                <li>Use rolling updates for zero downtime</li>
+                                <li>Monitor with health checks and logging</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">2</span>
+                            <h4>What is a container registry?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <p>A storage and distribution service for container images:</p>
+                            <ul>
+                                <li><strong>Docker Hub:</strong> Default public registry</li>
+                                <li><strong>AWS ECR:</strong> Amazon's private registry</li>
+                                <li><strong>Azure ACR:</strong> Azure Container Registry</li>
+                                <li><strong>GCR/Artifact Registry:</strong> Google Cloud</li>
+                                <li><strong>Harbor:</strong> Self-hosted enterprise option</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">3</span>
+                            <h4>What is zero-downtime deployment?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <p>Deployment strategies that don't cause service interruption:</p>
+                            <ul>
+                                <li><strong>Rolling update:</strong> Gradually replace old with new</li>
+                                <li><strong>Blue-green:</strong> Two identical environments, switch traffic</li>
+                                <li><strong>Canary:</strong> Route small % to new version first</li>
+                            </ul>
+                            <div class="highlight-box">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Health checks are essential - don't route traffic until new containers are healthy!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">4</span>
+                            <h4>Why use Kubernetes over Docker Swarm?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <p>Kubernetes advantages:</p>
+                            <ul>
+                                <li>Industry standard, massive ecosystem</li>
+                                <li>Better auto-scaling capabilities</li>
+                                <li>More sophisticated networking (Ingress)</li>
+                                <li>ConfigMaps, Secrets, RBAC</li>
+                                <li>Available as managed service (EKS, AKS, GKE)</li>
+                            </ul>
+                            <p>Swarm is simpler but less feature-rich.</p>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">5</span>
+                            <h4>How do you handle configuration in containers?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>Environment variables:</strong> Non-sensitive config</li>
+                                <li><strong>ConfigMaps (K8s):</strong> External configuration</li>
+                                <li><strong>Secrets:</strong> Sensitive data (encrypted)</li>
+                                <li><strong>Volume mounts:</strong> Config files from external source</li>
+                            </ul>
+                            <p>12-factor app principle: Config should be in the environment, not baked into image.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tips -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-lightbulb"></i></div>
+                <h2>Quick Tips</h2>
+            </div>
+            <div class="section-body">
+                <div class="tips-grid">
+                    <div class="tip-item">
+                        <i class="fas fa-tag"></i>
+                        <p>Tag with git SHA: <code>myapp:abc123</code> for traceability</p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-heartbeat"></i>
+                        <p>Always implement health endpoints: <code>/health</code>, <code>/ready</code></p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-sync"></i>
+                        <p>Set restart policy: <code>unless-stopped</code> or <code>always</code></p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <p>Scan images in CI before pushing to registry</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <a href="day-08-logging-debugging.html" class="nav-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>Day 8: Logging & Debugging</span>
+            </a>
+            <a href="day-10-interview-deep-dive.html" class="nav-btn">
+                <span>Day 10: Interview Deep Dive</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="../../" class="footer-logo"><i class="fas fa-terminal"></i><span>DevOps Hub</span></a>
+                <p>Your daily companion for DevOps learning and interview preparation.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Topics</h4>
+                <ul>
+                    <li><a href="../docker/">Docker</a></li>
+                    <li><a href="../kubernetes/">Kubernetes</a></li>
+                    <li><a href="../terraform/">Terraform</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="../../#learning-path">Learning Path</a></li>
+                    <li><a href="https://github.com/saggy6210/devops_notes" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 DevOps Learning Hub. Made with <i class="fas fa-heart"></i> for the DevOps community.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById('progressBar').style.width = (winScroll / height) * 100 + '%';
+        });
+        function toggleQA(element) { element.parentElement.classList.toggle('active'); }
+    </script>
+</body>
+</html>
