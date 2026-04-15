@@ -3,6 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kubernetes Learning - Container orchestration, commands, and interview preparation">
+    <title>Kubernetes | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/topic.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo">
+                <i class="fas fa-terminal"></i>
+                <span>DevOps Hub</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="../../" class="nav-link">Home</a></li>
+                <li><a href="../../#topics" class="nav-link">Topics</a></li>
+                <li><a href="../../#learning-path" class="nav-link">Learning Path</a></li>
+                <li><a href="../../#about" class="nav-link">About</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Topic Header -->
+    <header class="topic-hero kubernetes-theme">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../../#topics">Topics</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Kubernetes</span>
+            </div>
+            <div class="topic-hero-content">
+                <div class="topic-hero-text">
+                    <div class="topic-badge">
+                        <i class="fas fa-dharmachakra"></i>
+                        <span>Container Orchestration</span>
+                    </div>
+                    <h1>Kubernetes</h1>
+                    <p>Master container orchestration from basics to production. Learn to deploy, scale, and manage containerized applications with K8s.</p>
+                    <div class="topic-stats">
+                        <div class="topic-stat">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>10 Days</span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-question-circle"></i>
+                            <span>50+ Q&A</span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-code"></i>
+                            <span>Hands-on Labs</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="topic-hero-icon">
+                    <i class="fas fa-dharmachakra"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="topic-main">
+        <div class="container">
+            <div class="topic-layout">
+                <!-- Sidebar -->
+                <aside class="topic-sidebar">
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-list"></i> Course Content</h3>
+                        <ul class="day-list">
+                            <li class="active">
+                                <a href="day-01-core-concepts.html">
+                                    <span class="day-number">01</span>
+                                    <span class="day-title">Core Concepts & Architecture</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-02-pods-deployments.html">
+                                    <span class="day-number">02</span>
+                                    <span class="day-title">Pods & Deployments</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-03-services-networking.html">
+                                    <span class="day-number">03</span>
+                                    <span class="day-title">Services & Networking</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-04-configmaps-secrets.html">
+                                    <span class="day-number">04</span>
+                                    <span class="day-title">ConfigMaps & Secrets</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-05-storage-volumes.html">
+                                    <span class="day-number">05</span>
+                                    <span class="day-title">Storage & Volumes</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-06-rbac-security.html">
+                                    <span class="day-number">06</span>
+                                    <span class="day-title">RBAC & Security</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-07-helm-package-management.html">
+                                    <span class="day-number">07</span>
+                                    <span class="day-title">Helm & Package Management</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-08-monitoring-logging.html">
+                                    <span class="day-number">08</span>
+                                    <span class="day-title">Monitoring & Logging</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-09-production-best-practices.html">
+                                    <span class="day-number">09</span>
+                                    <span class="day-title">Production Best Practices</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-10-interview-deep-dive.html">
+                                    <span class="day-number">10</span>
+                                    <span class="day-title">Interview Deep Dive</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sidebar-card quick-ref">
+                        <h3><i class="fas fa-terminal"></i> Quick Reference</h3>
+                        <div class="quick-commands">
+                            <code>kubectl get pods</code>
+                            <code>kubectl describe pod &lt;name&gt;</code>
+                            <code>kubectl logs &lt;pod&gt;</code>
+                            <code>kubectl exec -it &lt;pod&gt; -- sh</code>
+                            <code>kubectl apply -f manifest.yaml</code>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Content Area -->
+                <div class="topic-content">
+                    <div class="content-card start-card">
+                        <div class="start-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h2>Start Your Kubernetes Journey</h2>
+                        <p>Begin with the fundamentals and progressively build your container orchestration expertise. Each day covers concepts, hands-on commands, and interview preparation.</p>
+                        <a href="day-01-core-concepts.html" class="btn btn-primary btn-large">
+                            <i class="fas fa-play"></i> Start Day 1: Core Concepts
+                        </a>
+                    </div>
+
+                    <div class="content-card learning-path-card">
+                        <h3><i class="fas fa-road"></i> What You'll Learn</h3>
+                        <div class="learning-grid">
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-dharmachakra"></i></div>
+                                <h4>K8s Architecture</h4>
+                                <p>Master control plane, nodes, and cluster components</p>
+                            </div>
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-cubes"></i></div>
+                                <h4>Workloads</h4>
+                                <p>Pods, Deployments, StatefulSets, DaemonSets</p>
+                            </div>
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-network-wired"></i></div>
+                                <h4>Networking</h4>
+                                <p>Services, Ingress, Network Policies, DNS</p>
+                            </div>
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-database"></i></div>
+                                <h4>Storage</h4>
+                                <p>PV, PVC, StorageClasses, StatefulSets</p>
+                            </div>
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-shield-alt"></i></div>
+                                <h4>Security</h4>
+                                <p>RBAC, ServiceAccounts, Pod Security</p>
+                            </div>
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-chart-line"></i></div>
+                                <h4>Monitoring</h4>
+                                <p>Prometheus, Grafana, logging stacks</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card prerequisites-card">
+                        <h3><i class="fas fa-clipboard-check"></i> Prerequisites</h3>
+                        <ul class="prereq-list">
+                            <li><i class="fas fa-check"></i> Basic Docker knowledge (containers, images)</li>
+                            <li><i class="fas fa-check"></i> Linux command line familiarity</li>
+                            <li><i class="fas fa-check"></i> YAML syntax understanding</li>
+                            <li><i class="fas fa-check"></i> Networking basics (ports, protocols)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="../../" class="footer-logo">
+                    <i class="fas fa-terminal"></i>
+                    <span>DevOps Hub</span>
+                </a>
+                <p>Your daily companion for DevOps learning and interview preparation.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Topics</h4>
+                <ul>
+                    <li><a href="../docker/">Docker</a></li>
+                    <li><a href="../kubernetes/">Kubernetes</a></li>
+                    <li><a href="../terraform/">Terraform</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="../../#learning-path">Learning Path</a></li>
+                    <li><a href="https://github.com/saggy6210/devops_notes" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 DevOps Learning Hub. Made with <i class="fas fa-heart"></i> for the DevOps community.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coming Soon | DevOps Learning Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">

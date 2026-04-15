@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kubernetes Storage & Volumes - Day 5: Learn PV, PVC, StorageClasses with interview Q&A">
+    <title>Day 5: Storage & Volumes | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #326ce5; --primary-dark: #2756b8; --secondary: #0f172a; --accent: #06b6d4; --success: #10b981; --warning: #f59e0b; --text: #1e293b; --bg: #ffffff; --bg-secondary: #f8fafc; --border: #e2e8f0; --radius: 12px; --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-secondary); color: var(--text); line-height: 1.6; }
+        .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: linear-gradient(90deg, var(--primary), var(--accent)); z-index: 9999; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .day-header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 60px 20px; margin-bottom: 40px; }
+        .day-badge { background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; font-size: 0.875rem; margin-bottom: 16px; display: inline-block; }
+        .day-header h1 { font-size: 2.5rem; margin-bottom: 16px; }
+        .day-header p { font-size: 1.125rem; opacity: 0.9; }
+        .day-nav { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+        .day-nav a { color: white; text-decoration: none; padding: 10px 20px; border-radius: var(--radius); background: rgba(255,255,255,0.1); }
+        .section { background: white; border-radius: var(--radius); padding: 32px; margin-bottom: 24px; box-shadow: var(--shadow); }
+        .section h2 { color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+        .section h3 { color: var(--secondary); margin: 24px 0 12px; }
+        .command-card { background: var(--secondary); border-radius: var(--radius); padding: 20px; margin: 16px 0; position: relative; }
+        .command-card code { color: #e2e8f0; font-family: 'Fira Code', monospace; font-size: 0.9rem; display: block; white-space: pre-wrap; }
+        .command-card .copy-btn { position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.1); border: none; color: white; padding: 8px; border-radius: 6px; cursor: pointer; }
+        .command-label { color: var(--accent); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; }
+        .qa-item { border: 1px solid var(--border); border-radius: var(--radius); margin: 12px 0; overflow: hidden; }
+        .qa-question { padding: 16px 20px; background: var(--bg-secondary); cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+        .qa-answer { padding: 20px; display: none; border-top: 1px solid var(--border); }
+        .qa-item.active .qa-answer { display: block; }
+        .tip-box { background: linear-gradient(135deg, #dbeafe, #eff6ff); border-left: 4px solid var(--primary); padding: 16px 20px; border-radius: 0 var(--radius) var(--radius) 0; margin: 20px 0; }
+        .tip-box.warning { background: linear-gradient(135deg, #fef3c7, #fffbeb); border-color: var(--warning); }
+        .tip-box h4 { margin-bottom: 8px; }
+        .concept-box { background: var(--bg-secondary); border-radius: var(--radius); padding: 20px; margin: 16px 0; border-left: 4px solid var(--primary); }
+        .concept-box h4 { color: var(--primary); margin-bottom: 8px; }
+        .nav-buttons { display: flex; justify-content: space-between; gap: 20px; margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--border); }
+        .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: white; border-radius: var(--radius); text-decoration: none; color: var(--text); box-shadow: var(--shadow); }
+        .footer { background: var(--secondary); color: white; padding: 40px 20px; margin-top: 60px; }
+        .footer a { color: var(--accent); text-decoration: none; }
+        @media (max-width: 768px) { .day-header h1 { font-size: 1.75rem; } .nav-buttons { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <header class="day-header">
+        <div class="container">
+            <span class="day-badge"><i class="fas fa-dharmachakra"></i> Kubernetes</span>
+            <h1>Day 5: Storage & Volumes</h1>
+            <p>Learn persistent storage in Kubernetes - Volumes, PersistentVolumes, PersistentVolumeClaims, and StorageClasses.</p>
+            <div class="day-nav">
+                <a href="day-04-configmaps-secrets.html"><i class="fas fa-arrow-left"></i> Day 4</a>
+                <a href="./"><i class="fas fa-home"></i> K8s Home</a>
+                <a href="day-06-rbac-security.html"><i class="fas fa-arrow-right"></i> Day 6</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Volume Types -->
+        <section class="section">
+            <h2><i class="fas fa-hdd"></i> Volume Types</h2>
+            <p>Kubernetes supports various volume types for different use cases.</p>
+
+            <div class="concept-box">
+                <h4><i class="fas fa-folder"></i> emptyDir</h4>
+                <p>Temporary directory created when Pod is assigned to a node. Deleted when Pod is removed. Good for cache, scratch space, sharing between containers.</p>
+            </div>
+
+            <div class="concept-box">
+                <h4><i class="fas fa-server"></i> hostPath</h4>
+                <p>Mounts a file or directory from the host node. Data persists across pod restarts on same node. Use cautiously - creates node dependency.</p>
+            </div>
+
+            <div class="concept-box">
+                <h4><i class="fas fa-database"></i> PersistentVolume (PV)</h4>
+                <p>Cluster-wide storage resource provisioned by admin or dynamically. Exists independently of pods. Supports NFS, iSCSI, cloud storage.</p>
+            </div>
+
+            <div class="concept-box">
+                <h4><i class="fas fa-file-contract"></i> PersistentVolumeClaim (PVC)</h4>
+                <p>Request for storage by a user. Claims are bound to PVs that satisfy size and access mode requirements.</p>
+            </div>
+        </section>
+
+        <!-- EmptyDir and HostPath -->
+        <section class="section">
+            <h2><i class="fas fa-file-code"></i> Basic Volume Examples</h2>
+
+            <div class="command-card">
+                <span class="command-label">emptyDir Volume</span>
+                <code>apiVersion: v1
+kind: Pod
+metadata:
+  name: cache-pod
+spec:
+  containers:
+  - name: app
+    image: nginx
+    volumeMounts:
+    - name: cache-volume
+      mountPath: /cache
+  - name: sidecar
+    image: busybox
+    volumeMounts:
+    - name: cache-volume
+      mountPath: /data
+  volumes:
+  - name: cache-volume
+    emptyDir:
+      sizeLimit: 500Mi   # Optional limit</code>
+                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <div class="command-card">
+                <span class="command-label">hostPath Volume</span>
+                <code>apiVersion: v1
+kind: Pod
+metadata:
+  name: hostpath-pod
+spec:
+  containers:
+  - name: app
+    image: nginx
+    volumeMounts:
+    - name: host-data
+      mountPath: /data
+  volumes:
+  - name: host-data
+    hostPath:
+      path: /var/data
+      type: DirectoryOrCreate  # Directory, File, etc.</code>
+                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <div class="tip-box warning">
+                <h4><i class="fas fa-exclamation-triangle"></i> hostPath Warning</h4>
+                <p>Avoid hostPath in production. It creates node affinity, potential security risks, and doesn't work across nodes.</p>
+            </div>
+        </section>
+
+        <!-- PV and PVC -->
+        <section class="section">
+            <h2><i class="fas fa-database"></i> PersistentVolumes & Claims</h2>
+
+            <h3>Access Modes</h3>
+            <ul>
+                <li><strong>ReadWriteOnce (RWO)</strong> - Volume can be mounted read-write by single node</li>
+                <li><strong>ReadOnlyMany (ROX)</strong> - Volume can be mounted read-only by many nodes</li>
+                <li><strong>ReadWriteMany (RWX)</strong> - Volume can be mounted read-write by many nodes</li>
+                <li><strong>ReadWriteOncePod (RWOP)</strong> - Volume mounted read-write by single pod (K8s 1.22+)</li>
+            </ul>
+
+            <div class="command-card">
+                <span class="command-label">PersistentVolume</span>
+                <code>apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-nfs
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs
+  nfs:
+    server: nfs-server.example.com
+    path: /exports/data</code>
+                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <div class="command-card">
+                <span class="command-label">PersistentVolumeClaim</span>
+                <code>apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: standard  # Must match PV or StorageClass</code>
+                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <div class="command-card">
+                <span class="command-label">Pod Using PVC</span>
+                <code>apiVersion: v1
+kind: Pod
+metadata:
+  name: app-with-storage
+spec:
+  containers:
+  - name: app
+    image: nginx
+    volumeMounts:
+    - name: data
+      mountPath: /usr/share/nginx/html
+  volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: my-pvc</code>
+                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+            </div>
+        </section>
+
+        <!-- StorageClass -->
+        <section class="section">
+            <h2><i class="fas fa-layer-group"></i> StorageClasses</h2>
+            <p>StorageClasses enable dynamic provisioning of PersistentVolumes. Admins define storage "classes" with different performance characteristics.</p>
+
+            <div class="command-card">
+                <span class="command-label">StorageClass Example (AWS EBS)</span>
+                <code>apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast-ssd
+provisioner: ebs.csi.aws.com
+parameters:
+  type: gp3
+  iops: "3000"
+  throughput: "125"
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true</code>
+                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <div class="command-card">
+                <span class="command-label">PVC with StorageClass</span>
+                <code>apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fast-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: fast-ssd
+  resources:
+    requests:
+      storage: 20Gi</code>
+                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3>Reclaim Policies</h3>
+            <ul>
+                <li><strong>Retain</strong> - Manual reclamation. PV becomes "Released" after PVC deletion.</li>
+                <li><strong>Delete</strong> - Automatically delete the underlying storage (default for dynamic).</li>
+                <li><strong>Recycle</strong> - Deprecated. Basic scrub (rm -rf).</li>
+            </ul>
+        </section>
+
+        <!-- StatefulSet Storage -->
+        <section class="section">
+            <h2><i class="fas fa-cubes"></i> StatefulSet with Storage</h2>
+
+            <div class="command-card">
+                <span class="command-label">StatefulSet with VolumeClaimTemplate</span>
+                <code>apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  serviceName: mysql
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: fast-ssd
+      resources:
+        requests:
+          storage: 10Gi</code>
+                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <div class="tip-box">
+                <h4><i class="fas fa-lightbulb"></i> StatefulSet Storage</h4>
+                <p>VolumeClaimTemplates create unique PVCs for each pod (data-mysql-0, data-mysql-1, etc.). PVCs persist even when pods are deleted.</p>
+            </div>
+        </section>
+
+        <!-- Commands -->
+        <section class="section">
+            <h2><i class="fas fa-terminal"></i> Storage Commands</h2>
+
+            <div class="command-card">
+                <span class="command-label">PV/PVC Commands</span>
+                <code>kubectl get pv
+kubectl get pvc
+kubectl describe pv pv-name
+kubectl describe pvc pvc-name
+kubectl get storageclass
+
+# Expand PVC (if allowed)
+kubectl patch pvc my-pvc -p '{"spec":{"resources":{"requests":{"storage":"10Gi"}}}}'</code>
+                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+            </div>
+        </section>
+
+        <!-- Q&A -->
+        <section class="section">
+            <h2><i class="fas fa-question-circle"></i> Interview Q&A</h2>
+
+            <div class="qa-item">
+                <div class="qa-question" onclick="toggleQA(this)">
+                    <span>Q: What is the difference between PV and PVC?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="qa-answer">
+                    <p><strong>PersistentVolume (PV):</strong> Cluster-level storage resource provisioned by admin or dynamically. Represents actual storage.</p>
+                    <p><strong>PersistentVolumeClaim (PVC):</strong> User's request for storage. Acts as a "claim" that binds to a suitable PV.</p>
+                    <p>Analogy: PV is like a disk in a data center, PVC is a request form to use that disk.</p>
+                </div>
+            </div>
+
+            <div class="qa-item">
+                <div class="qa-question" onclick="toggleQA(this)">
+                    <span>Q: What is static vs dynamic provisioning?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="qa-answer">
+                    <p><strong>Static:</strong> Admin manually creates PVs. PVCs bind to existing PVs that match requirements.</p>
+                    <p><strong>Dynamic:</strong> PVs are automatically created when PVC requests storage. Requires StorageClass with provisioner.</p>
+                    <p>Dynamic is preferred as it reduces admin overhead and enables self-service.</p>
+                </div>
+            </div>
+
+            <div class="qa-item">
+                <div class="qa-question" onclick="toggleQA(this)">
+                    <span>Q: What happens when a PVC is deleted?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="qa-answer">
+                    <p>Depends on the <strong>reclaimPolicy</strong>:</p>
+                    <ul>
+                        <li><strong>Delete:</strong> PV and underlying storage are deleted</li>
+                        <li><strong>Retain:</strong> PV becomes "Released", data preserved, manual cleanup needed</li>
+                    </ul>
+                    <p>A Released PV cannot be bound to new PVC until manually reclaimed or data deleted.</p>
+                </div>
+            </div>
+
+            <div class="qa-item">
+                <div class="qa-question" onclick="toggleQA(this)">
+                    <span>Q: When would you use emptyDir vs PVC?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="qa-answer">
+                    <p><strong>emptyDir:</strong></p>
+                    <ul>
+                        <li>Temporary storage (cache, scratch space)</li>
+                        <li>Sharing data between containers in same pod</li>
+                        <li>Data that can be lost when pod restarts</li>
+                    </ul>
+                    <p><strong>PVC:</strong></p>
+                    <ul>
+                        <li>Persistent data (databases, uploads)</li>
+                        <li>Data that must survive pod restarts</li>
+                        <li>Stateful applications</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="qa-item">
+                <div class="qa-question" onclick="toggleQA(this)">
+                    <span>Q: How do you resize a PVC?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="qa-answer">
+                    <ol>
+                        <li>StorageClass must have <code>allowVolumeExpansion: true</code></li>
+                        <li>Edit PVC to increase storage request</li>
+                        <li>For file systems, pod may need restart for resize to take effect</li>
+                    </ol>
+                    <p>Note: PVCs can only be expanded, not shrunk.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <a href="day-04-configmaps-secrets.html" class="nav-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>Day 4: ConfigMaps & Secrets</span>
+            </a>
+            <a href="day-06-rbac-security.html" class="nav-btn">
+                <span>Day 6: RBAC & Security</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 DevOps Learning Hub. Made with <i class="fas fa-heart"></i> for the DevOps community.</p>
+            <p><a href="https://github.com/saggy6210/devops_notes">GitHub</a> | <a href="../../">Home</a></p>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+        function toggleQA(el) { el.parentElement.classList.toggle('active'); }
+        function copyCode(btn) {
+            const code = btn.parentElement.querySelector('code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                setTimeout(() => btn.innerHTML = '<i class="fas fa-copy"></i>', 2000);
+            });
+        }
+    </script>
+</body>
+</html>
