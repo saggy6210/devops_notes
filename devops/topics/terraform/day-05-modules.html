@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Terraform Day 5 - Modules, Reusability, and Module Registry">
+    <title>Day 5: Modules | Terraform | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root{--primary:#7c3aed;--primary-dark:#5b21b6;--accent:#06b6d4;--bg-dark:#0f172a;--bg-card:#1e293b;--text-primary:#f1f5f9;--text-secondary:#94a3b8;--border-color:#334155;--success:#10b981;--warning:#f59e0b;--danger:#ef4444}*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:var(--bg-dark);color:var(--text-primary);line-height:1.7}.progress-bar{position:fixed;top:0;left:0;width:0%;height:4px;background:linear-gradient(90deg,var(--primary),var(--accent));z-index:1001;transition:width .3s ease}.container{max-width:1200px;margin:0 auto;padding:0 20px}.day-header{background:linear-gradient(135deg,var(--bg-card),var(--bg-dark));border-bottom:1px solid var(--border-color);padding:24px 0;position:sticky;top:0;z-index:100}.day-header .container{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}.day-nav{display:flex;align-items:center;gap:16px}.back-link{display:flex;align-items:center;gap:8px;color:var(--text-secondary);text-decoration:none;font-size:.9rem;transition:color .3s ease}.back-link:hover{color:var(--primary)}.day-title{display:flex;align-items:center;gap:16px}.day-badge{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;padding:8px 16px;border-radius:20px;font-weight:600;font-size:.9rem}.day-title h1{font-size:1.5rem;font-weight:700}.day-content{padding:48px 0}.content-grid{display:grid;gap:32px}.section-card{background:var(--bg-card);border-radius:16px;border:1px solid var(--border-color);overflow:hidden}.section-header{background:linear-gradient(135deg,rgba(124,58,237,.1),rgba(6,182,212,.1));padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;align-items:center;gap:12px}.section-header i{font-size:1.5rem;color:var(--primary)}.section-header h2{font-size:1.25rem;font-weight:600}.section-content{padding:24px}.hero-section{text-align:center;padding:48px 24px;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(6,182,212,.1))}.hero-section h2{font-size:2rem;margin-bottom:16px}.hero-section p{color:var(--text-secondary);max-width:700px;margin:0 auto;font-size:1.1rem}.command-card{background:#0d1520;border-radius:12px;margin:16px 0;overflow:hidden;border:1px solid var(--border-color)}.command-header{background:rgba(124,58,237,.1);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border-color)}.command-title{font-family:'Fira Code',monospace;color:var(--accent);font-size:.9rem}.copy-btn{background:var(--primary);color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:.8rem;display:flex;align-items:center;gap:6px;transition:all .3s ease}.copy-btn:hover{background:var(--primary-dark)}.command-body{padding:16px}.command-body pre{font-family:'Fira Code',monospace;font-size:.9rem;color:var(--text-primary);overflow-x:auto;white-space:pre-wrap;word-wrap:break-word}.concept-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:20px}.concept-card{background:rgba(124,58,237,.05);border:1px solid var(--border-color);border-radius:12px;padding:24px;transition:all .3s ease}.concept-card:hover{border-color:var(--primary);transform:translateY(-4px)}.concept-card h4{color:var(--primary);margin-bottom:12px;display:flex;align-items:center;gap:10px}.concept-card p{color:var(--text-secondary);font-size:.95rem}.qa-item{border:1px solid var(--border-color);border-radius:12px;margin-bottom:16px;overflow:hidden}.qa-question{background:rgba(124,58,237,.1);padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:500;transition:all .3s ease}.qa-question:hover{background:rgba(124,58,237,.2)}.qa-question i{color:var(--primary);transition:transform .3s ease}.qa-question.active i{transform:rotate(180deg)}.qa-answer{padding:0 20px;max-height:0;overflow:hidden;transition:all .3s ease}.qa-answer.active{padding:20px;max-height:600px}.qa-answer p,.qa-answer ul{color:var(--text-secondary)}.qa-answer ul{margin-left:20px;margin-top:10px}.qa-answer li{margin-bottom:8px}.info-table{width:100%;border-collapse:collapse;margin:16px 0}.info-table th,.info-table td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--border-color)}.info-table th{background:rgba(124,58,237,.1);font-weight:600;color:var(--primary)}.info-table td{color:var(--text-secondary)}.info-table code{background:rgba(6,182,212,.1);padding:2px 8px;border-radius:4px;font-family:'Fira Code',monospace;color:var(--accent)}.nav-buttons{display:flex;justify-content:space-between;margin-top:48px;gap:16px;flex-wrap:wrap}.nav-btn{display:flex;align-items:center;gap:12px;padding:16px 24px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;color:var(--text-primary);text-decoration:none;transition:all .3s ease}.nav-btn:hover{border-color:var(--primary);transform:translateY(-2px)}.nav-btn.next{background:linear-gradient(135deg,var(--primary),var(--accent));border:none}.nav-btn-text{display:flex;flex-direction:column}.nav-btn-label{font-size:.8rem;color:var(--text-secondary)}.nav-btn.next .nav-btn-label{color:rgba(255,255,255,.8)}.nav-btn-title{font-weight:600}@media(max-width:768px){.day-header .container{flex-direction:column;align-items:flex-start}.day-title h1{font-size:1.2rem}.hero-section h2{font-size:1.5rem}.nav-buttons{flex-direction:column}.nav-btn{width:100%;justify-content:center}}
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <header class="day-header">
+        <div class="container">
+            <div class="day-nav">
+                <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i><span>Back to Terraform</span></a>
+            </div>
+            <div class="day-title">
+                <span class="day-badge">Day 5 of 10</span>
+                <h1>Modules</h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="day-content">
+        <div class="container">
+            <div class="content-grid">
+                <section class="section-card">
+                    <div class="hero-section">
+                        <h2>📦 Terraform Modules</h2>
+                        <p>Learn to create reusable, maintainable infrastructure components with Terraform modules. Master module composition, versioning, and the Terraform Registry.</p>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-puzzle-piece"></i>
+                        <h2>What are Modules?</h2>
+                    </div>
+                    <div class="section-content">
+                        <p>A module is a container for multiple resources that are used together. Modules enable code reuse, organization, and encapsulation.</p>
+                        
+                        <div class="concept-grid">
+                            <div class="concept-card">
+                                <h4><i class="fas fa-recycle"></i> Reusability</h4>
+                                <p>Write once, use many times across projects and environments</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4><i class="fas fa-box"></i> Encapsulation</h4>
+                                <p>Hide complexity behind a simple interface</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4><i class="fas fa-folder-tree"></i> Organization</h4>
+                                <p>Organize code into logical components</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4><i class="fas fa-tags"></i> Versioning</h4>
+                                <p>Track and control changes with version constraints</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-folder-open"></i>
+                        <h2>Module Structure</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">Standard Module Structure</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre>modules/
+└── vpc/
+    ├── main.tf           # Main resources
+    ├── variables.tf      # Input variables
+    ├── outputs.tf        # Output values
+    ├── versions.tf       # Provider requirements
+    ├── README.md         # Documentation
+    └── examples/         # Usage examples
+        └── simple/
+            └── main.tf</pre>
+                            </div>
+                        </div>
+
+                        <h4>Module Files</h4>
+                        <table class="info-table">
+                            <thead><tr><th>File</th><th>Purpose</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>main.tf</code></td><td>Primary resource definitions</td></tr>
+                                <tr><td><code>variables.tf</code></td><td>Input variable declarations</td></tr>
+                                <tr><td><code>outputs.tf</code></td><td>Output value definitions</td></tr>
+                                <tr><td><code>versions.tf</code></td><td>Terraform and provider version constraints</td></tr>
+                                <tr><td><code>locals.tf</code></td><td>Local value definitions</td></tr>
+                                <tr><td><code>data.tf</code></td><td>Data source definitions</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-code"></i>
+                        <h2>Creating a Module</h2>
+                    </div>
+                    <div class="section-content">
+                        <h4>VPC Module Example</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">modules/vpc/variables.tf</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre>variable "vpc_cidr" {
+  description = "CIDR block for the VPC"
+  type        = string
+  default     = "10.0.0.0/16"
+}
+
+variable "environment" {
+  description = "Environment name"
+  type        = string
+}
+
+variable "public_subnet_cidrs" {
+  description = "CIDR blocks for public subnets"
+  type        = list(string)
+  default     = ["10.0.1.0/24", "10.0.2.0/24"]
+}
+
+variable "private_subnet_cidrs" {
+  description = "CIDR blocks for private subnets"
+  type        = list(string)
+  default     = ["10.0.10.0/24", "10.0.11.0/24"]
+}
+
+variable "enable_nat_gateway" {
+  description = "Enable NAT Gateway for private subnets"
+  type        = bool
+  default     = true
+}</pre>
+                            </div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">modules/vpc/main.tf</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre>data "aws_availability_zones" "available" {
+  state = "available"
+}
+
+locals {
+  azs = slice(data.aws_availability_zones.available.names, 0, 2)
+}
+
+resource "aws_vpc" "main" {
+  cidr_block           = var.vpc_cidr
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
+  tags = {
+    Name        = "${var.environment}-vpc"
+    Environment = var.environment
+  }
+}
+
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "${var.environment}-igw"
+  }
+}
+
+resource "aws_subnet" "public" {
+  count                   = length(var.public_subnet_cidrs)
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.public_subnet_cidrs[count.index]
+  availability_zone       = local.azs[count.index]
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "${var.environment}-public-${count.index + 1}"
+    Type = "public"
+  }
+}
+
+resource "aws_subnet" "private" {
+  count             = length(var.private_subnet_cidrs)
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.private_subnet_cidrs[count.index]
+  availability_zone = local.azs[count.index]
+
+  tags = {
+    Name = "${var.environment}-private-${count.index + 1}"
+    Type = "private"
+  }
+}
+
+resource "aws_nat_gateway" "main" {
+  count         = var.enable_nat_gateway ? 1 : 0
+  allocation_id = aws_eip.nat[0].id
+  subnet_id     = aws_subnet.public[0].id
+
+  tags = {
+    Name = "${var.environment}-nat"
+  }
+}
+
+resource "aws_eip" "nat" {
+  count  = var.enable_nat_gateway ? 1 : 0
+  domain = "vpc"
+}</pre>
+                            </div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">modules/vpc/outputs.tf</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre>output "vpc_id" {
+  description = "ID of the VPC"
+  value       = aws_vpc.main.id
+}
+
+output "vpc_cidr" {
+  description = "CIDR block of the VPC"
+  value       = aws_vpc.main.cidr_block
+}
+
+output "public_subnet_ids" {
+  description = "IDs of public subnets"
+  value       = aws_subnet.public[*].id
+}
+
+output "private_subnet_ids" {
+  description = "IDs of private subnets"
+  value       = aws_subnet.private[*].id
+}
+
+output "nat_gateway_ip" {
+  description = "Public IP of NAT Gateway"
+  value       = var.enable_nat_gateway ? aws_eip.nat[0].public_ip : null
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-plug"></i>
+                        <h2>Using Modules</h2>
+                    </div>
+                    <div class="section-content">
+                        <h4>Local Module</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">main.tf</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre>module "vpc" {
+  source = "./modules/vpc"
+
+  environment          = "prod"
+  vpc_cidr             = "10.0.0.0/16"
+  public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
+  private_subnet_cidrs = ["10.0.10.0/24", "10.0.11.0/24"]
+  enable_nat_gateway   = true
+}
+
+# Use module outputs
+resource "aws_instance" "web" {
+  ami           = "ami-12345678"
+  instance_type = "t3.micro"
+  subnet_id     = module.vpc.public_subnet_ids[0]
+}
+
+output "vpc_id" {
+  value = module.vpc.vpc_id
+}</pre>
+                            </div>
+                        </div>
+
+                        <h4>Multiple Module Instances</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">Multiple Environments</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre>module "vpc_dev" {
+  source = "./modules/vpc"
+
+  environment        = "dev"
+  vpc_cidr           = "10.1.0.0/16"
+  enable_nat_gateway = false
+}
+
+module "vpc_prod" {
+  source = "./modules/vpc"
+
+  environment        = "prod"
+  vpc_cidr           = "10.0.0.0/16"
+  enable_nat_gateway = true
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-cloud-download-alt"></i>
+                        <h2>Module Sources</h2>
+                    </div>
+                    <div class="section-content">
+                        <table class="info-table">
+                            <thead><tr><th>Source Type</th><th>Example</th></tr></thead>
+                            <tbody>
+                                <tr><td>Local Path</td><td><code>source = "./modules/vpc"</code></td></tr>
+                                <tr><td>Terraform Registry</td><td><code>source = "hashicorp/consul/aws"</code></td></tr>
+                                <tr><td>GitHub</td><td><code>source = "github.com/org/repo//modules/vpc"</code></td></tr>
+                                <tr><td>Git (generic)</td><td><code>source = "git::https://example.com/repo.git"</code></td></tr>
+                                <tr><td>S3 Bucket</td><td><code>source = "s3::https://bucket.s3.amazonaws.com/module.zip"</code></td></tr>
+                                <tr><td>HTTP URL</td><td><code>source = "https://example.com/module.zip"</code></td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4>Terraform Registry Module</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">Using Registry Module</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre>module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "5.1.0"
+
+  name = "my-vpc"
+  cidr = "10.0.0.0/16"
+
+  azs             = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+
+  enable_nat_gateway = true
+  single_nat_gateway = true
+
+  tags = {
+    Environment = "dev"
+  }
+}</pre>
+                            </div>
+                        </div>
+
+                        <h4>GitHub Module with Version</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">GitHub Source</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># Using tag
+module "vpc" {
+  source = "github.com/myorg/terraform-modules//vpc?ref=v1.2.0"
+}
+
+# Using branch
+module "vpc" {
+  source = "github.com/myorg/terraform-modules//vpc?ref=main"
+}
+
+# Using commit
+module "vpc" {
+  source = "github.com/myorg/terraform-modules//vpc?ref=abc1234"
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-layer-group"></i>
+                        <h2>Module Composition</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">Composing Modules</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># Root module composes multiple child modules
+module "networking" {
+  source = "./modules/vpc"
+  
+  environment = var.environment
+  vpc_cidr    = var.vpc_cidr
+}
+
+module "database" {
+  source = "./modules/rds"
+  
+  environment   = var.environment
+  vpc_id        = module.networking.vpc_id
+  subnet_ids    = module.networking.private_subnet_ids
+  instance_type = "db.t3.medium"
+}
+
+module "application" {
+  source = "./modules/ecs"
+  
+  environment   = var.environment
+  vpc_id        = module.networking.vpc_id
+  subnet_ids    = module.networking.private_subnet_ids
+  db_endpoint   = module.database.endpoint
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-cog"></i>
+                        <h2>Module Best Practices</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="concept-grid">
+                            <div class="concept-card">
+                                <h4><i class="fas fa-file-alt"></i> Document Everything</h4>
+                                <p>README, variable descriptions, output descriptions</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4><i class="fas fa-lock"></i> Version Constraints</h4>
+                                <p>Always specify versions for registry/git modules</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4><i class="fas fa-sliders-h"></i> Sensible Defaults</h4>
+                                <p>Provide defaults where appropriate</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4><i class="fas fa-check-double"></i> Validate Inputs</h4>
+                                <p>Use validation blocks for input variables</p>
+                            </div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">Module Commands</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># Download/update modules
+terraform init
+terraform init -upgrade
+
+# Show module tree
+terraform providers
+
+# Get specific module
+terraform get</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-comments"></i>
+                        <h2>Interview Q&A</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Q1: What is a Terraform module and why use it?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>A module is a container for multiple resources used together:</p>
+                                <ul>
+                                    <li>Promotes code reusability</li>
+                                    <li>Encapsulates complexity</li>
+                                    <li>Enables standardization</li>
+                                    <li>Simplifies maintenance</li>
+                                    <li>Root module = your working directory</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Q2: What are the different module sources?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li><strong>Local:</strong> ./modules/vpc</li>
+                                    <li><strong>Registry:</strong> hashicorp/consul/aws</li>
+                                    <li><strong>GitHub:</strong> github.com/org/repo</li>
+                                    <li><strong>Git:</strong> git::https://example.com/repo.git</li>
+                                    <li><strong>S3/GCS:</strong> Cloud storage buckets</li>
+                                    <li><strong>HTTP:</strong> Direct URL to zip file</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Q3: How do you version modules?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>Version constraints ensure stability:</p>
+                                <ul>
+                                    <li>Registry: <code>version = "~> 5.0"</code></li>
+                                    <li>Git: <code>?ref=v1.2.0</code> (tag/branch/commit)</li>
+                                    <li>Always pin versions in production</li>
+                                    <li>Use semantic versioning</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Q4: How do you pass data between modules?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li>Module outputs expose values</li>
+                                    <li>Access via <code>module.name.output_name</code></li>
+                                    <li>Creates implicit dependencies</li>
+                                    <li>Parent passes values to child via input variables</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Q5: What is the Terraform Registry?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>The Terraform Registry (registry.terraform.io):</p>
+                                <ul>
+                                    <li>Public repository of modules and providers</li>
+                                    <li>Verified modules from HashiCorp partners</li>
+                                    <li>Community-contributed modules</li>
+                                    <li>Documentation and examples included</li>
+                                    <li>Version history and changelogs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="nav-buttons">
+                    <a href="day-04-state-management.html" class="nav-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        <div class="nav-btn-text"><span class="nav-btn-label">Previous</span><span class="nav-btn-title">Day 4: State Management</span></div>
+                    </a>
+                    <a href="day-06-workspaces-environments.html" class="nav-btn next">
+                        <div class="nav-btn-text"><span class="nav-btn-label">Next</span><span class="nav-btn-title">Day 6: Workspaces & Environments</span></div>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        window.addEventListener('scroll',()=>{const e=window.scrollY,t=document.documentElement.scrollHeight-window.innerHeight;document.getElementById('progressBar').style.width=e/t*100+'%'});function copyCode(e){const t=e.closest('.command-card').querySelector('pre');navigator.clipboard.writeText(t.textContent).then(()=>{e.innerHTML='<i class="fas fa-check"></i> Copied!';setTimeout(()=>{e.innerHTML='<i class="fas fa-copy"></i> Copy'},2e3)})}function toggleAnswer(e){e.classList.toggle('active');e.nextElementSibling.classList.toggle('active')}
+    </script>
+</body>
+</html>

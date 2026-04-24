@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Terraform Day 7 - Remote State, Backends, and State Sharing">
+    <title>Day 7: Remote State & Backends | Terraform | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root{--primary:#7c3aed;--primary-dark:#5b21b6;--accent:#06b6d4;--bg-dark:#0f172a;--bg-card:#1e293b;--text-primary:#f1f5f9;--text-secondary:#94a3b8;--border-color:#334155;--success:#10b981;--warning:#f59e0b;--danger:#ef4444}*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:var(--bg-dark);color:var(--text-primary);line-height:1.7}.progress-bar{position:fixed;top:0;left:0;width:0%;height:4px;background:linear-gradient(90deg,var(--primary),var(--accent));z-index:1001}.container{max-width:1200px;margin:0 auto;padding:0 20px}.day-header{background:linear-gradient(135deg,var(--bg-card),var(--bg-dark));border-bottom:1px solid var(--border-color);padding:24px 0;position:sticky;top:0;z-index:100}.day-header .container{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}.day-nav{display:flex;align-items:center;gap:16px}.back-link{display:flex;align-items:center;gap:8px;color:var(--text-secondary);text-decoration:none;font-size:.9rem}.back-link:hover{color:var(--primary)}.day-title{display:flex;align-items:center;gap:16px}.day-badge{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;padding:8px 16px;border-radius:20px;font-weight:600;font-size:.9rem}.day-title h1{font-size:1.5rem;font-weight:700}.day-content{padding:48px 0}.content-grid{display:grid;gap:32px}.section-card{background:var(--bg-card);border-radius:16px;border:1px solid var(--border-color);overflow:hidden}.section-header{background:linear-gradient(135deg,rgba(124,58,237,.1),rgba(6,182,212,.1));padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;align-items:center;gap:12px}.section-header i{font-size:1.5rem;color:var(--primary)}.section-header h2{font-size:1.25rem;font-weight:600}.section-content{padding:24px}.hero-section{text-align:center;padding:48px 24px;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(6,182,212,.1))}.hero-section h2{font-size:2rem;margin-bottom:16px}.hero-section p{color:var(--text-secondary);max-width:700px;margin:0 auto;font-size:1.1rem}.command-card{background:#0d1520;border-radius:12px;margin:16px 0;overflow:hidden;border:1px solid var(--border-color)}.command-header{background:rgba(124,58,237,.1);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border-color)}.command-title{font-family:'Fira Code',monospace;color:var(--accent);font-size:.9rem}.copy-btn{background:var(--primary);color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:.8rem;display:flex;align-items:center;gap:6px}.copy-btn:hover{background:var(--primary-dark)}.command-body{padding:16px}.command-body pre{font-family:'Fira Code',monospace;font-size:.9rem;color:var(--text-primary);overflow-x:auto;white-space:pre-wrap}.concept-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:20px}.concept-card{background:rgba(124,58,237,.05);border:1px solid var(--border-color);border-radius:12px;padding:24px}.concept-card:hover{border-color:var(--primary);transform:translateY(-4px)}.concept-card h4{color:var(--primary);margin-bottom:12px;display:flex;align-items:center;gap:10px}.concept-card p{color:var(--text-secondary);font-size:.95rem}.qa-item{border:1px solid var(--border-color);border-radius:12px;margin-bottom:16px;overflow:hidden}.qa-question{background:rgba(124,58,237,.1);padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:500}.qa-question:hover{background:rgba(124,58,237,.2)}.qa-question i{color:var(--primary)}.qa-question.active i{transform:rotate(180deg)}.qa-answer{padding:0 20px;max-height:0;overflow:hidden}.qa-answer.active{padding:20px;max-height:600px}.qa-answer p,.qa-answer ul{color:var(--text-secondary)}.qa-answer ul{margin-left:20px;margin-top:10px}.qa-answer li{margin-bottom:8px}.info-table{width:100%;border-collapse:collapse;margin:16px 0}.info-table th,.info-table td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--border-color)}.info-table th{background:rgba(124,58,237,.1);font-weight:600;color:var(--primary)}.info-table td{color:var(--text-secondary)}.info-table code{background:rgba(6,182,212,.1);padding:2px 8px;border-radius:4px;font-family:'Fira Code',monospace;color:var(--accent)}.warning-box{background:rgba(245,158,11,.1);border:1px solid var(--warning);border-radius:12px;padding:16px 20px;margin:16px 0}.warning-box h4{color:var(--warning);margin-bottom:8px;display:flex;align-items:center;gap:8px}.warning-box p{color:var(--text-secondary);font-size:.95rem}.nav-buttons{display:flex;justify-content:space-between;margin-top:48px;gap:16px;flex-wrap:wrap}.nav-btn{display:flex;align-items:center;gap:12px;padding:16px 24px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;color:var(--text-primary);text-decoration:none}.nav-btn:hover{border-color:var(--primary);transform:translateY(-2px)}.nav-btn.next{background:linear-gradient(135deg,var(--primary),var(--accent));border:none}.nav-btn-text{display:flex;flex-direction:column}.nav-btn-label{font-size:.8rem;color:var(--text-secondary)}.nav-btn.next .nav-btn-label{color:rgba(255,255,255,.8)}.nav-btn-title{font-weight:600}@media(max-width:768px){.day-header .container{flex-direction:column;align-items:flex-start}.day-title h1{font-size:1.2rem}.hero-section h2{font-size:1.5rem}.nav-buttons{flex-direction:column}.nav-btn{width:100%;justify-content:center}}
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <header class="day-header">
+        <div class="container">
+            <div class="day-nav">
+                <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i><span>Back to Terraform</span></a>
+            </div>
+            <div class="day-title">
+                <span class="day-badge">Day 7 of 10</span>
+                <h1>Remote State & Backends</h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="day-content">
+        <div class="container">
+            <div class="content-grid">
+                <section class="section-card">
+                    <div class="hero-section">
+                        <h2>☁️ Remote State & Backends</h2>
+                        <p>Learn to configure remote backends for secure, collaborative state management. Master S3, Azure, GCS backends and state sharing between configurations.</p>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-database"></i>
+                        <h2>Why Remote Backends?</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="concept-grid">
+                            <div class="concept-card">
+                                <h4><i class="fas fa-users"></i> Collaboration</h4>
+                                <p>Team members share the same state</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4><i class="fas fa-lock"></i> Locking</h4>
+                                <p>Prevents concurrent modifications</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4><i class="fas fa-shield-alt"></i> Security</h4>
+                                <p>Encryption at rest and in transit</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4><i class="fas fa-history"></i> Versioning</h4>
+                                <p>State history for rollback</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fab fa-aws"></i>
+                        <h2>S3 Backend (AWS)</h2>
+                    </div>
+                    <div class="section-content">
+                        <h4>1. Create Backend Infrastructure</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">S3 Bucket & DynamoDB</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># Create S3 bucket for state
+aws s3api create-bucket \
+  --bucket mycompany-terraform-state \
+  --region us-east-1
+
+# Enable versioning
+aws s3api put-bucket-versioning \
+  --bucket mycompany-terraform-state \
+  --versioning-configuration Status=Enabled
+
+# Enable encryption
+aws s3api put-bucket-encryption \
+  --bucket mycompany-terraform-state \
+  --server-side-encryption-configuration '{
+    "Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "aws:kms"}}]
+  }'
+
+# Create DynamoDB table for locking
+aws dynamodb create-table \
+  --table-name terraform-locks \
+  --attribute-definitions AttributeName=LockID,AttributeType=S \
+  --key-schema AttributeName=LockID,KeyType=HASH \
+  --billing-mode PAY_PER_REQUEST</pre>
+                            </div>
+                        </div>
+
+                        <h4>2. Configure Backend</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">backend.tf</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre>terraform {
+  backend "s3" {
+    bucket         = "mycompany-terraform-state"
+    key            = "prod/network/terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
+    dynamodb_table = "terraform-locks"
+    
+    # Optional: assume role for cross-account
+    # role_arn = "arn:aws:iam::123456789:role/terraform"
+  }
+}</pre>
+                            </div>
+                        </div>
+
+                        <h4>3. Initialize Backend</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">Migrate State</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># Initialize and migrate existing state
+terraform init
+
+# If migrating from local to remote:
+# Terraform will ask: "Do you want to copy existing state?"
+# Answer: yes
+
+# Reconfigure backend
+terraform init -reconfigure
+
+# Migrate to new backend
+terraform init -migrate-state</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fab fa-microsoft"></i>
+                        <h2>Azure Backend</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">Azure Storage Backend</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre>terraform {
+  backend "azurerm" {
+    resource_group_name  = "terraform-state-rg"
+    storage_account_name = "tfstateaccount"
+    container_name       = "tfstate"
+    key                  = "prod.terraform.tfstate"
+    
+    # Use managed identity or service principal
+    use_azuread_auth = true
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fab fa-google"></i>
+                        <h2>GCS Backend (Google Cloud)</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">GCS Backend</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre>terraform {
+  backend "gcs" {
+    bucket = "my-terraform-state"
+    prefix = "prod/network"
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-share-alt"></i>
+                        <h2>Sharing State Between Configurations</h2>
+                    </div>
+                    <div class="section-content">
+                        <p>Use <code>terraform_remote_state</code> data source to access outputs from another configuration.</p>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">Remote State Data Source</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># In application configuration, reference network state
+data "terraform_remote_state" "network" {
+  backend = "s3"
+  
+  config = {
+    bucket = "mycompany-terraform-state"
+    key    = "prod/network/terraform.tfstate"
+    region = "us-east-1"
+  }
+}
+
+# Use outputs from network state
+resource "aws_instance" "app" {
+  ami           = var.ami_id
+  instance_type = "t3.micro"
+  subnet_id     = data.terraform_remote_state.network.outputs.private_subnet_ids[0]
+  
+  vpc_security_group_ids = [
+    data.terraform_remote_state.network.outputs.app_security_group_id
+  ]
+}</pre>
+                            </div>
+                        </div>
+
+                        <div class="warning-box">
+                            <h4><i class="fas fa-lightbulb"></i> Alternative: Use Data Sources</h4>
+                            <p>Instead of terraform_remote_state, consider using provider data sources (e.g., aws_vpc, aws_subnet) for looser coupling between configurations.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-cog"></i>
+                        <h2>Backend Configuration Options</h2>
+                    </div>
+                    <div class="section-content">
+                        <h4>Partial Configuration</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">Partial Backend Config</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># backend.tf - partial configuration
+terraform {
+  backend "s3" {
+    # Only specify immutable settings
+    bucket = "mycompany-terraform-state"
+    region = "us-east-1"
+    # key will be provided at init
+  }
+}
+
+# Initialize with remaining config
+terraform init \
+  -backend-config="key=prod/app/terraform.tfstate" \
+  -backend-config="dynamodb_table=terraform-locks"
+
+# Or use a backend config file
+terraform init -backend-config=backend.hcl</pre>
+                            </div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">backend.hcl</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre>key            = "prod/app/terraform.tfstate"
+dynamodb_table = "terraform-locks"
+encrypt        = true</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-comments"></i>
+                        <h2>Interview Q&A</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Q1: Why use remote backends?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li>Team collaboration with shared state</li>
+                                    <li>State locking prevents corruption</li>
+                                    <li>Encryption for sensitive data</li>
+                                    <li>Versioning for rollback</li>
+                                    <li>Not stored in version control</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Q2: How does state locking work?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>State locking prevents concurrent operations:</p>
+                                <ul>
+                                    <li>S3: Uses DynamoDB for locks</li>
+                                    <li>Azure: Uses blob lease mechanism</li>
+                                    <li>GCS: Built-in locking</li>
+                                    <li>Lock acquired before plan/apply</li>
+                                    <li>Released after operation completes</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Q3: How do you migrate state to a new backend?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li>Update backend configuration</li>
+                                    <li>Run <code>terraform init -migrate-state</code></li>
+                                    <li>Confirm state migration when prompted</li>
+                                    <li>Verify state with <code>terraform state list</code></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Q4: What is terraform_remote_state?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>Data source to read outputs from another state:</p>
+                                <ul>
+                                    <li>Enables state sharing between configs</li>
+                                    <li>Access via <code>data.terraform_remote_state.name.outputs.value</code></li>
+                                    <li>Creates loose coupling between stacks</li>
+                                    <li>Alternative to hardcoding values</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Q5: What is partial backend configuration?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li>Define some backend config in code</li>
+                                    <li>Supply rest at init time</li>
+                                    <li>Use -backend-config flag or .hcl file</li>
+                                    <li>Useful for CI/CD pipelines</li>
+                                    <li>Keeps secrets out of code</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="nav-buttons">
+                    <a href="day-06-workspaces-environments.html" class="nav-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        <div class="nav-btn-text"><span class="nav-btn-label">Previous</span><span class="nav-btn-title">Day 6: Workspaces & Environments</span></div>
+                    </a>
+                    <a href="day-08-advanced-features.html" class="nav-btn next">
+                        <div class="nav-btn-text"><span class="nav-btn-label">Next</span><span class="nav-btn-title">Day 8: Advanced Features</span></div>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        window.addEventListener('scroll',()=>{const e=window.scrollY,t=document.documentElement.scrollHeight-window.innerHeight;document.getElementById('progressBar').style.width=e/t*100+'%'});function copyCode(e){const t=e.closest('.command-card').querySelector('pre');navigator.clipboard.writeText(t.textContent).then(()=>{e.innerHTML='<i class="fas fa-check"></i> Copied!';setTimeout(()=>{e.innerHTML='<i class="fas fa-copy"></i> Copy'},2e3)})}function toggleAnswer(e){e.classList.toggle('active');e.nextElementSibling.classList.toggle('active')}
+    </script>
+</body>
+</html>

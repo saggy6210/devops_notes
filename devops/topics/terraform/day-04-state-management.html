@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Terraform Day 4 - State Management, State Commands, and State Operations">
+    <title>Day 4: State Management | Terraform | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root{--primary:#7c3aed;--primary-dark:#5b21b6;--accent:#06b6d4;--bg-dark:#0f172a;--bg-card:#1e293b;--text-primary:#f1f5f9;--text-secondary:#94a3b8;--border-color:#334155;--success:#10b981;--warning:#f59e0b;--danger:#ef4444}*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:var(--bg-dark);color:var(--text-primary);line-height:1.7}.progress-bar{position:fixed;top:0;left:0;width:0%;height:4px;background:linear-gradient(90deg,var(--primary),var(--accent));z-index:1001;transition:width .3s ease}.container{max-width:1200px;margin:0 auto;padding:0 20px}.day-header{background:linear-gradient(135deg,var(--bg-card),var(--bg-dark));border-bottom:1px solid var(--border-color);padding:24px 0;position:sticky;top:0;z-index:100}.day-header .container{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}.day-nav{display:flex;align-items:center;gap:16px}.back-link{display:flex;align-items:center;gap:8px;color:var(--text-secondary);text-decoration:none;font-size:.9rem;transition:color .3s ease}.back-link:hover{color:var(--primary)}.day-title{display:flex;align-items:center;gap:16px}.day-badge{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;padding:8px 16px;border-radius:20px;font-weight:600;font-size:.9rem}.day-title h1{font-size:1.5rem;font-weight:700}.day-content{padding:48px 0}.content-grid{display:grid;gap:32px}.section-card{background:var(--bg-card);border-radius:16px;border:1px solid var(--border-color);overflow:hidden}.section-header{background:linear-gradient(135deg,rgba(124,58,237,.1),rgba(6,182,212,.1));padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;align-items:center;gap:12px}.section-header i{font-size:1.5rem;color:var(--primary)}.section-header h2{font-size:1.25rem;font-weight:600}.section-content{padding:24px}.hero-section{text-align:center;padding:48px 24px;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(6,182,212,.1))}.hero-section h2{font-size:2rem;margin-bottom:16px}.hero-section p{color:var(--text-secondary);max-width:700px;margin:0 auto;font-size:1.1rem}.command-card{background:#0d1520;border-radius:12px;margin:16px 0;overflow:hidden;border:1px solid var(--border-color)}.command-header{background:rgba(124,58,237,.1);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border-color)}.command-title{font-family:'Fira Code',monospace;color:var(--accent);font-size:.9rem}.copy-btn{background:var(--primary);color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:.8rem;display:flex;align-items:center;gap:6px;transition:all .3s ease}.copy-btn:hover{background:var(--primary-dark)}.command-body{padding:16px}.command-body pre{font-family:'Fira Code',monospace;font-size:.9rem;color:var(--text-primary);overflow-x:auto;white-space:pre-wrap;word-wrap:break-word}.concept-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:20px}.concept-card{background:rgba(124,58,237,.05);border:1px solid var(--border-color);border-radius:12px;padding:24px;transition:all .3s ease}.concept-card:hover{border-color:var(--primary);transform:translateY(-4px)}.concept-card h4{color:var(--primary);margin-bottom:12px;display:flex;align-items:center;gap:10px}.concept-card p{color:var(--text-secondary);font-size:.95rem}.qa-item{border:1px solid var(--border-color);border-radius:12px;margin-bottom:16px;overflow:hidden}.qa-question{background:rgba(124,58,237,.1);padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:500;transition:all .3s ease}.qa-question:hover{background:rgba(124,58,237,.2)}.qa-question i{color:var(--primary);transition:transform .3s ease}.qa-question.active i{transform:rotate(180deg)}.qa-answer{padding:0 20px;max-height:0;overflow:hidden;transition:all .3s ease}.qa-answer.active{padding:20px;max-height:600px}.qa-answer p,.qa-answer ul{color:var(--text-secondary)}.qa-answer ul{margin-left:20px;margin-top:10px}.qa-answer li{margin-bottom:8px}.info-table{width:100%;border-collapse:collapse;margin:16px 0}.info-table th,.info-table td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--border-color)}.info-table th{background:rgba(124,58,237,.1);font-weight:600;color:var(--primary)}.info-table td{color:var(--text-secondary)}.info-table code{background:rgba(6,182,212,.1);padding:2px 8px;border-radius:4px;font-family:'Fira Code',monospace;color:var(--accent)}.nav-buttons{display:flex;justify-content:space-between;margin-top:48px;gap:16px;flex-wrap:wrap}.nav-btn{display:flex;align-items:center;gap:12px;padding:16px 24px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;color:var(--text-primary);text-decoration:none;transition:all .3s ease}.nav-btn:hover{border-color:var(--primary);transform:translateY(-2px)}.nav-btn.next{background:linear-gradient(135deg,var(--primary),var(--accent));border:none}.nav-btn-text{display:flex;flex-direction:column}.nav-btn-label{font-size:.8rem;color:var(--text-secondary)}.nav-btn.next .nav-btn-label{color:rgba(255,255,255,.8)}.nav-btn-title{font-weight:600}.warning-box{background:rgba(245,158,11,.1);border:1px solid var(--warning);border-radius:12px;padding:16px 20px;margin:16px 0}.warning-box h4{color:var(--warning);margin-bottom:8px;display:flex;align-items:center;gap:8px}.warning-box p{color:var(--text-secondary);font-size:.95rem}@media(max-width:768px){.day-header .container{flex-direction:column;align-items:flex-start}.day-title h1{font-size:1.2rem}.hero-section h2{font-size:1.5rem}.nav-buttons{flex-direction:column}.nav-btn{width:100%;justify-content:center}}
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <header class="day-header">
+        <div class="container">
+            <div class="day-nav">
+                <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i><span>Back to Terraform</span></a>
+            </div>
+            <div class="day-title">
+                <span class="day-badge">Day 4 of 10</span>
+                <h1>State Management</h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="day-content">
+        <div class="container">
+            <div class="content-grid">
+                <section class="section-card">
+                    <div class="hero-section">
+                        <h2>💾 Terraform State Management</h2>
+                        <p>Master Terraform state - the heart of how Terraform tracks and manages your infrastructure. Learn state commands, imports, and best practices.</p>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-database"></i>
+                        <h2>What is Terraform State?</h2>
+                    </div>
+                    <div class="section-content">
+                        <p>Terraform state is a JSON file that maps your configuration to real-world resources. It's the source of truth for Terraform.</p>
+                        
+                        <div class="concept-grid">
+                            <div class="concept-card">
+                                <h4><i class="fas fa-map"></i> Resource Mapping</h4>
+                                <p>Maps resource addresses to real infrastructure IDs (e.g., aws_instance.web → i-1234567890)</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4><i class="fas fa-tachometer-alt"></i> Performance</h4>
+                                <p>Caches resource attributes to avoid querying the provider on every plan</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4><i class="fas fa-project-diagram"></i> Dependencies</h4>
+                                <p>Tracks resource dependencies for proper creation/destruction order</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4><i class="fas fa-sync"></i> Drift Detection</h4>
+                                <p>Compares actual infrastructure to desired state to detect changes</p>
+                            </div>
+                        </div>
+
+                        <div class="warning-box">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Important</h4>
+                            <p>State files contain sensitive data (passwords, keys). Never commit to version control. Use remote backends with encryption for production.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-file-code"></i>
+                        <h2>State File Structure</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">terraform.tfstate (simplified)</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre>{
+  "version": 4,
+  "terraform_version": "1.6.0",
+  "serial": 5,
+  "lineage": "abc123-def456-...",
+  "outputs": {
+    "instance_ip": {
+      "value": "54.123.45.67",
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "aws_instance",
+      "name": "web",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "attributes": {
+            "id": "i-0abc123def456",
+            "ami": "ami-12345678",
+            "instance_type": "t3.micro",
+            "public_ip": "54.123.45.67"
+          }
+        }
+      ]
+    }
+  ]
+}</pre>
+                            </div>
+                        </div>
+
+                        <table class="info-table">
+                            <thead><tr><th>Field</th><th>Purpose</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>version</code></td><td>State file format version</td></tr>
+                                <tr><td><code>serial</code></td><td>Increments with each state change</td></tr>
+                                <tr><td><code>lineage</code></td><td>Unique ID for state history</td></tr>
+                                <tr><td><code>outputs</code></td><td>Exported output values</td></tr>
+                                <tr><td><code>resources</code></td><td>All managed resources and their attributes</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-terminal"></i>
+                        <h2>State Commands</h2>
+                    </div>
+                    <div class="section-content">
+                        <h4>List Resources</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">terraform state list</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># List all resources in state
+terraform state list
+
+# Output:
+# aws_instance.web
+# aws_security_group.web_sg
+# aws_vpc.main
+
+# Filter by resource type
+terraform state list aws_instance.*</pre>
+                            </div>
+                        </div>
+
+                        <h4>Show Resource Details</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">terraform state show</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># Show specific resource
+terraform state show aws_instance.web
+
+# Output:
+# resource "aws_instance" "web" {
+#     ami                    = "ami-12345678"
+#     id                     = "i-0abc123def456"
+#     instance_type          = "t3.micro"
+#     public_ip              = "54.123.45.67"
+#     ...
+# }</pre>
+                            </div>
+                        </div>
+
+                        <h4>Move Resources</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">terraform state mv</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># Rename a resource (change name in config first)
+terraform state mv aws_instance.web aws_instance.web_server
+
+# Move to module
+terraform state mv aws_instance.web module.compute.aws_instance.web
+
+# Move from module to root
+terraform state mv module.compute.aws_instance.web aws_instance.web
+
+# Move between modules
+terraform state mv module.old.aws_instance.web module.new.aws_instance.web</pre>
+                            </div>
+                        </div>
+
+                        <h4>Remove from State</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">terraform state rm</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># Remove resource from state (doesn't delete actual resource)
+terraform state rm aws_instance.web
+
+# Remove module
+terraform state rm module.vpc
+
+# Dry run
+terraform state rm -dry-run aws_instance.web</pre>
+                            </div>
+                        </div>
+
+                        <h4>Pull and Push State</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">terraform state pull/push</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># Download remote state to stdout
+terraform state pull > backup.tfstate
+
+# Upload local state to remote backend
+terraform state push backup.tfstate
+
+# Force push (dangerous!)
+terraform state push -force backup.tfstate</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-file-import"></i>
+                        <h2>Importing Existing Resources</h2>
+                    </div>
+                    <div class="section-content">
+                        <p>Import existing infrastructure into Terraform management using <code>terraform import</code>.</p>
+
+                        <h4>Traditional Import</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">terraform import</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># Step 1: Write resource block in config
+resource "aws_instance" "imported" {
+  # Attributes will be filled after import
+}
+
+# Step 2: Import the resource
+terraform import aws_instance.imported i-0abc123def456
+
+# Step 3: Run terraform plan to see current attributes
+terraform plan
+
+# Step 4: Update config to match actual resource
+# Copy attributes from plan output to your config</pre>
+                            </div>
+                        </div>
+
+                        <h4>Import Block (Terraform 1.5+)</h4>
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">import block</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># imports.tf
+import {
+  to = aws_instance.imported
+  id = "i-0abc123def456"
+}
+
+import {
+  to = aws_s3_bucket.data
+  id = "my-existing-bucket"
+}
+
+# Run plan to generate config
+terraform plan -generate-config-out=generated.tf
+
+# Review generated.tf and copy to main config
+# Remove import blocks after successful import</pre>
+                            </div>
+                        </div>
+
+                        <h4>Common Import IDs</h4>
+                        <table class="info-table">
+                            <thead><tr><th>Resource</th><th>Import ID Format</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>aws_instance</code></td><td>Instance ID: <code>i-1234567890</code></td></tr>
+                                <tr><td><code>aws_s3_bucket</code></td><td>Bucket name: <code>my-bucket</code></td></tr>
+                                <tr><td><code>aws_vpc</code></td><td>VPC ID: <code>vpc-12345678</code></td></tr>
+                                <tr><td><code>aws_security_group</code></td><td>SG ID: <code>sg-12345678</code></td></tr>
+                                <tr><td><code>aws_iam_role</code></td><td>Role name: <code>my-role</code></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-sync-alt"></i>
+                        <h2>State Refresh and Replace</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">Refresh and Replace Commands</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># Refresh state to match actual infrastructure
+terraform apply -refresh-only
+
+# Force recreation of a resource
+terraform apply -replace=aws_instance.web
+
+# Multiple replacements
+terraform apply -replace=aws_instance.web -replace=aws_instance.app
+
+# Legacy taint (marks for recreation)
+terraform taint aws_instance.web
+terraform untaint aws_instance.web</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-lock"></i>
+                        <h2>State Locking</h2>
+                    </div>
+                    <div class="section-content">
+                        <p>State locking prevents concurrent modifications that could corrupt state.</p>
+
+                        <div class="concept-grid">
+                            <div class="concept-card">
+                                <h4><i class="fas fa-shield-alt"></i> Purpose</h4>
+                                <p>Prevents multiple users from modifying state simultaneously</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4><i class="fas fa-clock"></i> Automatic</h4>
+                                <p>Enabled by default on supported backends (S3+DynamoDB, Azure, GCS)</p>
+                            </div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">Lock Management</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># Disable locking (not recommended)
+terraform apply -lock=false
+
+# Set lock timeout
+terraform apply -lock-timeout=5m
+
+# Force unlock (emergency only!)
+terraform force-unlock LOCK_ID</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h2>State Recovery</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">Recovery Scenarios</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># Backup before risky operations
+terraform state pull > backup-$(date +%Y%m%d).tfstate
+
+# Recover from backup
+terraform state push backup-20240115.tfstate
+
+# Restore from S3 versioning (if enabled)
+aws s3api get-object \
+  --bucket my-tf-state \
+  --key terraform.tfstate \
+  --version-id "abc123" \
+  recovered.tfstate
+
+# Re-import if state is lost
+# 1. List resources manually from cloud console
+# 2. Write resource blocks
+# 3. Import each resource
+terraform import aws_instance.web i-123456</pre>
+                            </div>
+                        </div>
+
+                        <div class="warning-box">
+                            <h4><i class="fas fa-lightbulb"></i> Best Practices</h4>
+                            <p>Always enable versioning on your remote state bucket. Take backups before state manipulation operations.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-comments"></i>
+                        <h2>Interview Q&A</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Q1: What is Terraform state and why is it important?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>Terraform state is a JSON file that maps configuration to real infrastructure:</p>
+                                <ul>
+                                    <li>Tracks resource IDs and metadata</li>
+                                    <li>Enables drift detection</li>
+                                    <li>Stores dependency information</li>
+                                    <li>Caches attributes for performance</li>
+                                    <li>Essential for plan/apply operations</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Q2: How do you import existing infrastructure into Terraform?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li>Write resource block in configuration</li>
+                                    <li>Run <code>terraform import resource.name resource_id</code></li>
+                                    <li>Run terraform plan to see current attributes</li>
+                                    <li>Update config to match actual state</li>
+                                    <li>Terraform 1.5+: Use import blocks for declarative import</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Q3: What is state locking and why is it needed?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>State locking prevents concurrent state modifications:</p>
+                                <ul>
+                                    <li>Avoids state corruption from parallel runs</li>
+                                    <li>Enabled by default on remote backends</li>
+                                    <li>Uses DynamoDB for S3, blob lease for Azure</li>
+                                    <li>Can be overridden with -lock=false (not recommended)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Q4: How do you move a resource in Terraform state?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>Use <code>terraform state mv</code>:</p>
+                                <ul>
+                                    <li>Update resource name in config first</li>
+                                    <li><code>terraform state mv old_name new_name</code></li>
+                                    <li>Can move between modules</li>
+                                    <li>Run plan to verify no changes</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Q5: What happens if you delete the state file?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>Deleting state file has serious consequences:</p>
+                                <ul>
+                                    <li>Terraform loses track of all resources</li>
+                                    <li>Apply would try to create everything again</li>
+                                    <li>Results in duplicate resources or errors</li>
+                                    <li>Recovery: Re-import all resources manually</li>
+                                    <li>Prevention: Use remote backend with versioning</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="nav-buttons">
+                    <a href="day-03-variables-outputs.html" class="nav-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        <div class="nav-btn-text"><span class="nav-btn-label">Previous</span><span class="nav-btn-title">Day 3: Variables & Outputs</span></div>
+                    </a>
+                    <a href="day-05-modules.html" class="nav-btn next">
+                        <div class="nav-btn-text"><span class="nav-btn-label">Next</span><span class="nav-btn-title">Day 5: Modules</span></div>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        window.addEventListener('scroll',()=>{const e=window.scrollY,t=document.documentElement.scrollHeight-window.innerHeight;document.getElementById('progressBar').style.width=e/t*100+'%'});function copyCode(e){const t=e.closest('.command-card').querySelector('pre');navigator.clipboard.writeText(t.textContent).then(()=>{e.innerHTML='<i class="fas fa-check"></i> Copied!';setTimeout(()=>{e.innerHTML='<i class="fas fa-copy"></i> Copy'},2e3)})}function toggleAnswer(e){e.classList.toggle('active');e.nextElementSibling.classList.toggle('active')}
+    </script>
+</body>
+</html>

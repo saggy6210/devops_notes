@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Terraform Day 10 - Interview Deep Dive and Comprehensive Q&A">
+    <title>Day 10: Interview Deep Dive | Terraform | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root{--primary:#7c3aed;--primary-dark:#5b21b6;--accent:#06b6d4;--bg-dark:#0f172a;--bg-card:#1e293b;--text-primary:#f1f5f9;--text-secondary:#94a3b8;--border-color:#334155;--success:#10b981;--warning:#f59e0b;--danger:#ef4444}*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:var(--bg-dark);color:var(--text-primary);line-height:1.7}.progress-bar{position:fixed;top:0;left:0;width:0%;height:4px;background:linear-gradient(90deg,var(--primary),var(--accent));z-index:1001}.container{max-width:1200px;margin:0 auto;padding:0 20px}.day-header{background:linear-gradient(135deg,var(--bg-card),var(--bg-dark));border-bottom:1px solid var(--border-color);padding:24px 0;position:sticky;top:0;z-index:100}.day-header .container{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}.day-nav{display:flex;align-items:center;gap:16px}.back-link{display:flex;align-items:center;gap:8px;color:var(--text-secondary);text-decoration:none;font-size:.9rem}.back-link:hover{color:var(--primary)}.day-title{display:flex;align-items:center;gap:16px}.day-badge{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;padding:8px 16px;border-radius:20px;font-weight:600;font-size:.9rem}.day-title h1{font-size:1.5rem;font-weight:700}.day-content{padding:48px 0}.content-grid{display:grid;gap:32px}.section-card{background:var(--bg-card);border-radius:16px;border:1px solid var(--border-color);overflow:hidden}.section-header{background:linear-gradient(135deg,rgba(124,58,237,.1),rgba(6,182,212,.1));padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;align-items:center;gap:12px}.section-header i{font-size:1.5rem;color:var(--primary)}.section-header h2{font-size:1.25rem;font-weight:600}.section-content{padding:24px}.hero-section{text-align:center;padding:48px 24px;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(6,182,212,.1))}.hero-section h2{font-size:2rem;margin-bottom:16px}.hero-section p{color:var(--text-secondary);max-width:700px;margin:0 auto;font-size:1.1rem}.qa-item{border:1px solid var(--border-color);border-radius:12px;margin-bottom:16px;overflow:hidden}.qa-question{background:rgba(124,58,237,.1);padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:500}.qa-question:hover{background:rgba(124,58,237,.2)}.qa-question i{color:var(--primary);transition:transform .3s ease}.qa-question.active i{transform:rotate(180deg)}.qa-answer{padding:0 20px;max-height:0;overflow:hidden;transition:all .3s ease}.qa-answer.active{padding:20px;max-height:800px}.qa-answer p,.qa-answer ul{color:var(--text-secondary)}.qa-answer ul{margin-left:20px;margin-top:10px}.qa-answer li{margin-bottom:8px}.qa-answer code{background:rgba(6,182,212,.1);padding:2px 8px;border-radius:4px;font-family:'Fira Code',monospace;color:var(--accent)}.command-card{background:#0d1520;border-radius:12px;margin:16px 0;overflow:hidden;border:1px solid var(--border-color)}.command-header{background:rgba(124,58,237,.1);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border-color)}.command-title{font-family:'Fira Code',monospace;color:var(--accent);font-size:.9rem}.copy-btn{background:var(--primary);color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:.8rem;display:flex;align-items:center;gap:6px}.copy-btn:hover{background:var(--primary-dark)}.command-body{padding:16px}.command-body pre{font-family:'Fira Code',monospace;font-size:.9rem;color:var(--text-primary);overflow-x:auto;white-space:pre-wrap}.nav-buttons{display:flex;justify-content:space-between;margin-top:48px;gap:16px;flex-wrap:wrap}.nav-btn{display:flex;align-items:center;gap:12px;padding:16px 24px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;color:var(--text-primary);text-decoration:none}.nav-btn:hover{border-color:var(--primary);transform:translateY(-2px)}.nav-btn.next{background:linear-gradient(135deg,var(--primary),var(--accent));border:none}.nav-btn-text{display:flex;flex-direction:column}.nav-btn-label{font-size:.8rem;color:var(--text-secondary)}.nav-btn.next .nav-btn-label{color:rgba(255,255,255,.8)}.nav-btn-title{font-weight:600}.category-tag{display:inline-block;background:rgba(6,182,212,.1);color:var(--accent);padding:4px 12px;border-radius:20px;font-size:.8rem;margin-bottom:12px}@media(max-width:768px){.day-header .container{flex-direction:column;align-items:flex-start}.day-title h1{font-size:1.2rem}.hero-section h2{font-size:1.5rem}.nav-buttons{flex-direction:column}.nav-btn{width:100%;justify-content:center}}
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <header class="day-header">
+        <div class="container">
+            <div class="day-nav">
+                <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i><span>Back to Terraform</span></a>
+            </div>
+            <div class="day-title">
+                <span class="day-badge">Day 10 of 10</span>
+                <h1>Interview Deep Dive</h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="day-content">
+        <div class="container">
+            <div class="content-grid">
+                <section class="section-card">
+                    <div class="hero-section">
+                        <h2>🎯 Terraform Interview Deep Dive</h2>
+                        <p>Comprehensive interview preparation covering fundamental concepts, advanced topics, troubleshooting scenarios, and real-world architecture questions.</p>
+                    </div>
+                </section>
+
+                <!-- Fundamentals -->
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-book"></i>
+                        <h2>Fundamentals</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>What is Terraform and how does it differ from Ansible/CloudFormation?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p><strong>Terraform</strong> is an IaC tool for provisioning infrastructure declaratively.</p>
+                                <ul>
+                                    <li><strong>vs Ansible:</strong> Terraform provisions infra; Ansible configures servers. Terraform is declarative; Ansible is procedural. They're often used together.</li>
+                                    <li><strong>vs CloudFormation:</strong> Terraform is cloud-agnostic (AWS, Azure, GCP); CF is AWS-only. Terraform uses HCL; CF uses JSON/YAML.</li>
+                                    <li><strong>Key difference:</strong> Terraform maintains state and can detect drift across any provider.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Explain the Terraform workflow (init, plan, apply, destroy)</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li><strong>init:</strong> Initialize directory, download providers/modules, configure backend</li>
+                                    <li><strong>plan:</strong> Create execution plan showing what will change (read-only)</li>
+                                    <li><strong>apply:</strong> Execute plan to create/modify/delete resources</li>
+                                    <li><strong>destroy:</strong> Delete all managed resources</li>
+                                </ul>
+                                <p>Additional commands: <code>validate</code> (syntax check), <code>fmt</code> (format), <code>refresh</code> (sync state)</p>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>What is Terraform state and why is it important?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>State is a JSON file mapping config to real infrastructure:</p>
+                                <ul>
+                                    <li>Tracks resource IDs and metadata</li>
+                                    <li>Enables drift detection</li>
+                                    <li>Determines create/update/delete actions</li>
+                                    <li>Caches attributes for performance</li>
+                                    <li>Contains sensitive data - secure it!</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>What are providers in Terraform?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>Providers are plugins that enable Terraform to interact with APIs:</p>
+                                <ul>
+                                    <li>Each provider adds resource types and data sources</li>
+                                    <li>Examples: aws, azurerm, google, kubernetes</li>
+                                    <li>Configured in <code>required_providers</code> block</li>
+                                    <li>Downloaded during <code>terraform init</code></li>
+                                    <li>Should be version-pinned in production</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- State Management -->
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-database"></i>
+                        <h2>State Management</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>How do you configure remote state in S3?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <div class="command-card">
+                                    <div class="command-body">
+<pre>terraform {
+  backend "s3" {
+    bucket         = "my-terraform-state"
+    key            = "prod/terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
+    dynamodb_table = "terraform-locks"
+  }
+}</pre>
+                                    </div>
+                                </div>
+                                <p>Requirements: S3 bucket with versioning, DynamoDB table for locking, appropriate IAM permissions.</p>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>What is state locking and why is it needed?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>State locking prevents concurrent operations that could corrupt state:</p>
+                                <ul>
+                                    <li>Acquired before plan/apply</li>
+                                    <li>S3 uses DynamoDB for locks</li>
+                                    <li>Azure uses blob leases</li>
+                                    <li>Force unlock: <code>terraform force-unlock LOCK_ID</code></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>How do you import existing resources into Terraform?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li>Write resource block in config</li>
+                                    <li>Run <code>terraform import resource.name resource_id</code></li>
+                                    <li>Run plan to see actual attributes</li>
+                                    <li>Update config to match</li>
+                                    <li>Terraform 1.5+: Use import blocks for declarative import</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>How do you move resources between states?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li><code>terraform state mv</code> - move within same state</li>
+                                    <li><code>terraform state rm</code> + <code>import</code> - move between states</li>
+                                    <li>Use <code>moved</code> blocks for refactoring (Terraform 1.1+)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Modules & Variables -->
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-puzzle-piece"></i>
+                        <h2>Modules & Variables</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>What are Terraform modules and their benefits?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>Modules are reusable containers for resources:</p>
+                                <ul>
+                                    <li><strong>Reusability:</strong> Write once, use many times</li>
+                                    <li><strong>Encapsulation:</strong> Hide complexity</li>
+                                    <li><strong>Standardization:</strong> Enforce conventions</li>
+                                    <li><strong>Versioning:</strong> Control updates</li>
+                                </ul>
+                                <p>Sources: Local, Registry, Git, S3, HTTP</p>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Explain variable precedence in Terraform</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>Highest to lowest precedence:</p>
+                                <ul>
+                                    <li>-var and -var-file flags</li>
+                                    <li>*.auto.tfvars (alphabetically)</li>
+                                    <li>terraform.tfvars</li>
+                                    <li>Environment variables (TF_VAR_name)</li>
+                                    <li>Default values in variable definition</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>What is the difference between variables and locals?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li><strong>Variables (var.):</strong> Input from users, can be set externally</li>
+                                    <li><strong>Locals (local.):</strong> Computed internally, not exposed</li>
+                                </ul>
+                                <p>Use locals to avoid repetition and simplify complex expressions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Advanced Concepts -->
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-code"></i>
+                        <h2>Advanced Concepts</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>When would you use count vs for_each?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li><strong>count:</strong> Identical resources, numeric index, reordering causes recreation</li>
+                                    <li><strong>for_each:</strong> String keys, stable references, safe for additions/removals</li>
+                                </ul>
+                                <p>Prefer for_each when resources have meaningful identifiers.</p>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>What are dynamic blocks?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>Dynamic blocks generate repeated nested configuration:</p>
+                                <div class="command-card">
+                                    <div class="command-body">
+<pre>dynamic "ingress" {
+  for_each = var.ports
+  content {
+    from_port = ingress.value
+    to_port   = ingress.value
+    protocol  = "tcp"
+  }
+}</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>How do you share data between Terraform configurations?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li><code>terraform_remote_state</code> data source</li>
+                                    <li>Data sources (aws_vpc, aws_subnet)</li>
+                                    <li>SSM Parameter Store / Secrets Manager</li>
+                                    <li>Output values from modules</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Explain Terraform workspaces</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <p>Workspaces allow multiple state instances for same config:</p>
+                                <ul>
+                                    <li>Each workspace has its own state file</li>
+                                    <li>Access via <code>terraform.workspace</code></li>
+                                    <li>Useful for dev/staging/prod of similar environments</li>
+                                    <li>Not recommended for significantly different configurations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Troubleshooting -->
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-wrench"></i>
+                        <h2>Troubleshooting Scenarios</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Terraform is trying to recreate a resource. How do you debug?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li>Check plan output for "forces replacement"</li>
+                                    <li>Review state: <code>terraform state show resource</code></li>
+                                    <li>Check for immutable attributes (AMI, availability zone)</li>
+                                    <li>Use <code>lifecycle { ignore_changes }</code> if needed</li>
+                                    <li>Review count/for_each index changes</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>State file is corrupted. What do you do?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li>Restore from S3 versioning</li>
+                                    <li>Restore from backup</li>
+                                    <li>Recreate state by importing resources</li>
+                                    <li>Use <code>terraform state push</code> to restore</li>
+                                </ul>
+                                <p>Prevention: Enable versioning, take regular backups before state operations.</p>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>How do you handle drift between actual infrastructure and state?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li><code>terraform plan</code> shows drift</li>
+                                    <li><code>terraform apply -refresh-only</code> to update state</li>
+                                    <li>If manual change should persist: update config to match</li>
+                                    <li>If manual change should revert: run apply</li>
+                                    <li>Prevention: Use <code>ignore_changes</code> for auto-managed attributes</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>"Error acquiring state lock" - how to resolve?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li>Wait for other operation to complete</li>
+                                    <li>Check if previous run crashed</li>
+                                    <li>Use <code>terraform force-unlock LOCK_ID</code></li>
+                                    <li>Check DynamoDB/blob lease manually</li>
+                                </ul>
+                                <p><strong>Warning:</strong> Only force-unlock if certain no other operation is running.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Architecture Questions -->
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-sitemap"></i>
+                        <h2>Architecture & Best Practices</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>How would you structure Terraform for a multi-environment setup?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li><strong>Shared modules:</strong> Create modules/ directory</li>
+                                    <li><strong>Environment directories:</strong> environments/dev, staging, prod</li>
+                                    <li><strong>Separate state files:</strong> Different S3 keys per environment</li>
+                                    <li><strong>Variable files:</strong> env-specific .tfvars</li>
+                                    <li><strong>CI/CD:</strong> Different pipelines per environment</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>How do you manage secrets in Terraform?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li>Never hardcode secrets in code</li>
+                                    <li>Use TF_VAR_ environment variables in CI</li>
+                                    <li>Integrate AWS Secrets Manager / HashiCorp Vault</li>
+                                    <li>Mark variables as <code>sensitive = true</code></li>
+                                    <li>Encrypt remote state backend</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>Describe a CI/CD pipeline for Terraform</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li><strong>PR:</strong> fmt check, validate, tflint, security scan</li>
+                                    <li><strong>PR:</strong> terraform plan, post as comment</li>
+                                    <li><strong>Merge:</strong> terraform apply with auto-approve</li>
+                                    <li><strong>Approvals:</strong> Manual approval for production</li>
+                                    <li><strong>Tools:</strong> GitHub Actions, GitLab CI, Terraform Cloud</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <div class="qa-question" onclick="toggleAnswer(this)">
+                                <span>What are Terraform best practices for production?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="qa-answer">
+                                <ul>
+                                    <li>Use remote backend with locking and encryption</li>
+                                    <li>Pin provider and module versions</li>
+                                    <li>Use modules for reusability</li>
+                                    <li>Keep state files small (layered architecture)</li>
+                                    <li>Run plan before apply, review changes</li>
+                                    <li>Use pre-commit hooks (fmt, validate, tflint)</li>
+                                    <li>Document with README and variable descriptions</li>
+                                    <li>Implement CI/CD with manual approval for prod</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Reference -->
+                <section class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-terminal"></i>
+                        <h2>Quick Reference Commands</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="command-card">
+                            <div class="command-header">
+                                <span class="command-title">Essential Commands</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="command-body">
+<pre># Initialize
+terraform init
+terraform init -upgrade
+terraform init -reconfigure
+
+# Plan & Apply
+terraform plan
+terraform plan -out=tfplan
+terraform apply tfplan
+terraform apply -auto-approve
+terraform apply -target=aws_instance.web
+
+# State Operations
+terraform state list
+terraform state show aws_instance.web
+terraform state mv old_name new_name
+terraform state rm resource.name
+terraform import resource.name resource_id
+
+# Destroy
+terraform destroy
+terraform destroy -target=aws_instance.web
+
+# Workspace
+terraform workspace list
+terraform workspace new dev
+terraform workspace select prod
+
+# Debug
+TF_LOG=DEBUG terraform plan
+terraform console
+terraform output -json</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="nav-buttons">
+                    <a href="day-09-best-practices-cicd.html" class="nav-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        <div class="nav-btn-text"><span class="nav-btn-label">Previous</span><span class="nav-btn-title">Day 9: Best Practices & CI/CD</span></div>
+                    </a>
+                    <a href="index.html" class="nav-btn next">
+                        <div class="nav-btn-text"><span class="nav-btn-label">Complete!</span><span class="nav-btn-title">Back to Terraform Home</span></div>
+                        <i class="fas fa-flag-checkered"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        window.addEventListener('scroll',()=>{const e=window.scrollY,t=document.documentElement.scrollHeight-window.innerHeight;document.getElementById('progressBar').style.width=e/t*100+'%'});function copyCode(e){const t=e.closest('.command-card').querySelector('pre');navigator.clipboard.writeText(t.textContent).then(()=>{e.innerHTML='<i class="fas fa-check"></i> Copied!';setTimeout(()=>{e.innerHTML='<i class="fas fa-copy"></i> Copy'},2e3)})}function toggleAnswer(e){e.classList.toggle('active');e.nextElementSibling.classList.toggle('active')}
+    </script>
+</body>
+</html>
