@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ansible Day 6 - Files, Templates & Vault">
+  <title>Day 6: Files, Templates & Vault | Ansible | DevOps Learning Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../../assets/css/topic.css">
+  <style>:root{--primary:#e7442e;--primary-dark:#b91c1c;--accent:#06b6d4;--bg-dark:#0f172a;--bg-card:#1e293b;--text-primary:#f1f5f9;--text-secondary:#94a3b8;--border-color:#334155;--success:#10b981;--warning:#f59e0b;--danger:#ef4444}body{background:var(--bg-dark);color:var(--text-primary);font-family:'Inter',sans-serif;line-height:1.7}.container{max-width:900px;margin:0 auto;padding:0 20px}.day-header{background:linear-gradient(135deg,var(--bg-card),var(--bg-dark));border-bottom:1px solid var(--border-color);padding:24px 0;position:sticky;top:0;z-index:100}.day-header .container{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}.day-nav{display:flex;align-items:center;gap:16px}.back-link{display:flex;align-items:center;gap:8px;color:var(--text-secondary);text-decoration:none;font-size:.9rem}.back-link:hover{color:var(--primary)}.day-title{display:flex;align-items:center;gap:16px}.day-badge{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;padding:8px 16px;border-radius:20px;font-weight:600;font-size:.9rem}.day-title h1{font-size:1.5rem;font-weight:700}.day-content{padding:48px 0}.content-grid{display:grid;gap:32px}.section-card{background:var(--bg-card);border-radius:16px;border:1px solid var(--border-color);overflow:hidden}.section-header{background:linear-gradient(135deg,rgba(231,68,46,.1),rgba(6,182,212,.1));padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;align-items:center;gap:12px}.section-header i{font-size:1.5rem;color:var(--primary)}.section-header h2{font-size:1.25rem;font-weight:600}.section-content{padding:24px}.hero-section{text-align:center;padding:48px 24px;background:linear-gradient(135deg,rgba(231,68,46,.2),rgba(6,182,212,.1))}.hero-section h2{font-size:2rem;margin-bottom:16px}.hero-section p{color:var(--text-secondary);max-width:700px;margin:0 auto;font-size:1.1rem}.command-card{background:#0d1520;border-radius:12px;margin:16px 0;overflow:hidden;border:1px solid var(--border-color)}.command-header{background:rgba(231,68,46,.1);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border-color)}.command-title{font-family:'Fira Code',monospace;color:var(--accent);font-size:.9rem}.copy-btn{background:var(--primary);color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:.8rem;display:flex;align-items:center;gap:6px}.copy-btn:hover{background:var(--primary-dark)}.command-body{padding:16px}.command-body pre{font-family:'Fira Code',monospace;font-size:.9rem;color:var(--text-primary);overflow-x:auto;white-space:pre-wrap}.nav-buttons{display:flex;justify-content:space-between;margin-top:48px;gap:16px;flex-wrap:wrap}.nav-btn{display:flex;align-items:center;gap:12px;padding:16px 24px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;color:var(--text-primary);text-decoration:none}.nav-btn:hover{border-color:var(--primary);transform:translateY(-2px)}.nav-btn.next{background:linear-gradient(135deg,var(--primary),var(--accent));border:none}.nav-btn-text{display:flex;flex-direction:column}.nav-btn-label{font-size:.8rem;color:var(--text-secondary)}.nav-btn.next .nav-btn-label{color:rgba(255,255,255,.8)}.nav-btn-title{font-weight:600}.category-tag{display:inline-block;background:rgba(6,182,212,.1);color:var(--accent);padding:4px 12px;border-radius:20px;font-size:.8rem;margin-bottom:12px}@media(max-width:768px){.day-header .container{flex-direction:column;align-items:flex-start}.day-title h1{font-size:1.2rem}.hero-section h2{font-size:1.5rem}.nav-buttons{flex-direction:column}.nav-btn{width:100%;justify-content:center}}
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progressBar"></div>
+  <header class="day-header">
+    <div class="container">
+      <div class="day-nav">
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i><span>Back to Ansible</span></a>
+      </div>
+      <div class="day-title">
+        <span class="day-badge">Day 6 of 10</span>
+        <h1>Files, Templates & Vault</h1>
+      </div>
+    </div>
+  </header>
+  <main class="day-content">
+    <div class="container">
+      <div class="content-grid">
+        <section class="section-card">
+          <div class="hero-section">
+            <h2>📄 Files, Templates & Vault</h2>
+            <p>Manage files, use Jinja2 templates, and secure secrets with Ansible Vault.</p>
+          </div>
+        </section>
+        <section class="section-card">
+          <div class="section-header">
+            <i class="fas fa-file-upload"></i>
+            <h2>Copying Files</h2>
+          </div>
+          <div class="section-content">
+            <ul>
+              <li>Use <code>copy</code> module to transfer files</li>
+              <li>Use <code>template</code> module for Jinja2 templates</li>
+            </ul>
+            <div class="command-card">
+              <div class="command-header">
+                <span class="command-title">Copy File Example</span>
+                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+              </div>
+              <div class="command-body">
+<pre>- name: Copy config file
+  copy:
+    src: files/my.conf
+    dest: /etc/my.conf
+</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="section-card">
+          <div class="section-header">
+            <i class="fas fa-file-alt"></i>
+            <h2>Templates</h2>
+          </div>
+          <div class="section-content">
+            <ul>
+              <li>Templates use Jinja2 syntax: <code>{{ variable }}</code></li>
+              <li>Place templates in <code>templates/</code> directory</li>
+            </ul>
+            <div class="command-card">
+              <div class="command-header">
+                <span class="command-title">Template Example</span>
+                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+              </div>
+              <div class="command-body">
+<pre>- name: Deploy config from template
+  template:
+    src: templates/my.conf.j2
+    dest: /etc/my.conf
+</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="section-card">
+          <div class="section-header">
+            <i class="fas fa-lock"></i>
+            <h2>Ansible Vault</h2>
+          </div>
+          <div class="section-content">
+            <ul>
+              <li>Encrypt secrets: <code>ansible-vault encrypt vars.yml</code></li>
+              <li>Edit secrets: <code>ansible-vault edit vars.yml</code></li>
+              <li>Decrypt: <code>ansible-vault decrypt vars.yml</code></li>
+              <li>Run playbook with vault: <code>ansible-playbook --ask-vault-pass site.yml</code></li>
+            </ul>
+          </div>
+        </section>
+        <div class="nav-buttons">
+          <a href="day-05-roles-structure.html" class="nav-btn">
+            <i class="fas fa-arrow-left"></i>
+            <div class="nav-btn-text"><span class="nav-btn-label">Previous</span><span class="nav-btn-title">Day 5: Roles & Project Structure</span></div>
+          </a>
+          <a href="day-07-dynamic-inventory.html" class="nav-btn next">
+            <div class="nav-btn-text"><span class="nav-btn-label">Next</span><span class="nav-btn-title">Day 7: Dynamic Inventory & Advanced Features</span></div>
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>function copyCode(e){const t=e.closest('.command-card').querySelector('pre');navigator.clipboard.writeText(t.textContent).then(()=>{e.innerHTML='<i class="fas fa-check"></i> Copied!';setTimeout(()=>{e.innerHTML='<i class="fas fa-copy"></i> Copy'},2e3)})}
+  </script>
+</body>
+</html>

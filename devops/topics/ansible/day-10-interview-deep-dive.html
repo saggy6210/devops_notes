@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ansible Day 10 - Interview Q&A & Deep Dive">
+  <title>Day 10: Interview Q&A & Deep Dive | Ansible | DevOps Learning Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../../assets/css/topic.css">
+  <style>:root{--primary:#e7442e;--primary-dark:#b91c1c;--accent:#06b6d4;--bg-dark:#0f172a;--bg-card:#1e293b;--text-primary:#f1f5f9;--text-secondary:#94a3b8;--border-color:#334155;--success:#10b981;--warning:#f59e0b;--danger:#ef4444}body{background:var(--bg-dark);color:var(--text-primary);font-family:'Inter',sans-serif;line-height:1.7}.container{max-width:900px;margin:0 auto;padding:0 20px}.day-header{background:linear-gradient(135deg,var(--bg-card),var(--bg-dark));border-bottom:1px solid var(--border-color);padding:24px 0;position:sticky;top:0;z-index:100}.day-header .container{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}.day-nav{display:flex;align-items:center;gap:16px}.back-link{display:flex;align-items:center;gap:8px;color:var(--text-secondary);text-decoration:none;font-size:.9rem}.back-link:hover{color:var(--primary)}.day-title{display:flex;align-items:center;gap:16px}.day-badge{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;padding:8px 16px;border-radius:20px;font-weight:600;font-size:.9rem}.day-title h1{font-size:1.5rem;font-weight:700}.day-content{padding:48px 0}.content-grid{display:grid;gap:32px}.section-card{background:var(--bg-card);border-radius:16px;border:1px solid var(--border-color);overflow:hidden}.section-header{background:linear-gradient(135deg,rgba(231,68,46,.1),rgba(6,182,212,.1));padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;align-items:center;gap:12px}.section-header i{font-size:1.5rem;color:var(--primary)}.section-header h2{font-size:1.25rem;font-weight:600}.section-content{padding:24px}.hero-section{text-align:center;padding:48px 24px;background:linear-gradient(135deg,rgba(231,68,46,.2),rgba(6,182,212,.1))}.hero-section h2{font-size:2rem;margin-bottom:16px}.hero-section p{color:var(--text-secondary);max-width:700px;margin:0 auto;font-size:1.1rem}.qa-item{border:1px solid var(--border-color);border-radius:12px;margin-bottom:16px;overflow:hidden}.qa-question{background:rgba(231,68,46,.1);padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:500}.qa-question:hover{background:rgba(231,68,46,.2)}.qa-question i{color:var(--primary);transition:transform .3s ease}.qa-question.active i{transform:rotate(180deg)}.qa-answer{padding:0 20px;max-height:0;overflow:hidden;transition:all .3s ease}.qa-answer.active{padding:20px;max-height:800px}.qa-answer p,.qa-answer ul{color:var(--text-secondary)}.qa-answer ul{margin-left:20px;margin-top:10px}.qa-answer li{margin-bottom:8px}.qa-answer code{background:rgba(6,182,212,.1);padding:2px 8px;border-radius:4px;font-family:'Fira Code',monospace;color:var(--accent)}.command-card{background:#0d1520;border-radius:12px;margin:16px 0;overflow:hidden;border:1px solid var(--border-color)}.command-header{background:rgba(231,68,46,.1);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border-color)}.command-title{font-family:'Fira Code',monospace;color:var(--accent);font-size:.9rem}.copy-btn{background:var(--primary);color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:.8rem;display:flex;align-items:center;gap:6px}.copy-btn:hover{background:var(--primary-dark)}.command-body{padding:16px}.command-body pre{font-family:'Fira Code',monospace;font-size:.9rem;color:var(--text-primary);overflow-x:auto;white-space:pre-wrap}.nav-buttons{display:flex;justify-content:space-between;margin-top:48px;gap:16px;flex-wrap:wrap}.nav-btn{display:flex;align-items:center;gap:12px;padding:16px 24px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;color:var(--text-primary);text-decoration:none}.nav-btn:hover{border-color:var(--primary);transform:translateY(-2px)}.nav-btn.next{background:linear-gradient(135deg,var(--primary),var(--accent));border:none}.nav-btn-text{display:flex;flex-direction:column}.nav-btn-label{font-size:.8rem;color:var(--text-secondary)}.nav-btn.next .nav-btn-label{color:rgba(255,255,255,.8)}.nav-btn-title{font-weight:600}.category-tag{display:inline-block;background:rgba(6,182,212,.1);color:var(--accent);padding:4px 12px;border-radius:20px;font-size:.8rem;margin-bottom:12px}@media(max-width:768px){.day-header .container{flex-direction:column;align-items:flex-start}.day-title h1{font-size:1.2rem}.hero-section h2{font-size:1.5rem}.nav-buttons{flex-direction:column}.nav-btn{width:100%;justify-content:center}}
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progressBar"></div>
+  <header class="day-header">
+    <div class="container">
+      <div class="day-nav">
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i><span>Back to Ansible</span></a>
+      </div>
+      <div class="day-title">
+        <span class="day-badge">Day 10 of 10</span>
+        <h1>Interview Q&A & Deep Dive</h1>
+      </div>
+    </div>
+  </header>
+  <main class="day-content">
+    <div class="container">
+      <div class="content-grid">
+        <section class="section-card">
+          <div class="hero-section">
+            <h2>🎯 Ansible Interview Q&A & Deep Dive</h2>
+            <p>Comprehensive interview preparation covering Ansible fundamentals, advanced topics, troubleshooting, and real-world architecture questions.</p>
+          </div>
+        </section>
+        <section class="section-card">
+          <div class="section-header">
+            <i class="fas fa-book"></i>
+            <h2>Fundamentals</h2>
+          </div>
+          <div class="section-content">
+            <div class="qa-item">
+              <div class="qa-question" onclick="toggleAnswer(this)">
+                <span>What is Ansible and how does it work?</span>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="qa-answer">
+                <p>Ansible is an agentless automation tool that connects to remote hosts over SSH (or WinRM for Windows) and executes tasks defined in YAML playbooks.</p>
+                <ul>
+                  <li>No agent required on managed nodes</li>
+                  <li>Uses modules to perform actions</li>
+                  <li>Idempotent: running playbooks multiple times yields the same result</li>
+                </ul>
+              </div>
+            </div>
+            <div class="qa-item">
+              <div class="qa-question" onclick="toggleAnswer(this)">
+                <span>What is an inventory file?</span>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="qa-answer">
+                <p>Inventory file lists hosts and groups for Ansible to manage. Can be static (INI/YAML) or dynamic (scripts/plugins).</p>
+                <ul>
+                  <li>Default: <code>/etc/ansible/hosts</code></li>
+                  <li>Custom: <code>-i</code> flag</li>
+                </ul>
+              </div>
+            </div>
+            <div class="qa-item">
+              <div class="qa-question" onclick="toggleAnswer(this)">
+                <span>What is a playbook?</span>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="qa-answer">
+                <p>Playbooks are YAML files describing automation tasks. They define plays (target hosts) and tasks (actions to perform).</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="section-card">
+          <div class="section-header">
+            <i class="fas fa-cogs"></i>
+            <h2>Advanced Topics</h2>
+          </div>
+          <div class="section-content">
+            <div class="qa-item">
+              <div class="qa-question" onclick="toggleAnswer(this)">
+                <span>How do you use variables and facts?</span>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="qa-answer">
+                <ul>
+                  <li>Variables: defined in playbooks, inventory, or external files</li>
+                  <li>Facts: gathered automatically (<code>ansible_facts</code>)</li>
+                  <li>Jinja2 templating: <code>{{ variable }}</code></li>
+                </ul>
+              </div>
+            </div>
+            <div class="qa-item">
+              <div class="qa-question" onclick="toggleAnswer(this)">
+                <span>What are handlers and when are they used?</span>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="qa-answer">
+                <p>Handlers are special tasks triggered by <code>notify</code> when a change occurs. Used for actions like restarting services after config changes.</p>
+              </div>
+            </div>
+            <div class="qa-item">
+              <div class="qa-question" onclick="toggleAnswer(this)">
+                <span>How do you secure secrets in Ansible?</span>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="qa-answer">
+                <ul>
+                  <li>Use Ansible Vault to encrypt files/variables</li>
+                  <li>Never hardcode secrets in playbooks</li>
+                  <li>Use <code>--ask-vault-pass</code> or vault password files</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="section-card">
+          <div class="section-header">
+            <i class="fas fa-wrench"></i>
+            <h2>Troubleshooting</h2>
+          </div>
+          <div class="section-content">
+            <div class="qa-item">
+              <div class="qa-question" onclick="toggleAnswer(this)">
+                <span>How do you debug a failing playbook?</span>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="qa-answer">
+                <ul>
+                  <li>Use <code>debug</code> module to print variables</li>
+                  <li>Run with <code>-v</code>, <code>-vvv</code> for verbose output</li>
+                  <li>Check SSH connectivity and permissions</li>
+                  <li>Check for missing variables/files</li>
+                </ul>
+              </div>
+            </div>
+            <div class="qa-item">
+              <div class="qa-question" onclick="toggleAnswer(this)">
+                <span>What are common errors in Ansible?</span>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="qa-answer">
+                <ul>
+                  <li>YAML syntax errors (indentation, colons)</li>
+                  <li>SSH connection failures</li>
+                  <li>Module not found</li>
+                  <li>Undefined variables</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="section-card">
+          <div class="section-header">
+            <i class="fas fa-sitemap"></i>
+            <h2>Architecture & Best Practices</h2>
+          </div>
+          <div class="section-content">
+            <div class="qa-item">
+              <div class="qa-question" onclick="toggleAnswer(this)">
+                <span>How do you structure a large Ansible project?</span>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="qa-answer">
+                <ul>
+                  <li>Use roles for modularity and reuse</li>
+                  <li>Group variables in <code>group_vars</code> and <code>host_vars</code></li>
+                  <li>Document roles and playbooks</li>
+                  <li>Use Ansible Galaxy for community roles</li>
+                </ul>
+              </div>
+            </div>
+            <div class="qa-item">
+              <div class="qa-question" onclick="toggleAnswer(this)">
+                <span>How do you use Ansible in CI/CD?</span>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="qa-answer">
+                <ul>
+                  <li>Integrate <code>ansible-playbook</code> in pipeline steps</li>
+                  <li>Lint playbooks with <code>ansible-lint</code></li>
+                  <li>Test roles with <code>molecule</code></li>
+                  <li>Use vault for secrets in CI</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="section-card">
+          <div class="section-header">
+            <i class="fas fa-terminal"></i>
+            <h2>Quick Reference Commands</h2>
+          </div>
+          <div class="section-content">
+            <div class="command-card">
+              <div class="command-header">
+                <span class="command-title">Essential Commands</span>
+                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+              </div>
+              <div class="command-body">
+<pre># Check version
+ansible --version
+
+# Run ad-hoc command
+ansible all -m ping
+ansible web -m shell -a 'uptime'
+
+# Run playbook
+ansible-playbook site.yml
+ansible-playbook -i inventory.ini playbook.yml
+
+# Lint playbooks
+ansible-lint playbook.yml
+
+# Encrypt/decrypt with vault
+ansible-vault encrypt vars.yml
+ansible-vault decrypt vars.yml
+ansible-vault edit vars.yml
+
+# Test roles
+molecule test
+</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div class="nav-buttons">
+          <a href="day-09-cicd-usecases.html" class="nav-btn">
+            <i class="fas fa-arrow-left"></i>
+            <div class="nav-btn-text"><span class="nav-btn-label">Previous</span><span class="nav-btn-title">Day 9: Ansible in CI/CD & Use Cases</span></div>
+          </a>
+          <a href="index.html" class="nav-btn next">
+            <div class="nav-btn-text"><span class="nav-btn-label">Complete!</span><span class="nav-btn-title">Back to Ansible Home</span></div>
+            <i class="fas fa-flag-checkered"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    function copyCode(e){const t=e.closest('.command-card').querySelector('pre');navigator.clipboard.writeText(t.textContent).then(()=>{e.innerHTML='<i class="fas fa-check"></i> Copied!';setTimeout(()=>{e.innerHTML='<i class="fas fa-copy"></i> Copy'},2e3)})}
+    function toggleAnswer(e){e.classList.toggle('active');e.nextElementSibling.classList.toggle('active')}
+  </script>
+</body>
+</html>
