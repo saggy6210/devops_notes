@@ -22,6 +22,12 @@
 .kubernetes-theme { --theme-color: #326ce5; }
 .terraform-theme { --theme-color: #7b42bc; }
 .ansible-theme { --theme-color: #ee0000; }
+.aws-theme { --theme-color: #ff9900; }
+.azure-theme { --theme-color: #0078d4; }
+.bash-theme { --theme-color: #4eaa25; }
+.cicd-theme { --theme-color: #fc6d26; }
+.monitoring-theme { --theme-color: #e6522c; }
+.python-theme { --theme-color: #3776ab; }
 
 .topic-hero-content {
     display: flex;

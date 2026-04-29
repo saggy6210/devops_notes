@@ -3,27 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon | DevOps Learning Hub</title>
+    <meta name="description" content="Python Learning - Hands-on tutorials, commands, and interview preparation">
+    <title>Python | DevOps Learning Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f0f9ff, #fff); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .container { text-align: center; padding: 40px; }
-        .icon { font-size: 4rem; color: #6366f1; margin-bottom: 24px; }
-        h1 { font-size: 2rem; color: #1e293b; margin-bottom: 16px; }
-        p { color: #64748b; margin-bottom: 32px; }
-        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 28px; background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; border-radius: 12px; text-decoration: none; font-weight: 600; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99,102,241,0.3); }
-    </style>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/topic.css">
 </head>
 <body>
-    <div class="container">
-        <div class="icon"><i class="fas fa-hard-hat"></i></div>
-        <h1>Content Coming Soon!</h1>
-        <p>We're working on this topic. Check back soon for daily updates.</p>
-        <a href="../../" class="btn"><i class="fas fa-home"></i> Back to Home</a>
-    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo">
+                <i class="fas fa-terminal"></i>
+                <span>DevOps Hub</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="../../" class="nav-link">Home</a></li>
+                <li><a href="../../#topics" class="nav-link">Topics</a></li>
+                <li><a href="../../#learning-path" class="nav-link">Learning Path</a></li>
+                <li><a href="../../#about" class="nav-link">About</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Topic Header -->
+    <header class="topic-hero python-theme">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../../#topics">Topics</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Python</span>
+            </div>
+            <div class="topic-hero-content">
+                <div class="topic-hero-text">
+                    <div class="topic-badge">
+                        <i class="fab fa-python"></i>
+                        <span>Programming Language</span>
+                    </div>
+                    <h1>Python</h1>
+                    <p>Python is the Swiss Army knife of DevOps — automation, AWS scripting, web APIs, and data tooling. Master it pragmatically.</p>
+                    <div class="topic-stats">
+                        <div class="topic-stat">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>10 Days</span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-question-circle"></i>
+                            <span>50+ Q&amp;A</span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-code"></i>
+                            <span>Hands-on Labs</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="topic-hero-icon">
+                    <i class="fab fa-python"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="topic-main">
+        <div class="container">
+            <div class="topic-layout">
+                <!-- Sidebar -->
+                <aside class="topic-sidebar">
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-list"></i> Course Content</h3>
+                        <ul class="day-list">
+                            <li class="active">
+                                <a href="day-01-core-concepts.html">
+                                    <span class="day-number">01</span>
+                                    <span class="day-title">Core Concepts</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-02-data-types.html">
+                                    <span class="day-number">02</span>
+                                    <span class="day-title">Data Types</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-03-control-flow.html">
+                                    <span class="day-number">03</span>
+                                    <span class="day-title">Control Flow</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-04-functions.html">
+                                    <span class="day-number">04</span>
+                                    <span class="day-title">Functions</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-05-modules-packages.html">
+                                    <span class="day-number">05</span>
+                                    <span class="day-title">Modules & Packages</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-06-file-io.html">
+                                    <span class="day-number">06</span>
+                                    <span class="day-title">File I/O</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-07-exceptions.html">
+                                    <span class="day-number">07</span>
+                                    <span class="day-title">Exceptions</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-08-advanced-topics.html">
+                                    <span class="day-number">08</span>
+                                    <span class="day-title">Advanced Topics</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-09-best-practices.html">
+                                    <span class="day-number">09</span>
+                                    <span class="day-title">Best Practices</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="day-10-interview-deep-dive.html">
+                                    <span class="day-number">10</span>
+                                    <span class="day-title">Interview Deep Dive</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-card quick-ref">
+                        <h3><i class="fas fa-terminal"></i> Quick Reference</h3>
+                        <div class="quick-commands">
+                            <code>python -m venv .venv && source .venv/bin/activate</code>
+                            <code>pip install -r requirements.txt</code>
+                            <code>pytest -v --cov</code>
+                            <code>ruff check . && black .</code>
+                            <code>python -m http.server 8000</code>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Content Area -->
+                <div class="topic-content">
+                    <div class="content-card start-card">
+                        <div class="start-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h2>Start Your Python Journey</h2>
+                        <p>Begin with the fundamentals and progressively build your expertise. Each day covers concepts, hands-on commands, scenarios, and interview preparation.</p>
+                        <a href="day-01-core-concepts.html" class="btn btn-primary btn-large">
+                            <i class="fas fa-play"></i> Start Day 1: Core Concepts
+                        </a>
+                    </div>
+
+                    <div class="content-card learning-path-card">
+                        <h3><i class="fas fa-road"></i> What You'll Learn</h3>
+                        <div class="learning-grid">
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-th-large"></i></div>
+                                <h4>Data Types</h4>
+                                <p>list, dict, set, comprehensions</p>
+                            </div>
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-code-branch"></i></div>
+                                <h4>Control Flow</h4>
+                                <p>Loops, exceptions, context managers</p>
+                            </div>
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-cogs"></i></div>
+                                <h4>Functions</h4>
+                                <p>Decorators, closures, type hints</p>
+                            </div>
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-cubes"></i></div>
+                                <h4>Modules</h4>
+                                <p>Packages, imports, projects</p>
+                            </div>
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-rocket"></i></div>
+                                <h4>Async</h4>
+                                <p>asyncio for I/O concurrency</p>
+                            </div>
+                            <div class="learning-item">
+                                <div class="learning-icon"><i class="fas fa-vial"></i></div>
+                                <h4>Testing</h4>
+                                <p>pytest + ruff + mypy</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card prereq-card">
+                        <h3><i class="fas fa-clipboard-check"></i> Prerequisites</h3>
+                        <ul class="prereq-list">
+                            <li><i class="fas fa-check"></i> Linux/macOS/Windows with terminal</li>
+                            <li><i class="fas fa-check"></i> Python 3.10+ installed</li>
+                            <li><i class="fas fa-check"></i> Basic programming exposure helpful</li>
+                        </ul>
+                        <div class="install-note">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Install Python: <a href="https://www.python.org/downloads/" target="_blank">python.org/downloads</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="../../" class="footer-logo">
+                        <i class="fas fa-terminal"></i>
+                        <span>DevOps Hub</span>
+                    </a>
+                    <p>Your daily companion for DevOps learning and interview preparation.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Topics</h4>
+                    <ul>
+                        <li><a href="../docker/">Docker</a></li>
+                        <li><a href="../kubernetes/">Kubernetes</a></li>
+                        <li><a href="../terraform/">Terraform</a></li>
+                        <li><a href="../ansible/">Ansible</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="../../#learning-path">Learning Path</a></li>
+                        <li><a href="https://github.com/saggy6210/devops_notes" target="_blank">GitHub</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 DevOps Learning Hub. Made with <i class="fas fa-heart"></i> for the DevOps community.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+            this.classList.toggle('active');
+        });
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
 </body>
 </html>
