@@ -29,9 +29,9 @@ Each topic includes:
 - Architecture questions
 - Real-world examples
 
-## 🔄 Daily Updates
+## 🔄 Updates
 
-Content is updated daily via automated GitHub Actions pipeline using AI-generated content.
+Content is curated and updated manually.
 
 ## 🏗️ Local Development
 
@@ -47,30 +47,23 @@ bundle exec jekyll serve
 # Visit http://localhost:4000
 ```
 
-## 🤖 Automation
+## 🚀 Deployment
 
-The repository uses GitHub Actions to:
-- Generate daily content using Gemini AI
-- Auto-commit and push updates
-- Deploy to GitHub Pages
+Deployed via GitHub Pages.
 
 ## 📁 Structure
 
 ```
 devops/
 ├── _config.yml          # Jekyll configuration
-├── index.md             # Landing page
+├── index.html           # Landing page
 ├── topics/
 │   ├── docker/          # Docker notes
 │   ├── kubernetes/      # K8s notes
 │   ├── terraform/       # Terraform notes
 │   └── ...
-├── scripts/
-│   └── content_generator.py  # AI content generator
-├── prompts/
-│   └── devops_content.txt    # Gemini prompts
 └── .github/workflows/
-    └── daily-content.yml     # Automation pipeline
+    └── deploy-pages.yml # GitHub Pages deployment
 ```
 
 ## 🎯 Goal
