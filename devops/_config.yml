@@ -3,7 +3,7 @@ title: DevOps Learning Hub
 description: Daily DevOps notes, concepts, and interview preparation
 author: Sagar Chavan
 url: "https://saggy6210.github.io"
-baseurl: "/devops_notes/devops"
+baseurl: "/devops_notes"
 
 # Build settings
 markdown: kramdown

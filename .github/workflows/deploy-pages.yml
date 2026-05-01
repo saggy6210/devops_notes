@@ -39,7 +39,7 @@ jobs:
       - name: Build site
         run: |
           cd devops
-          bundle exec jekyll build --baseurl "/devops_notes/devops"
+          bundle exec jekyll build --baseurl "/devops_notes"
         env:
           JEKYLL_ENV: production
 
