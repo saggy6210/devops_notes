@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Docker Interview Questions and Answers - Container fundamentals, Dockerfile, networking, compose">
+    <title>Docker Interview Q&A | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/topic.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo">
+                <i class="fas fa-terminal"></i>
+                <span>DevOps Hub</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="../../" class="nav-link">Home</a></li>
+                <li><a href="../../#topics" class="nav-link">Topics</a></li>
+                <li><a href="../../#learning-path" class="nav-link">Learning Path</a></li>
+                <li><a href="../../#about" class="nav-link">About</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Topic Header -->
+    <header class="topic-hero docker-theme">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="index.html">Interview Prep</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Docker</span>
+            </div>
+            <div class="topic-hero-content">
+                <div class="topic-hero-text">
+                    <div class="topic-badge">
+                        <i class="fab fa-docker"></i>
+                        <span>Interview Questions</span>
+                    </div>
+                    <h1>Docker Interview Q&A</h1>
+                    <p>Master Docker interview questions covering containers, images, networking, Dockerfile, Docker Compose, and Swarm.</p>
+                </div>
+                <div class="topic-hero-icon">
+                    <i class="fab fa-docker"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="topic-main">
+        <div class="container">
+            <div class="topic-layout">
+                <!-- Sidebar -->
+                <aside class="topic-sidebar">
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-list"></i> Interview Topics</h3>
+                        <ul class="day-list">
+                            <li class="current">
+                                <a href="docker-interview.html">
+                                    <span class="day-number"><i class="fab fa-docker"></i></span>
+                                    <span class="day-title">Docker</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="kubernetes-interview.html">
+                                    <span class="day-number"><i class="fas fa-dharmachakra"></i></span>
+                                    <span class="day-title">Kubernetes</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="linux-interview.html">
+                                    <span class="day-number"><i class="fab fa-linux"></i></span>
+                                    <span class="day-title">Linux & Bash</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="git-interview.html">
+                                    <span class="day-number"><i class="fab fa-git-alt"></i></span>
+                                    <span class="day-title">Git</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="cicd-interview.html">
+                                    <span class="day-number"><i class="fas fa-infinity"></i></span>
+                                    <span class="day-title">CI/CD & Jenkins</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="networking-interview.html">
+                                    <span class="day-number"><i class="fas fa-network-wired"></i></span>
+                                    <span class="day-title">Networking & HTTP</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <!-- Content Area -->
+                <div class="topic-content">
+                    <!-- Q&A Section -->
+                    <div class="qa-section">
+                        <h2><i class="fas fa-question-circle"></i> Docker Interview Questions</h2>
+                        
+                        <div class="qa-list">
+                            <!-- Q1 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">1</span>
+                                    <h4>What is Docker?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p>Docker is an <strong>open-source lightweight containerization technology</strong>. It allows you to package applications and their dependencies into standardized units called containers that can run consistently across different environments.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q2 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">2</span>
+                                    <h4>What is Docker Swarm?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p>Docker Swarm is a <strong>native clustering and orchestration tool</strong> for Docker. It helps you group multiple Docker hosts into a single virtual Docker host, enabling container orchestration, load balancing, and scaling.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q3 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">3</span>
+                                    <h4>What is Docker Hub?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p>Docker Hub is a <strong>cloud-based registry service</strong> that allows you to store and distribute Docker images. It also helps you link to code repositories and automate builds.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q4 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">4</span>
+                                    <h4>What is a Hypervisor?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p>A hypervisor allows you to create a <strong>virtual environment</strong> in which guest virtual machines operate. It controls the guest systems and manages resource allocation to the guests as necessary. Examples: VMware, Hyper-V, VirtualBox.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q5 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">5</span>
+                                    <h4>What is CNM (Container Networking Model)?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p>CNM stands for <strong>Container Networking Model</strong>. It's Docker's approach to networking that provides a pluggable architecture. Key components: Sandbox (network namespace), Endpoint (connects sandbox to network), Network (group of endpoints).</p>
+                                </div>
+                            </div>
+
+                            <!-- Q6 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">6</span>
+                                    <h4>What is the default Docker network driver?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p>Docker provides different network drivers: <strong>bridge</strong> (default), <strong>host</strong>, <strong>overlay</strong>, and <strong>macvlan</strong>. Bridge is the default driver for standalone containers.</p>
+                                    <div class="code-block">
+                                        <code>docker network create my-network</code>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Q7 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">7</span>
+                                    <h4>Which network driver should be used with Docker Swarm?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p>Use the <strong>overlay</strong> network driver with Docker Swarm. It enables the Swarm service by connecting multiple Docker host daemons together, allowing containers across different hosts to communicate.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q8 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">8</span>
+                                    <h4>What is the difference between CMD and ENTRYPOINT?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <ul>
+                                        <li><strong>CMD:</strong> Sets default command and/or parameters, which <strong>can be overwritten</strong> from command line when container runs.</li>
+                                        <li><strong>ENTRYPOINT:</strong> Configures a container that will run as an executable. Arguments are <strong>appended</strong>, not replaced.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Q9 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">9</span>
+                                    <h4>What is the difference between ADD and COPY instruction?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <ul>
+                                        <li><strong>COPY:</strong> Only copies local files or directories from the host into the Docker image.</li>
+                                        <li><strong>ADD:</strong> Can use a URL as source and can extract tar files directly into the destination. URLs are downloaded but not decompressed.</li>
+                                    </ul>
+                                    <p class="tip"><i class="fas fa-lightbulb"></i> Best practice: Use COPY unless you need ADD's specific features.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q10 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">10</span>
+                                    <h4>What is Docker Compose?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p>Docker Compose is a tool for <strong>defining and running multi-container Docker applications</strong>. You use a YAML file to configure your application's services, then create and start all services with a single command:</p>
+                                    <div class="code-block">
+                                        <code>docker-compose up -d</code>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Q11 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">11</span>
+                                    <h4>What are docker save and docker load commands?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <ul>
+                                        <li><strong>docker save:</strong> Saves one or more images to a tar archive. Contains all parent layers, tags, and versions.</li>
+                                        <li><strong>docker load:</strong> Loads an image from a tar archive. Restores both images and tags.</li>
+                                    </ul>
+                                    <div class="code-block">
+                                        <code>docker save myimage > myimage.tar<br>docker load < myimage.tar</code>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Q12 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">12</span>
+                                    <h4>What are Docker container's possible states?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <ul>
+                                        <li><strong>created:</strong> Container created but not started</li>
+                                        <li><strong>restarting:</strong> Container being restarted</li>
+                                        <li><strong>running:</strong> Currently running container</li>
+                                        <li><strong>paused:</strong> Processes paused</li>
+                                        <li><strong>exited:</strong> Container ran and completed (stopped)</li>
+                                        <li><strong>dead:</strong> Daemon tried and failed to stop the container</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Q13 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">13</span>
+                                    <h4>What is the difference between RUN and CMD?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <ul>
+                                        <li><strong>RUN:</strong> Executes commands <strong>at build time</strong> inside the Docker image. Commands are written as a new layer.</li>
+                                        <li><strong>CMD:</strong> Defines default command to run <strong>when container starts</strong>. Only one CMD per Dockerfile.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Q14 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">14</span>
+                                    <h4>What is the difference between Dockerfile and Docker image?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <ul>
+                                        <li><strong>Dockerfile:</strong> A text file with instructions (recipe) for building Docker images.</li>
+                                        <li><strong>Docker Image:</strong> The result produced when you build a Dockerfile. A read-only template.</li>
+                                        <li><strong>Docker Container:</strong> A running instance of a Docker image.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Q15 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">15</span>
+                                    <h4>How do you get the IP address of a Docker container?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <div class="code-block">
+                                        <code>docker inspect --format='{{.NetworkSettings.IPAddress}}' container_name</code>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Q16 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">16</span>
+                                    <h4>How do you connect/disconnect a container to a network?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <div class="code-block">
+                                        <code>docker network connect my_network container_name<br>docker network disconnect my_network container_name</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="nav-buttons">
+                        <a href="index.html" class="nav-btn">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Back to Index</span>
+                        </a>
+                        <a href="kubernetes-interview.html" class="nav-btn next">
+                            <span>Kubernetes Q&A</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <a href="../../" class="footer-logo">
+                    <i class="fas fa-terminal"></i>
+                    <span>DevOps Hub</span>
+                </a>
+                <p>Your complete guide to DevOps interview preparation.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 DevOps Learning Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <style>
+        .qa-section {
+            background: var(--bg);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            border: 1px solid var(--border);
+        }
+
+        .qa-section h2 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+            color: var(--secondary);
+        }
+
+        .qa-section h2 i {
+            color: var(--primary);
+        }
+
+        .qa-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .qa-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .qa-item:hover {
+            border-color: var(--primary);
+        }
+
+        .qa-item.active {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(36, 150, 237, 0.15);
+        }
+
+        .qa-question {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            cursor: pointer;
+            background: var(--bg);
+            transition: background 0.2s;
+        }
+
+        .qa-question:hover {
+            background: var(--bg-secondary);
+        }
+
+        .qa-number {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), #06b6d4);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .qa-question h4 {
+            flex: 1;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .toggle-icon {
+            color: var(--text-light);
+            transition: transform 0.3s;
+        }
+
+        .qa-item.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .qa-answer {
+            display: none;
+            padding: 0 20px 20px 72px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .qa-item.active .qa-answer {
+            display: block;
+        }
+
+        .qa-answer ul {
+            padding-left: 20px;
+            margin: 12px 0;
+        }
+
+        .qa-answer li {
+            margin-bottom: 8px;
+        }
+
+        .qa-answer strong {
+            color: var(--text);
+        }
+
+        .code-block {
+            background: var(--secondary);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            color: #22d3ee;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+
+        .tip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 8px;
+            color: #059669;
+            font-size: 0.9rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-btn.next {
+            margin-left: auto;
+        }
+
+        .docker-theme {
+            background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);
+        }
+
+        .topic-hero-icon i {
+            font-size: 6rem;
+            color: #2496ed;
+            opacity: 0.2;
+        }
+
+        .day-list li.current a {
+            background: var(--primary);
+            color: white;
+        }
+    </style>
+
+    <script>
+        function toggleAnswer(element) {
+            const qaItem = element.parentElement;
+            qaItem.classList.toggle('active');
+        }
+
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

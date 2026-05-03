@@ -507,6 +507,16 @@ section {
 .topic-icon.python { background: rgba(55, 118, 171, 0.1); color: var(--python-color); }
 .topic-icon.monitoring { background: rgba(230, 82, 44, 0.1); color: var(--monitoring-color); }
 .topic-icon.cicd { background: rgba(252, 109, 38, 0.1); color: var(--cicd-color); }
+.topic-icon.interview { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+
+.topic-card.featured {
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.02), rgba(6, 182, 212, 0.02));
+}
+
+.topic-card.featured:hover {
+    border-color: #8b5cf6;
+}
 
 .topic-card h3 {
     font-size: 1.25rem;

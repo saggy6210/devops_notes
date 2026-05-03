@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DevOps Interview Preparation - Q&A by topic for Docker, Kubernetes, Linux, Git, CI/CD">
+    <title>Interview Preparation | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/topic.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo">
+                <i class="fas fa-terminal"></i>
+                <span>DevOps Hub</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="../../" class="nav-link">Home</a></li>
+                <li><a href="../../#topics" class="nav-link">Topics</a></li>
+                <li><a href="../../#learning-path" class="nav-link">Learning Path</a></li>
+                <li><a href="../../#about" class="nav-link">About</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Topic Header -->
+    <header class="topic-hero interview-theme">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../../#topics">Topics</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Interview Preparation</span>
+            </div>
+            <div class="topic-hero-content">
+                <div class="topic-hero-text">
+                    <div class="topic-badge">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Career Ready</span>
+                    </div>
+                    <h1>Interview Preparation</h1>
+                    <p>Comprehensive Q&A collection organized by topic. Master the most frequently asked DevOps interview questions with concise answers.</p>
+                    <div class="topic-stats">
+                        <div class="topic-stat">
+                            <i class="fas fa-layer-group"></i>
+                            <span>6 Subtopics</span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-question-circle"></i>
+                            <span>100+ Q&A</span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Interview Focus</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="topic-hero-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="topic-main">
+        <div class="container">
+            <div class="topic-layout">
+                <!-- Sidebar -->
+                <aside class="topic-sidebar">
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-list"></i> Interview Topics</h3>
+                        <ul class="day-list">
+                            <li class="active">
+                                <a href="docker-interview.html">
+                                    <span class="day-number"><i class="fab fa-docker"></i></span>
+                                    <span class="day-title">Docker</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="kubernetes-interview.html">
+                                    <span class="day-number"><i class="fas fa-dharmachakra"></i></span>
+                                    <span class="day-title">Kubernetes</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="linux-interview.html">
+                                    <span class="day-number"><i class="fab fa-linux"></i></span>
+                                    <span class="day-title">Linux & Bash</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="git-interview.html">
+                                    <span class="day-number"><i class="fab fa-git-alt"></i></span>
+                                    <span class="day-title">Git</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="cicd-interview.html">
+                                    <span class="day-number"><i class="fas fa-infinity"></i></span>
+                                    <span class="day-title">CI/CD & Jenkins</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="networking-interview.html">
+                                    <span class="day-number"><i class="fas fa-network-wired"></i></span>
+                                    <span class="day-title">Networking & HTTP</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-lightbulb"></i> Interview Tips</h3>
+                        <ul class="tips-list">
+                            <li><i class="fas fa-check"></i> Explain concepts clearly</li>
+                            <li><i class="fas fa-check"></i> Use real examples</li>
+                            <li><i class="fas fa-check"></i> Show command knowledge</li>
+                            <li><i class="fas fa-check"></i> Understand trade-offs</li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <!-- Content Area -->
+                <div class="topic-content">
+                    <div class="content-card">
+                        <h2><i class="fas fa-rocket"></i> Quick Start Guide</h2>
+                        <p>Select a topic from the sidebar to begin reviewing interview questions. Each subtopic contains commonly asked questions with concise, interview-ready answers.</p>
+                    </div>
+
+                    <!-- Topic Cards Grid -->
+                    <div class="subtopic-grid">
+                        <a href="docker-interview.html" class="subtopic-card docker-card">
+                            <div class="subtopic-icon">
+                                <i class="fab fa-docker"></i>
+                            </div>
+                            <h3>Docker</h3>
+                            <p>Containers, images, networking, Dockerfile, Docker Compose, and Swarm concepts.</p>
+                            <span class="question-count">15+ Questions</span>
+                        </a>
+
+                        <a href="kubernetes-interview.html" class="subtopic-card k8s-card">
+                            <div class="subtopic-icon">
+                                <i class="fas fa-dharmachakra"></i>
+                            </div>
+                            <h3>Kubernetes</h3>
+                            <p>Pods, deployments, services, control plane, namespaces, and cluster management.</p>
+                            <span class="question-count">20+ Questions</span>
+                        </a>
+
+                        <a href="linux-interview.html" class="subtopic-card linux-card">
+                            <div class="subtopic-icon">
+                                <i class="fab fa-linux"></i>
+                            </div>
+                            <h3>Linux & Bash</h3>
+                            <p>Shell scripting, system commands, file operations, process management.</p>
+                            <span class="question-count">15+ Questions</span>
+                        </a>
+
+                        <a href="git-interview.html" class="subtopic-card git-card">
+                            <div class="subtopic-icon">
+                                <i class="fab fa-git-alt"></i>
+                            </div>
+                            <h3>Git</h3>
+                            <p>Version control, branching, merging, rebasing, and common Git workflows.</p>
+                            <span class="question-count">12+ Questions</span>
+                        </a>
+
+                        <a href="cicd-interview.html" class="subtopic-card cicd-card">
+                            <div class="subtopic-icon">
+                                <i class="fas fa-infinity"></i>
+                            </div>
+                            <h3>CI/CD & Jenkins</h3>
+                            <p>Pipelines, build automation, Jenkins configuration, GitLab CI, deployment strategies.</p>
+                            <span class="question-count">15+ Questions</span>
+                        </a>
+
+                        <a href="networking-interview.html" class="subtopic-card network-card">
+                            <div class="subtopic-icon">
+                                <i class="fas fa-network-wired"></i>
+                            </div>
+                            <h3>Networking & HTTP</h3>
+                            <p>HTTP status codes, DNS, load balancing, reverse proxy, and network troubleshooting.</p>
+                            <span class="question-count">10+ Questions</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <a href="../../" class="footer-logo">
+                    <i class="fas fa-terminal"></i>
+                    <span>DevOps Hub</span>
+                </a>
+                <p>Your complete guide to DevOps interview preparation.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Topics</h4>
+                <ul>
+                    <li><a href="../docker/">Docker</a></li>
+                    <li><a href="../kubernetes/">Kubernetes</a></li>
+                    <li><a href="../terraform/">Terraform</a></li>
+                    <li><a href="../ansible/">Ansible</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Best Practices</a></li>
+                    <li><a href="#">Community</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 DevOps Learning Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <style>
+        .subtopic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .subtopic-card {
+            background: var(--bg);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            border: 1px solid var(--border);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .subtopic-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .subtopic-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .docker-card .subtopic-icon { background: rgba(36, 150, 237, 0.1); color: #2496ed; }
+        .k8s-card .subtopic-icon { background: rgba(50, 108, 229, 0.1); color: #326ce5; }
+        .linux-card .subtopic-icon { background: rgba(0, 0, 0, 0.1); color: #333; }
+        .git-card .subtopic-icon { background: rgba(240, 80, 50, 0.1); color: #f05032; }
+        .cicd-card .subtopic-icon { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .network-card .subtopic-icon { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+
+        .subtopic-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .subtopic-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .question-count {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .interview-theme {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0fdfa 100%);
+        }
+
+        .topic-hero-icon i {
+            font-size: 6rem;
+            color: var(--primary);
+            opacity: 0.2;
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .tips-list li i {
+            color: var(--success);
+        }
+    </style>
+
+    <script>
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

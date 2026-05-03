@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Networking and HTTP Interview Questions and Answers - Status codes, DNS, load balancing">
+    <title>Networking & HTTP Interview Q&A | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/topic.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo">
+                <i class="fas fa-terminal"></i>
+                <span>DevOps Hub</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="../../" class="nav-link">Home</a></li>
+                <li><a href="../../#topics" class="nav-link">Topics</a></li>
+                <li><a href="../../#learning-path" class="nav-link">Learning Path</a></li>
+                <li><a href="../../#about" class="nav-link">About</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Topic Header -->
+    <header class="topic-hero network-theme">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="index.html">Interview Prep</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Networking & HTTP</span>
+            </div>
+            <div class="topic-hero-content">
+                <div class="topic-hero-text">
+                    <div class="topic-badge">
+                        <i class="fas fa-network-wired"></i>
+                        <span>Interview Questions</span>
+                    </div>
+                    <h1>Networking & HTTP Interview Q&A</h1>
+                    <p>Master networking interview questions covering HTTP status codes, DNS, load balancing, and network troubleshooting.</p>
+                </div>
+                <div class="topic-hero-icon">
+                    <i class="fas fa-network-wired"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="topic-main">
+        <div class="container">
+            <div class="topic-layout">
+                <!-- Sidebar -->
+                <aside class="topic-sidebar">
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-list"></i> Interview Topics</h3>
+                        <ul class="day-list">
+                            <li>
+                                <a href="docker-interview.html">
+                                    <span class="day-number"><i class="fab fa-docker"></i></span>
+                                    <span class="day-title">Docker</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="kubernetes-interview.html">
+                                    <span class="day-number"><i class="fas fa-dharmachakra"></i></span>
+                                    <span class="day-title">Kubernetes</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="linux-interview.html">
+                                    <span class="day-number"><i class="fab fa-linux"></i></span>
+                                    <span class="day-title">Linux & Bash</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="git-interview.html">
+                                    <span class="day-number"><i class="fab fa-git-alt"></i></span>
+                                    <span class="day-title">Git</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="cicd-interview.html">
+                                    <span class="day-number"><i class="fas fa-infinity"></i></span>
+                                    <span class="day-title">CI/CD & Jenkins</span>
+                                </a>
+                            </li>
+                            <li class="current">
+                                <a href="networking-interview.html">
+                                    <span class="day-number"><i class="fas fa-network-wired"></i></span>
+                                    <span class="day-title">Networking & HTTP</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <!-- Content Area -->
+                <div class="topic-content">
+                    <!-- HTTP Status Codes Section -->
+                    <div class="qa-section">
+                        <h2><i class="fas fa-code"></i> HTTP Status Codes</h2>
+                        
+                        <div class="status-grid">
+                            <div class="status-category success">
+                                <h3><span class="status-badge">2xx</span> Success</h3>
+                                <div class="status-item">
+                                    <code>200 OK</code>
+                                    <p>Request succeeded. Response depends on HTTP method used.</p>
+                                </div>
+                            </div>
+
+                            <div class="status-category client-error">
+                                <h3><span class="status-badge error">4xx</span> Client Errors</h3>
+                                <div class="status-item">
+                                    <code>400 Bad Request</code>
+                                    <p>Server cannot understand request due to invalid syntax.</p>
+                                </div>
+                                <div class="status-item">
+                                    <code>401 Unauthorized</code>
+                                    <p>Client must authenticate itself to get the requested response.</p>
+                                </div>
+                                <div class="status-item">
+                                    <code>403 Forbidden</code>
+                                    <p>Client does not have access rights to the content.</p>
+                                </div>
+                                <div class="status-item">
+                                    <code>404 Not Found</code>
+                                    <p>Server cannot find requested resource. URL not recognized.</p>
+                                </div>
+                                <div class="status-item">
+                                    <code>408 Request Timeout</code>
+                                    <p>Server wants to shut down this unused idle connection.</p>
+                                </div>
+                            </div>
+
+                            <div class="status-category server-error">
+                                <h3><span class="status-badge server">5xx</span> Server Errors</h3>
+                                <div class="status-item">
+                                    <code>500 Internal Server Error</code>
+                                    <p>Server encountered an unexpected situation.</p>
+                                </div>
+                                <div class="status-item">
+                                    <code>501 Not Implemented</code>
+                                    <p>Request method not supported by server.</p>
+                                </div>
+                                <div class="status-item">
+                                    <code>502 Bad Gateway</code>
+                                    <p>Server as gateway got invalid response from upstream server.</p>
+                                </div>
+                                <div class="status-item">
+                                    <code>503 Service Unavailable</code>
+                                    <p>Server not ready. Usually maintenance or overload.</p>
+                                </div>
+                                <div class="status-item">
+                                    <code>504 Gateway Timeout</code>
+                                    <p>Server as gateway cannot get response in time.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q&A Section -->
+                    <div class="qa-section" style="margin-top: 32px;">
+                        <h2><i class="fas fa-question-circle"></i> Networking Interview Questions</h2>
+                        
+                        <div class="qa-list">
+                            <!-- Q1 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">1</span>
+                                    <h4>What is DNS?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Domain Name System</strong> translates human-readable domain names (google.com) to IP addresses. It's like a phonebook for the internet.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q2 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">2</span>
+                                    <h4>What is a Load Balancer?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p>A load balancer distributes network traffic across multiple servers to ensure no single server becomes overwhelmed. Types:</p>
+                                    <ul>
+                                        <li><strong>L4 (Transport):</strong> Routes based on IP and port</li>
+                                        <li><strong>L7 (Application):</strong> Routes based on content (URL, headers)</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Q3 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">3</span>
+                                    <h4>What is a Reverse Proxy?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p>A reverse proxy sits between clients and servers, forwarding client requests to appropriate backend servers. Benefits:</p>
+                                    <ul>
+                                        <li>Load balancing</li>
+                                        <li>SSL termination</li>
+                                        <li>Caching</li>
+                                        <li>Security (hide backend servers)</li>
+                                    </ul>
+                                    <p>Examples: Nginx, HAProxy, Traefik</p>
+                                </div>
+                            </div>
+
+                            <!-- Q4 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">4</span>
+                                    <h4>What is the difference between TCP and UDP?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <ul>
+                                        <li><strong>TCP:</strong> Connection-oriented, reliable, ordered delivery, error checking (HTTP, SSH, FTP)</li>
+                                        <li><strong>UDP:</strong> Connectionless, faster, no guaranteed delivery (DNS, streaming, gaming)</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Q5 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">5</span>
+                                    <h4>What are common network ports?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <ul>
+                                        <li><strong>22:</strong> SSH</li>
+                                        <li><strong>80:</strong> HTTP</li>
+                                        <li><strong>443:</strong> HTTPS</li>
+                                        <li><strong>3306:</strong> MySQL</li>
+                                        <li><strong>5432:</strong> PostgreSQL</li>
+                                        <li><strong>6379:</strong> Redis</li>
+                                        <li><strong>27017:</strong> MongoDB</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Q6 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">6</span>
+                                    <h4>What is CIDR notation?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p>CIDR (Classless Inter-Domain Routing) is a method for allocating IP addresses. Format: IP/prefix</p>
+                                    <ul>
+                                        <li><code>10.0.0.0/8</code> - 16 million addresses</li>
+                                        <li><code>192.168.1.0/24</code> - 256 addresses</li>
+                                        <li><code>10.0.0.1/32</code> - Single host</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Q7 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">7</span>
+                                    <h4>What is SSL/TLS?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>SSL (Secure Sockets Layer)</strong> and <strong>TLS (Transport Layer Security)</strong> are cryptographic protocols for secure communication. TLS is the successor to SSL.</p>
+                                    <p>Used for HTTPS, secure email, and other encrypted connections.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q8 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">8</span>
+                                    <h4>How to troubleshoot network connectivity?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <div class="code-block">
+                                        <code>ping host                  # Test connectivity<br>traceroute host            # Trace path to host<br>nslookup domain            # DNS lookup<br>dig domain                 # Detailed DNS query<br>curl -v url                # HTTP request details<br>telnet host port           # Test port connectivity<br>netstat -tulpn             # List listening ports</code>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Q9 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">9</span>
+                                    <h4>What is a VPN?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Virtual Private Network</strong> creates an encrypted tunnel between your device and a VPN server, hiding your IP and securing your traffic. Used for remote access and security.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q10 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">10</span>
+                                    <h4>What is the difference between HTTP and HTTPS?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <ul>
+                                        <li><strong>HTTP:</strong> Unencrypted, port 80, data sent in plaintext</li>
+                                        <li><strong>HTTPS:</strong> Encrypted with SSL/TLS, port 443, secure data transfer</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="nav-buttons">
+                        <a href="cicd-interview.html" class="nav-btn">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>CI/CD Q&A</span>
+                        </a>
+                        <a href="index.html" class="nav-btn next">
+                            <span>Back to Index</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <a href="../../" class="footer-logo">
+                    <i class="fas fa-terminal"></i>
+                    <span>DevOps Hub</span>
+                </a>
+                <p>Your complete guide to DevOps interview preparation.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 DevOps Learning Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <style>
+        .qa-section {
+            background: var(--bg);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            border: 1px solid var(--border);
+        }
+
+        .qa-section h2 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+            color: var(--secondary);
+        }
+
+        .qa-section h2 i { color: var(--primary); }
+
+        /* Status Codes Grid */
+        .status-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .status-category h3 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            color: var(--secondary);
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            background: #10b981;
+            color: white;
+        }
+
+        .status-badge.error { background: #f59e0b; }
+        .status-badge.server { background: #ef4444; }
+
+        .status-item {
+            display: flex;
+            gap: 16px;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+
+        .status-item code {
+            min-width: 200px;
+            font-weight: 600;
+            color: var(--primary);
+            font-family: 'Fira Code', monospace;
+        }
+
+        .status-item p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .qa-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .qa-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .qa-item:hover { border-color: var(--primary); }
+
+        .qa-item.active {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(36, 150, 237, 0.15);
+        }
+
+        .qa-question {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            cursor: pointer;
+            background: var(--bg);
+            transition: background 0.2s;
+        }
+
+        .qa-question:hover { background: var(--bg-secondary); }
+
+        .qa-number {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .qa-question h4 {
+            flex: 1;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .toggle-icon {
+            color: var(--text-light);
+            transition: transform 0.3s;
+        }
+
+        .qa-item.active .toggle-icon { transform: rotate(180deg); }
+
+        .qa-answer {
+            display: none;
+            padding: 0 20px 20px 72px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .qa-item.active .qa-answer { display: block; }
+
+        .qa-answer ul {
+            padding-left: 20px;
+            margin: 12px 0;
+        }
+
+        .qa-answer li { margin-bottom: 8px; }
+        .qa-answer strong { color: var(--text); }
+
+        .code-block {
+            background: var(--secondary);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            color: #22d3ee;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-btn.next { margin-left: auto; }
+
+        .network-theme {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+        }
+
+        .topic-hero-icon i {
+            font-size: 6rem;
+            color: #8b5cf6;
+            opacity: 0.2;
+        }
+
+        .day-list li.current a {
+            background: var(--primary);
+            color: white;
+        }
+    </style>
+
+    <script>
+        function toggleAnswer(element) {
+            const qaItem = element.parentElement;
+            qaItem.classList.toggle('active');
+        }
+
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
