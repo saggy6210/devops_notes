@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kubernetes Architect Interview Questions - Cluster Design, Multi-tenancy, Security, Networking">
+    <title>Kubernetes Architecture | Senior DevOps Interview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/topic.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo"><i class="fas fa-terminal"></i><span>DevOps Hub</span></a>
+            <ul class="nav-menu">
+                <li><a href="../../" class="nav-link">Home</a></li>
+                <li><a href="../../#topics" class="nav-link">Topics</a></li>
+            </ul>
+            <div class="hamburger"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+    </nav>
+
+    <header class="topic-hero k8s-theme">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="index.html">Senior DevOps Interview</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Kubernetes Architecture</span>
+            </div>
+            <div class="topic-hero-content">
+                <div class="topic-hero-text">
+                    <div class="topic-badge"><i class="fas fa-dharmachakra"></i><span>Architect Level</span></div>
+                    <h1>Kubernetes Architecture Q&A</h1>
+                    <p>Master Kubernetes architect questions covering cluster design, multi-tenancy, networking, security, and enterprise-scale deployments.</p>
+                </div>
+                <div class="topic-hero-icon"><i class="fas fa-dharmachakra"></i></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="topic-main">
+        <div class="container">
+            <div class="topic-layout">
+                <aside class="topic-sidebar">
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-list"></i> Categories</h3>
+                        <ul class="day-list">
+                            <li><a href="system-design.html"><span class="day-number"><i class="fas fa-sitemap"></i></span><span class="day-title">System Design</span></a></li>
+                            <li><a href="infrastructure-scalability.html"><span class="day-number"><i class="fas fa-server"></i></span><span class="day-title">Infrastructure</span></a></li>
+                            <li class="current"><a href="kubernetes.html"><span class="day-number"><i class="fas fa-dharmachakra"></i></span><span class="day-title">Kubernetes</span></a></li>
+                            <li><a href="devops-practices.html"><span class="day-number"><i class="fas fa-infinity"></i></span><span class="day-title">DevOps Practices</span></a></li>
+                            <li><a href="monitoring-observability.html"><span class="day-number"><i class="fas fa-chart-line"></i></span><span class="day-title">Monitoring</span></a></li>
+                            <li><a href="security-compliance.html"><span class="day-number"><i class="fas fa-shield-alt"></i></span><span class="day-title">Security</span></a></li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <div class="topic-content">
+                    <div class="qa-section">
+                        <h2><i class="fas fa-question-circle"></i> Kubernetes Architecture Questions</h2>
+                        
+                        <div class="qa-list">
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">1</span>
+                                    <h4>How would you design a multi-cluster Kubernetes strategy for a global enterprise?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Key considerations:</strong></p>
+                                    <ul>
+                                        <li><strong>Cluster topology:</strong> Regional clusters for latency, central management cluster</li>
+                                        <li><strong>Workload placement:</strong> Data residency requirements, user proximity</li>
+                                        <li><strong>Federation options:</strong> Kubefed, Liqo, or GitOps-based (ArgoCD ApplicationSets)</li>
+                                        <li><strong>Service mesh:</strong> Cross-cluster communication (Istio multi-cluster, Linkerd)</li>
+                                        <li><strong>DNS strategy:</strong> Global load balancing (Route53, CloudFlare)</li>
+                                    </ul>
+                                    <p><strong>Management approaches:</strong></p>
+                                    <ul>
+                                        <li><strong>Fleet management:</strong> Rancher, OpenShift ACM, Tanzu Mission Control</li>
+                                        <li><strong>GitOps:</strong> Single source of truth for all clusters</li>
+                                        <li><strong>Observability:</strong> Centralized monitoring across clusters (Thanos, Cortex)</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">2</span>
+                                    <h4>How do you implement multi-tenancy in Kubernetes? What are the isolation levels?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Isolation levels (soft to hard):</strong></p>
+                                    <ul>
+                                        <li><strong>Namespace isolation:</strong> RBAC, Network Policies, Resource Quotas</li>
+                                        <li><strong>Virtual clusters:</strong> vCluster - virtual control planes in namespaces</li>
+                                        <li><strong>Cluster per tenant:</strong> Full isolation but higher cost</li>
+                                    </ul>
+                                    <p><strong>Key controls for namespace multi-tenancy:</strong></p>
+                                    <ul>
+                                        <li><strong>RBAC:</strong> Tenant-scoped roles, no cluster-admin</li>
+                                        <li><strong>Network Policies:</strong> Default deny, explicit allow between namespaces</li>
+                                        <li><strong>Resource Quotas:</strong> CPU, memory, storage limits per namespace</li>
+                                        <li><strong>LimitRanges:</strong> Default and max resource limits for pods</li>
+                                        <li><strong>Pod Security Standards:</strong> Restricted profile for tenants</li>
+                                        <li><strong>OPA/Kyverno:</strong> Policy enforcement (no privileged pods, required labels)</li>
+                                    </ul>
+                                    <p><strong>Tools:</strong> Capsule, Hierarchical Namespaces Controller (HNC), Loft</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">3</span>
+                                    <h4>How would you design etcd for a production Kubernetes cluster?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Sizing and topology:</strong></p>
+                                    <ul>
+                                        <li><strong>Cluster size:</strong> 3 or 5 nodes (odd number for quorum)</li>
+                                        <li><strong>Dedicated nodes:</strong> Separate from control plane for large clusters</li>
+                                        <li><strong>Resources:</strong> SSD storage (critical), low-latency network between nodes</li>
+                                    </ul>
+                                    <p><strong>High availability:</strong></p>
+                                    <ul>
+                                        <li>Spread across availability zones</li>
+                                        <li>Use anti-affinity rules</li>
+                                        <li>Quorum: 3 nodes tolerate 1 failure, 5 tolerate 2</li>
+                                    </ul>
+                                    <p><strong>Backup strategy:</strong></p>
+                                    <ul>
+                                        <li>Regular snapshots (etcdctl snapshot save)</li>
+                                        <li>Store backups off-cluster (S3, GCS)</li>
+                                        <li>Test restore procedures regularly</li>
+                                        <li>Velero for cluster-level backup</li>
+                                    </ul>
+                                    <p><strong>Performance tuning:</strong> Increase heartbeat interval for cross-AZ, monitor latency metrics.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">4</span>
+                                    <h4>How do you design Kubernetes networking for enterprise? CNI selection criteria?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>CNI selection criteria:</strong></p>
+                                    <ul>
+                                        <li><strong>Network Policy support:</strong> Essential for security (Calico, Cilium)</li>
+                                        <li><strong>Performance:</strong> eBPF-based for high throughput (Cilium)</li>
+                                        <li><strong>Encryption:</strong> WireGuard integration (Calico, Cilium)</li>
+                                        <li><strong>Observability:</strong> Network flow logs, metrics</li>
+                                        <li><strong>Multi-cluster:</strong> Cross-cluster connectivity</li>
+                                    </ul>
+                                    <p><strong>Enterprise considerations:</strong></p>
+                                    <ul>
+                                        <li><strong>IP address management:</strong> Integration with corporate IPAM</li>
+                                        <li><strong>BGP peering:</strong> Direct integration with network infrastructure</li>
+                                        <li><strong>Egress controls:</strong> Restrict outbound traffic, NAT gateways</li>
+                                        <li><strong>Service mesh integration:</strong> Sidecar or eBPF-based (Cilium Service Mesh)</li>
+                                    </ul>
+                                    <p><strong>Popular choices:</strong> Calico (enterprise features), Cilium (eBPF, observability), AWS VPC CNI, Azure CNI</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">5</span>
+                                    <h4>How do you handle stateful workloads in Kubernetes at scale?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>StatefulSet best practices:</strong></p>
+                                    <ul>
+                                        <li>Stable network identities (headless service)</li>
+                                        <li>Ordered deployment and scaling</li>
+                                        <li>PodDisruptionBudgets for maintenance</li>
+                                        <li>Anti-affinity for HA</li>
+                                    </ul>
+                                    <p><strong>Storage considerations:</strong></p>
+                                    <ul>
+                                        <li><strong>Storage classes:</strong> SSD for databases, appropriate IOPS</li>
+                                        <li><strong>CSI drivers:</strong> Cloud-native (EBS CSI, Azure Disk) or enterprise (NetApp Trident, Portworx)</li>
+                                        <li><strong>Volume expansion:</strong> Enable allowVolumeExpansion</li>
+                                        <li><strong>Snapshots:</strong> VolumeSnapshots for backups</li>
+                                    </ul>
+                                    <p><strong>Operators for databases:</strong></p>
+                                    <ul>
+                                        <li>PostgreSQL: CloudNativePG, Zalando Operator</li>
+                                        <li>MySQL: Oracle MySQL Operator, Percona</li>
+                                        <li>MongoDB: MongoDB Community Operator</li>
+                                        <li>Redis: Redis Operator, Spotahome</li>
+                                    </ul>
+                                    <p><strong>Alternative:</strong> Use managed databases outside K8s for critical workloads.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">6</span>
+                                    <h4>How do you design Kubernetes for zero-downtime deployments?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Deployment strategies:</strong></p>
+                                    <ul>
+                                        <li><strong>Rolling update:</strong> maxSurge and maxUnavailable tuning</li>
+                                        <li><strong>Blue-green:</strong> Service selector switch</li>
+                                        <li><strong>Canary:</strong> Flagger, Argo Rollouts with traffic splitting</li>
+                                    </ul>
+                                    <p><strong>Application requirements:</strong></p>
+                                    <ul>
+                                        <li><strong>Readiness probes:</strong> Only receive traffic when ready</li>
+                                        <li><strong>Liveness probes:</strong> Restart unhealthy pods</li>
+                                        <li><strong>Startup probes:</strong> For slow-starting applications</li>
+                                        <li><strong>PreStop hooks:</strong> Graceful shutdown, drain connections</li>
+                                        <li><strong>terminationGracePeriodSeconds:</strong> Sufficient time for cleanup</li>
+                                    </ul>
+                                    <p><strong>Infrastructure requirements:</strong></p>
+                                    <ul>
+                                        <li>PodDisruptionBudgets to limit simultaneous pod evictions</li>
+                                        <li>Pod anti-affinity across nodes/zones</li>
+                                        <li>Ingress connection draining</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">7</span>
+                                    <h4>How do you implement GitOps for Kubernetes at enterprise scale?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Repository structure:</strong></p>
+                                    <ul>
+                                        <li><strong>App repo:</strong> Application code and Dockerfile</li>
+                                        <li><strong>Config repo:</strong> Kubernetes manifests, Helm charts</li>
+                                        <li><strong>Environment overlays:</strong> Kustomize for dev/staging/prod</li>
+                                    </ul>
+                                    <p><strong>Tools comparison:</strong></p>
+                                    <ul>
+                                        <li><strong>ArgoCD:</strong> UI, RBAC, multi-cluster, ApplicationSets for fleet</li>
+                                        <li><strong>Flux:</strong> Lightweight, GitOps Toolkit, better Helm integration</li>
+                                    </ul>
+                                    <p><strong>Enterprise patterns:</strong></p>
+                                    <ul>
+                                        <li>ApplicationSets for multi-cluster deployment</li>
+                                        <li>App-of-apps pattern for hierarchy</li>
+                                        <li>Sync waves for ordered deployment</li>
+                                        <li>Progressive delivery with Argo Rollouts</li>
+                                        <li>Secrets: Sealed Secrets, External Secrets, SOPS</li>
+                                    </ul>
+                                    <p><strong>Governance:</strong> PR-based changes, required reviews, automated testing in CI.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">8</span>
+                                    <h4>How do you secure a Kubernetes cluster for production?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Control plane security:</strong></p>
+                                    <ul>
+                                        <li>API server: Enable audit logging, restrict anonymous access</li>
+                                        <li>etcd: Encrypt at rest, mTLS between nodes</li>
+                                        <li>Authentication: OIDC integration (no static tokens)</li>
+                                        <li>Private API endpoint or IP allowlisting</li>
+                                    </ul>
+                                    <p><strong>Workload security:</strong></p>
+                                    <ul>
+                                        <li>Pod Security Standards (restricted)</li>
+                                        <li>Network Policies (default deny)</li>
+                                        <li>RBAC with least privilege</li>
+                                        <li>Service account token projection (bound tokens)</li>
+                                        <li>Secrets encryption at rest</li>
+                                    </ul>
+                                    <p><strong>Supply chain:</strong></p>
+                                    <ul>
+                                        <li>Image signing and verification (Cosign, Sigstore)</li>
+                                        <li>Admission controllers for image policies</li>
+                                        <li>Private registry with vulnerability scanning</li>
+                                    </ul>
+                                    <p><strong>Runtime:</strong></p>
+                                    <ul>
+                                        <li>Falco for runtime threat detection</li>
+                                        <li>Seccomp and AppArmor profiles</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">9</span>
+                                    <h4>How do you design Kubernetes autoscaling for varying workloads?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Pod-level scaling:</strong></p>
+                                    <ul>
+                                        <li><strong>HPA (Horizontal Pod Autoscaler):</strong> Scale based on CPU, memory, or custom metrics</li>
+                                        <li><strong>VPA (Vertical Pod Autoscaler):</strong> Right-size resource requests</li>
+                                        <li><strong>KEDA:</strong> Event-driven scaling (queue depth, cron, external metrics)</li>
+                                    </ul>
+                                    <p><strong>Node-level scaling:</strong></p>
+                                    <ul>
+                                        <li><strong>Cluster Autoscaler:</strong> Add/remove nodes based on pending pods</li>
+                                        <li><strong>Karpenter:</strong> Faster provisioning, better bin-packing, spot instances</li>
+                                    </ul>
+                                    <p><strong>Best practices:</strong></p>
+                                    <ul>
+                                        <li>Set accurate resource requests (basis for HPA)</li>
+                                        <li>Use custom metrics for business-relevant scaling</li>
+                                        <li>Scale-to-zero with KEDA for batch workloads</li>
+                                        <li>Pod priority and preemption for critical workloads</li>
+                                        <li>Buffer capacity for faster scaling</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">10</span>
+                                    <h4>How do you handle secrets management in Kubernetes at scale?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Problems with native secrets:</strong></p>
+                                    <ul>
+                                        <li>Base64 encoded, not encrypted in etcd by default</li>
+                                        <li>Anyone with namespace access can read</li>
+                                        <li>Secrets in Git are a security risk</li>
+                                    </ul>
+                                    <p><strong>Solutions:</strong></p>
+                                    <ul>
+                                        <li><strong>External Secrets Operator:</strong> Sync from Vault, AWS Secrets Manager, Azure Key Vault</li>
+                                        <li><strong>Sealed Secrets:</strong> Encrypt secrets for Git storage</li>
+                                        <li><strong>HashiCorp Vault:</strong> Dynamic secrets, PKI, audit logging</li>
+                                        <li><strong>SOPS + Age/GPG:</strong> Encrypt secrets files in Git</li>
+                                    </ul>
+                                    <p><strong>Best practices:</strong></p>
+                                    <ul>
+                                        <li>Enable etcd encryption at rest</li>
+                                        <li>Use short-lived credentials where possible</li>
+                                        <li>Rotate secrets automatically</li>
+                                        <li>Audit secret access via K8s audit logs</li>
+                                        <li>Workload identity (IRSA, Workload Identity) instead of static credentials</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">11</span>
+                                    <h4>How do you design ingress and API gateway for Kubernetes?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Ingress controller selection:</strong></p>
+                                    <ul>
+                                        <li><strong>NGINX Ingress:</strong> Most common, good for standard use cases</li>
+                                        <li><strong>Traefik:</strong> Native K8s integration, auto-discovery</li>
+                                        <li><strong>HAProxy:</strong> High performance, enterprise features</li>
+                                        <li><strong>Kong:</strong> API gateway features built-in</li>
+                                        <li><strong>Envoy-based:</strong> Contour, Emissary (Ambassador)</li>
+                                    </ul>
+                                    <p><strong>Gateway API (next-gen):</strong></p>
+                                    <ul>
+                                        <li>More expressive than Ingress</li>
+                                        <li>Role-oriented: Infrastructure provider, cluster operator, app developer</li>
+                                        <li>Traffic splitting, header-based routing native</li>
+                                    </ul>
+                                    <p><strong>Enterprise patterns:</strong></p>
+                                    <ul>
+                                        <li>External load balancer → Ingress controller → Services</li>
+                                        <li>TLS termination at ingress or end-to-end</li>
+                                        <li>Rate limiting, WAF integration</li>
+                                        <li>Multi-tenant ingress with IngressClass</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">12</span>
+                                    <h4>How do you implement disaster recovery for Kubernetes?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>What to backup:</strong></p>
+                                    <ul>
+                                        <li><strong>etcd:</strong> Cluster state (critical)</li>
+                                        <li><strong>Persistent volumes:</strong> Application data</li>
+                                        <li><strong>Kubernetes resources:</strong> Deployments, ConfigMaps, Secrets</li>
+                                    </ul>
+                                    <p><strong>Tools:</strong></p>
+                                    <ul>
+                                        <li><strong>Velero:</strong> Backup resources and PVs, cross-cluster restore</li>
+                                        <li><strong>Kasten K10:</strong> Enterprise backup, application-aware</li>
+                                        <li><strong>etcd snapshots:</strong> For control plane recovery</li>
+                                    </ul>
+                                    <p><strong>DR strategies:</strong></p>
+                                    <ul>
+                                        <li><strong>Active-Passive:</strong> Standby cluster, restore from backup</li>
+                                        <li><strong>Active-Active:</strong> Multi-cluster with traffic failover</li>
+                                        <li><strong>GitOps recovery:</strong> Rebuild cluster from Git (stateless only)</li>
+                                    </ul>
+                                    <p><strong>Testing:</strong> Regular DR drills, document RTO/RPO, automate recovery procedures.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">13</span>
+                                    <h4>How do you optimize Kubernetes costs?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Right-sizing:</strong></p>
+                                    <ul>
+                                        <li>VPA recommendations for resource requests</li>
+                                        <li>Goldilocks for namespace-wide analysis</li>
+                                        <li>Avoid over-provisioning (requests too high)</li>
+                                    </ul>
+                                    <p><strong>Efficient scheduling:</strong></p>
+                                    <ul>
+                                        <li><strong>Karpenter:</strong> Better bin-packing than Cluster Autoscaler</li>
+                                        <li><strong>Pod priority:</strong> Evict low-priority for critical workloads</li>
+                                        <li><strong>Spot/Preemptible instances:</strong> For fault-tolerant workloads</li>
+                                    </ul>
+                                    <p><strong>Visibility:</strong></p>
+                                    <ul>
+                                        <li><strong>Kubecost:</strong> Cost allocation by namespace, label</li>
+                                        <li><strong>OpenCost:</strong> CNCF project for cost monitoring</li>
+                                        <li>Chargeback to teams based on usage</li>
+                                    </ul>
+                                    <p><strong>Operational:</strong></p>
+                                    <ul>
+                                        <li>Scale down dev/staging outside hours</li>
+                                        <li>Reserved instances for baseline, spot for burst</li>
+                                        <li>Clean up unused resources (PVs, load balancers)</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">14</span>
+                                    <h4>How do you upgrade Kubernetes clusters with minimal disruption?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Upgrade strategy:</strong></p>
+                                    <ul>
+                                        <li>One minor version at a time (1.27 → 1.28 → 1.29)</li>
+                                        <li>Read release notes for deprecations and breaking changes</li>
+                                        <li>Test in non-production first</li>
+                                    </ul>
+                                    <p><strong>Control plane upgrade:</strong></p>
+                                    <ul>
+                                        <li>Managed K8s: Usually handled by provider with zero downtime</li>
+                                        <li>Self-managed: Upgrade one master at a time, etcd backup first</li>
+                                    </ul>
+                                    <p><strong>Node upgrade (rolling):</strong></p>
+                                    <ol>
+                                        <li>Cordon node (prevent new scheduling)</li>
+                                        <li>Drain node (evict pods with PDB respect)</li>
+                                        <li>Upgrade kubelet and container runtime</li>
+                                        <li>Uncordon node</li>
+                                    </ol>
+                                    <p><strong>Blue-green nodes:</strong> Add new node pool with new version, migrate workloads, remove old pool.</p>
+                                    <p><strong>Pre-upgrade checks:</strong> Deprecated APIs (pluto, kubent), PDBs configured, pod resource limits set.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">15</span>
+                                    <h4>How do you implement service mesh in Kubernetes? When is it needed?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>When to use service mesh:</strong></p>
+                                    <ul>
+                                        <li>Many microservices with complex traffic patterns</li>
+                                        <li>Need mTLS without application changes</li>
+                                        <li>Advanced traffic management (canary, fault injection)</li>
+                                        <li>Consistent observability across services</li>
+                                    </ul>
+                                    <p><strong>When NOT to use:</strong></p>
+                                    <ul>
+                                        <li>Simple applications (few services)</li>
+                                        <li>Team lacks expertise to operate</li>
+                                        <li>Latency-sensitive applications (sidecar overhead)</li>
+                                    </ul>
+                                    <p><strong>Options:</strong></p>
+                                    <ul>
+                                        <li><strong>Istio:</strong> Feature-rich, complex, high resource usage</li>
+                                        <li><strong>Linkerd:</strong> Lightweight, simpler, lower overhead</li>
+                                        <li><strong>Cilium:</strong> eBPF-based, no sidecars, high performance</li>
+                                        <li><strong>Consul Connect:</strong> Works outside K8s too</li>
+                                    </ul>
+                                    <p><strong>Implementation:</strong> Start with observability, add mTLS, then advanced traffic features.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">16</span>
+                                    <h4>How do you troubleshoot Kubernetes networking issues?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Common issues:</strong></p>
+                                    <ul>
+                                        <li>Pod-to-pod communication failing</li>
+                                        <li>Service not reachable</li>
+                                        <li>Ingress/external access issues</li>
+                                        <li>DNS resolution problems</li>
+                                    </ul>
+                                    <p><strong>Troubleshooting steps:</strong></p>
+                                    <ol>
+                                        <li><strong>Check endpoints:</strong> <code>kubectl get endpoints &lt;svc&gt;</code></li>
+                                        <li><strong>DNS test:</strong> <code>kubectl exec -it pod -- nslookup service-name</code></li>
+                                        <li><strong>Connectivity:</strong> <code>kubectl exec -it pod -- curl service:port</code></li>
+                                        <li><strong>Network policies:</strong> Check if policies block traffic</li>
+                                        <li><strong>CNI logs:</strong> Check CNI plugin logs on nodes</li>
+                                    </ol>
+                                    <p><strong>Tools:</strong></p>
+                                    <ul>
+                                        <li><strong>netshoot:</strong> Debug container with network tools</li>
+                                        <li><strong>kubectl debug:</strong> Ephemeral debug containers</li>
+                                        <li><strong>Hubble (Cilium):</strong> Network flow visibility</li>
+                                        <li><strong>tcpdump/wireshark:</strong> Packet capture on nodes</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">17</span>
+                                    <h4>How do you implement observability for Kubernetes?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Metrics:</strong></p>
+                                    <ul>
+                                        <li><strong>Prometheus:</strong> De facto standard for K8s</li>
+                                        <li><strong>kube-state-metrics:</strong> K8s object states</li>
+                                        <li><strong>metrics-server:</strong> Resource metrics for HPA</li>
+                                        <li><strong>Node exporter:</strong> Node-level metrics</li>
+                                    </ul>
+                                    <p><strong>Logging:</strong></p>
+                                    <ul>
+                                        <li><strong>Stack:</strong> Fluentd/Fluent Bit → Elasticsearch/Loki → Kibana/Grafana</li>
+                                        <li><strong>Cloud:</strong> CloudWatch, Stackdriver, Azure Monitor</li>
+                                        <li>Structured logging with correlation IDs</li>
+                                    </ul>
+                                    <p><strong>Tracing:</strong></p>
+                                    <ul>
+                                        <li>OpenTelemetry for instrumentation</li>
+                                        <li>Jaeger, Tempo for trace storage</li>
+                                        <li>Service mesh provides automatic tracing</li>
+                                    </ul>
+                                    <p><strong>Dashboards:</strong> Grafana with pre-built K8s dashboards, custom SLO dashboards.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">18</span>
+                                    <h4>What's your approach to Kubernetes platform team structure?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Team responsibilities:</strong></p>
+                                    <ul>
+                                        <li><strong>Platform team:</strong> Cluster lifecycle, upgrades, security baseline, shared services</li>
+                                        <li><strong>Application teams:</strong> Deploy and operate their applications</li>
+                                    </ul>
+                                    <p><strong>Platform as a product:</strong></p>
+                                    <ul>
+                                        <li>Self-service for developers (namespaces, resources)</li>
+                                        <li>Golden paths and templates</li>
+                                        <li>Internal developer portal (Backstage)</li>
+                                        <li>Clear SLOs for platform reliability</li>
+                                    </ul>
+                                    <p><strong>Tooling provided:</strong></p>
+                                    <ul>
+                                        <li>CI/CD pipelines and templates</li>
+                                        <li>Observability stack</li>
+                                        <li>Secrets management</li>
+                                        <li>Ingress and DNS automation</li>
+                                    </ul>
+                                    <p><strong>Documentation:</strong> Runbooks, architecture decision records (ADRs), onboarding guides.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons">
+                        <a href="infrastructure-scalability.html" class="nav-btn"><i class="fas fa-arrow-left"></i><span>Infrastructure</span></a>
+                        <a href="devops-practices.html" class="nav-btn next"><span>DevOps Practices</span><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <a href="../../" class="footer-logo"><i class="fas fa-terminal"></i><span>DevOps Hub</span></a>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2024 DevOps Learning Hub.</p></div>
+    </footer>
+
+    <style>
+        .qa-section { background: var(--bg); border-radius: var(--radius-lg); padding: 32px; border: 1px solid var(--border); }
+        .qa-section h2 { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; margin-bottom: 24px; color: var(--secondary); }
+        .qa-section h2 i { color: var(--primary); }
+        .qa-list { display: flex; flex-direction: column; gap: 12px; }
+        .qa-item { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: all 0.3s ease; }
+        .qa-item:hover { border-color: var(--primary); }
+        .qa-item.active { border-color: #326ce5; box-shadow: 0 4px 12px rgba(50, 108, 229, 0.15); }
+        .qa-question { display: flex; align-items: center; gap: 16px; padding: 20px; cursor: pointer; background: var(--bg); transition: background 0.2s; }
+        .qa-question:hover { background: var(--bg-secondary); }
+        .qa-number { width: 36px; height: 36px; background: linear-gradient(135deg, #326ce5, #1d4ed8); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; flex-shrink: 0; }
+        .qa-question h4 { flex: 1; font-size: 1rem; font-weight: 600; color: var(--secondary); }
+        .toggle-icon { color: var(--text-light); transition: transform 0.3s; }
+        .qa-item.active .toggle-icon { transform: rotate(180deg); }
+        .qa-answer { display: none; padding: 0 20px 20px 72px; color: var(--text-secondary); line-height: 1.7; }
+        .qa-item.active .qa-answer { display: block; }
+        .qa-answer ul, .qa-answer ol { padding-left: 20px; margin: 12px 0; }
+        .qa-answer li { margin-bottom: 8px; }
+        .qa-answer strong { color: var(--text); }
+        .qa-answer code { background: var(--bg-secondary); padding: 2px 6px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.9em; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+        .nav-btn { display: flex; align-items: center; gap: 8px; padding: 12px 20px; background: var(--bg-secondary); border-radius: var(--radius); text-decoration: none; color: var(--text-secondary); font-weight: 500; transition: all 0.2s; }
+        .nav-btn:hover { background: var(--primary); color: white; }
+        .nav-btn.next { margin-left: auto; }
+        .k8s-theme { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); }
+        .topic-hero-icon i { font-size: 6rem; color: #326ce5; opacity: 0.2; }
+        .day-list li.current a { background: var(--primary); color: white; }
+    </style>
+
+    <script>
+        function toggleAnswer(element) { element.parentElement.classList.toggle('active'); }
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
