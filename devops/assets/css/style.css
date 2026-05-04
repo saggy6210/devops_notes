@@ -508,6 +508,7 @@ section {
 .topic-icon.monitoring { background: rgba(230, 82, 44, 0.1); color: var(--monitoring-color); }
 .topic-icon.cicd { background: rgba(252, 109, 38, 0.1); color: var(--cicd-color); }
 .topic-icon.interview { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+.topic-icon.senior-interview { background: rgba(234, 179, 8, 0.15); color: #eab308; }
 
 .topic-card.featured {
     border: 2px solid rgba(139, 92, 246, 0.3);

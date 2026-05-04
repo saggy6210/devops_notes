@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Infrastructure and Scalability Interview Questions for Senior DevOps Architects">
+    <title>Infrastructure & Scalability | Senior DevOps Interview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/topic.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo"><i class="fas fa-terminal"></i><span>DevOps Hub</span></a>
+            <ul class="nav-menu">
+                <li><a href="../../" class="nav-link">Home</a></li>
+                <li><a href="../../#topics" class="nav-link">Topics</a></li>
+            </ul>
+            <div class="hamburger"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+    </nav>
+
+    <header class="topic-hero infra-theme">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="index.html">Senior DevOps Interview</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Infrastructure & Scalability</span>
+            </div>
+            <div class="topic-hero-content">
+                <div class="topic-hero-text">
+                    <div class="topic-badge"><i class="fas fa-server"></i><span>Architect Level</span></div>
+                    <h1>Infrastructure & Scalability Q&A</h1>
+                    <p>Master infrastructure questions covering scaling strategies, high availability, disaster recovery, and cloud architecture.</p>
+                </div>
+                <div class="topic-hero-icon"><i class="fas fa-server"></i></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="topic-main">
+        <div class="container">
+            <div class="topic-layout">
+                <aside class="topic-sidebar">
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-list"></i> Categories</h3>
+                        <ul class="day-list">
+                            <li><a href="system-design.html"><span class="day-number"><i class="fas fa-sitemap"></i></span><span class="day-title">System Design</span></a></li>
+                            <li class="current"><a href="infrastructure-scalability.html"><span class="day-number"><i class="fas fa-server"></i></span><span class="day-title">Infrastructure</span></a></li>
+                            <li><a href="devops-practices.html"><span class="day-number"><i class="fas fa-infinity"></i></span><span class="day-title">DevOps Practices</span></a></li>
+                            <li><a href="monitoring-observability.html"><span class="day-number"><i class="fas fa-chart-line"></i></span><span class="day-title">Monitoring</span></a></li>
+                            <li><a href="security-compliance.html"><span class="day-number"><i class="fas fa-shield-alt"></i></span><span class="day-title">Security</span></a></li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <div class="topic-content">
+                    <div class="qa-section">
+                        <h2><i class="fas fa-question-circle"></i> Infrastructure & Scalability Questions</h2>
+                        
+                        <div class="qa-list">
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">1</span>
+                                    <h4>Explain Vertical vs. Horizontal Scaling. When to use each?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Vertical Scaling (Scale Up):</strong></p>
+                                    <ul>
+                                        <li>Add more CPU, RAM, storage to existing machine</li>
+                                        <li>Simpler to implement, no code changes</li>
+                                        <li>Has hardware limits, single point of failure</li>
+                                        <li>Use for: Databases, legacy applications</li>
+                                    </ul>
+                                    <p><strong>Horizontal Scaling (Scale Out):</strong></p>
+                                    <ul>
+                                        <li>Add more machines to distribute load</li>
+                                        <li>Requires stateless design or distributed state</li>
+                                        <li>Virtually unlimited, better fault tolerance</li>
+                                        <li>Use for: Web servers, microservices, stateless APIs</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">2</span>
+                                    <h4>What is the difference between High Availability and Disaster Recovery?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>High Availability (HA):</strong></p>
+                                    <ul>
+                                        <li>Minimize downtime during normal operations</li>
+                                        <li>Redundancy within same region/datacenter</li>
+                                        <li>Automatic failover (seconds to minutes)</li>
+                                        <li>Metrics: 99.9% = 8.7h/year, 99.99% = 52m/year</li>
+                                    </ul>
+                                    <p><strong>Disaster Recovery (DR):</strong></p>
+                                    <ul>
+                                        <li>Recover from major failures (region outage, natural disaster)</li>
+                                        <li>Cross-region/cross-cloud replication</li>
+                                        <li>Defined by RTO (Recovery Time) and RPO (Recovery Point)</li>
+                                        <li>May require manual intervention</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">3</span>
+                                    <h4>Explain Fault Tolerance vs. High Availability.</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Fault Tolerance:</strong> System continues to operate with zero downtime even when components fail. No degradation in performance. Example: RAID arrays, redundant power supplies.</p>
+                                    <p><strong>High Availability:</strong> System minimizes downtime but may have brief interruption during failover. May have degraded performance. Example: Active-passive database clusters.</p>
+                                    <p><strong>Cost:</strong> Fault tolerance is more expensive (requires duplicate systems running simultaneously).</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">4</span>
+                                    <h4>What are RTO and RPO? How do they affect architecture?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>RTO (Recovery Time Objective):</strong> Maximum acceptable time to restore service after failure.</p>
+                                    <p><strong>RPO (Recovery Point Objective):</strong> Maximum acceptable data loss measured in time (how old can the backup be?).</p>
+                                    <p><strong>Architecture implications:</strong></p>
+                                    <ul>
+                                        <li>RTO = 0: Hot standby, active-active</li>
+                                        <li>RTO = minutes: Warm standby with automated failover</li>
+                                        <li>RPO = 0: Synchronous replication (affects latency)</li>
+                                        <li>RPO = hours: Async replication, regular backups</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">5</span>
+                                    <h4>Explain Elasticity in cloud computing.</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Elasticity</strong> is the ability to automatically scale resources up or down based on demand.</p>
+                                    <p><strong>Components:</strong></p>
+                                    <ul>
+                                        <li><strong>Auto-scaling:</strong> Add/remove instances based on metrics (CPU, memory, custom)</li>
+                                        <li><strong>Predictive scaling:</strong> Scale based on forecasted demand</li>
+                                        <li><strong>Scheduled scaling:</strong> Scale based on known patterns</li>
+                                    </ul>
+                                    <p><strong>Benefits:</strong> Cost optimization (pay for what you use), handle traffic spikes, maintain performance.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">6</span>
+                                    <h4>What is Resiliency? How do you build resilient systems?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Resiliency</strong> is the ability to recover from failures and continue functioning.</p>
+                                    <p><strong>Patterns:</strong></p>
+                                    <ul>
+                                        <li><strong>Circuit Breaker:</strong> Stop calling failing services</li>
+                                        <li><strong>Retry with backoff:</strong> Exponential backoff for transient failures</li>
+                                        <li><strong>Bulkhead:</strong> Isolate failures to prevent cascade</li>
+                                        <li><strong>Timeout:</strong> Fail fast instead of waiting indefinitely</li>
+                                        <li><strong>Graceful degradation:</strong> Reduce functionality instead of failing completely</li>
+                                        <li><strong>Chaos engineering:</strong> Proactively test failure scenarios</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">7</span>
+                                    <h4>Explain different load balancing algorithms.</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <ul>
+                                        <li><strong>Round Robin:</strong> Requests distributed sequentially. Simple but ignores server capacity.</li>
+                                        <li><strong>Weighted Round Robin:</strong> Accounts for server capacity via weights.</li>
+                                        <li><strong>Least Connections:</strong> Routes to server with fewest active connections.</li>
+                                        <li><strong>Weighted Least Connections:</strong> Combines weights with connection count.</li>
+                                        <li><strong>IP Hash:</strong> Same client IP always goes to same server (session affinity).</li>
+                                        <li><strong>Resource Based:</strong> Routes based on server health/resource availability.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">8</span>
+                                    <h4>What are sticky sessions? Pros and cons?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Sticky sessions</strong> ensure requests from same client always go to same server.</p>
+                                    <p><strong>Implementation:</strong> Cookie-based (application or duration-based) or IP-based.</p>
+                                    <p><strong>Pros:</strong></p>
+                                    <ul>
+                                        <li>Simplifies stateful applications</li>
+                                        <li>Better cache utilization</li>
+                                    </ul>
+                                    <p><strong>Cons:</strong></p>
+                                    <ul>
+                                        <li>Uneven load distribution</li>
+                                        <li>Lost sessions on server failure</li>
+                                        <li>Harder to scale and maintain</li>
+                                    </ul>
+                                    <p><strong>Better approach:</strong> Externalized session storage (Redis)</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">9</span>
+                                    <h4>What is connection draining? When is it important?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Connection draining</strong> (or deregistration delay) allows in-flight requests to complete before removing an instance from load balancer.</p>
+                                    <p><strong>Process:</strong></p>
+                                    <ol>
+                                        <li>Instance marked for removal</li>
+                                        <li>No new connections sent to instance</li>
+                                        <li>Existing connections allowed to complete (within timeout)</li>
+                                        <li>Instance removed after timeout or all connections closed</li>
+                                    </ol>
+                                    <p><strong>Important for:</strong> Graceful deployments, auto-scaling down, instance maintenance.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">10</span>
+                                    <h4>How would you design a multi-region architecture?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Key considerations:</strong></p>
+                                    <ul>
+                                        <li><strong>Traffic routing:</strong> GeoDNS or global load balancer (AWS Global Accelerator, CloudFlare)</li>
+                                        <li><strong>Data replication:</strong> Active-active vs. active-passive, sync vs. async</li>
+                                        <li><strong>Conflict resolution:</strong> Last-write-wins, CRDTs, or application logic</li>
+                                        <li><strong>Latency:</strong> Keep user data close to users</li>
+                                        <li><strong>Compliance:</strong> Data residency requirements</li>
+                                    </ul>
+                                    <p><strong>Patterns:</strong></p>
+                                    <ul>
+                                        <li><strong>Active-Active:</strong> Both regions serve traffic, requires conflict handling</li>
+                                        <li><strong>Active-Passive:</strong> Standby region for DR only</li>
+                                        <li><strong>Follow-the-sun:</strong> Primary shifts based on time of day</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">11</span>
+                                    <h4>What is Infrastructure as Code? Best practices at scale?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>IaC</strong> manages infrastructure through code instead of manual processes.</p>
+                                    <p><strong>Best practices at scale:</strong></p>
+                                    <ul>
+                                        <li><strong>Modularization:</strong> Reusable modules for common patterns</li>
+                                        <li><strong>State management:</strong> Remote state with locking (S3 + DynamoDB)</li>
+                                        <li><strong>Environment separation:</strong> Workspaces or separate state files</li>
+                                        <li><strong>Testing:</strong> terraform validate, tflint, terratest</li>
+                                        <li><strong>GitOps:</strong> PR-based changes with automated plan/apply</li>
+                                        <li><strong>Drift detection:</strong> Regular plan to detect manual changes</li>
+                                        <li><strong>Secrets handling:</strong> External secrets management (Vault)</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">12</span>
+                                    <h4>What is Virtualization? Types of hypervisors?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Virtualization</strong> creates virtual versions of computing resources (servers, storage, networks).</p>
+                                    <p><strong>Type 1 (Bare-metal):</strong></p>
+                                    <ul>
+                                        <li>Runs directly on hardware</li>
+                                        <li>Better performance, more secure</li>
+                                        <li>Examples: VMware ESXi, Microsoft Hyper-V, KVM</li>
+                                    </ul>
+                                    <p><strong>Type 2 (Hosted):</strong></p>
+                                    <ul>
+                                        <li>Runs on top of host OS</li>
+                                        <li>Easier to set up, good for development</li>
+                                        <li>Examples: VirtualBox, VMware Workstation</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">13</span>
+                                    <h4>Do we still need VMs in the age of containers?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Yes, VMs are still relevant:</strong></p>
+                                    <ul>
+                                        <li><strong>Security isolation:</strong> Stronger boundaries than containers</li>
+                                        <li><strong>Legacy applications:</strong> Apps that can't be containerized</li>
+                                        <li><strong>Different OS:</strong> Running Windows workloads on Linux hosts</li>
+                                        <li><strong>Compliance:</strong> Certain regulations require VM-level isolation</li>
+                                        <li><strong>Kubernetes nodes:</strong> Containers run inside VMs</li>
+                                    </ul>
+                                    <p><strong>Emerging:</strong> Kata Containers, Firecracker - micro-VMs combining VM security with container speed.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">14</span>
+                                    <h4>How do you handle database scaling?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Read scaling:</strong></p>
+                                    <ul>
+                                        <li>Read replicas</li>
+                                        <li>Caching layer (Redis, Memcached)</li>
+                                        <li>Connection pooling (PgBouncer)</li>
+                                    </ul>
+                                    <p><strong>Write scaling:</strong></p>
+                                    <ul>
+                                        <li><strong>Vertical scaling:</strong> Bigger instance</li>
+                                        <li><strong>Sharding:</strong> Partition data across databases</li>
+                                        <li><strong>CQRS:</strong> Separate read/write databases</li>
+                                    </ul>
+                                    <p><strong>Managed solutions:</strong> Aurora, Spanner, CockroachDB for automatic scaling.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons">
+                        <a href="system-design.html" class="nav-btn"><i class="fas fa-arrow-left"></i><span>System Design</span></a>
+                        <a href="devops-practices.html" class="nav-btn next"><span>DevOps Practices</span><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <a href="../../" class="footer-logo"><i class="fas fa-terminal"></i><span>DevOps Hub</span></a>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2024 DevOps Learning Hub.</p></div>
+    </footer>
+
+    <style>
+        .qa-section { background: var(--bg); border-radius: var(--radius-lg); padding: 32px; border: 1px solid var(--border); }
+        .qa-section h2 { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; margin-bottom: 24px; color: var(--secondary); }
+        .qa-section h2 i { color: var(--primary); }
+        .qa-list { display: flex; flex-direction: column; gap: 12px; }
+        .qa-item { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: all 0.3s ease; }
+        .qa-item:hover { border-color: var(--primary); }
+        .qa-item.active { border-color: #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15); }
+        .qa-question { display: flex; align-items: center; gap: 16px; padding: 20px; cursor: pointer; background: var(--bg); transition: background 0.2s; }
+        .qa-question:hover { background: var(--bg-secondary); }
+        .qa-number { width: 36px; height: 36px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; flex-shrink: 0; }
+        .qa-question h4 { flex: 1; font-size: 1rem; font-weight: 600; color: var(--secondary); }
+        .toggle-icon { color: var(--text-light); transition: transform 0.3s; }
+        .qa-item.active .toggle-icon { transform: rotate(180deg); }
+        .qa-answer { display: none; padding: 0 20px 20px 72px; color: var(--text-secondary); line-height: 1.7; }
+        .qa-item.active .qa-answer { display: block; }
+        .qa-answer ul, .qa-answer ol { padding-left: 20px; margin: 12px 0; }
+        .qa-answer li { margin-bottom: 8px; }
+        .qa-answer strong { color: var(--text); }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+        .nav-btn { display: flex; align-items: center; gap: 8px; padding: 12px 20px; background: var(--bg-secondary); border-radius: var(--radius); text-decoration: none; color: var(--text-secondary); font-weight: 500; transition: all 0.2s; }
+        .nav-btn:hover { background: var(--primary); color: white; }
+        .nav-btn.next { margin-left: auto; }
+        .infra-theme { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); }
+        .topic-hero-icon i { font-size: 6rem; color: #10b981; opacity: 0.2; }
+        .day-list li.current a { background: var(--primary); color: white; }
+    </style>
+
+    <script>
+        function toggleAnswer(element) { element.parentElement.classList.toggle('active'); }
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

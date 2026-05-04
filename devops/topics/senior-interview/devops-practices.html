@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DevOps Practices Interview Questions for Senior DevOps Architects - CI/CD, GitOps, SRE">
+    <title>DevOps Practices | Senior DevOps Interview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/topic.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo"><i class="fas fa-terminal"></i><span>DevOps Hub</span></a>
+            <ul class="nav-menu">
+                <li><a href="../../" class="nav-link">Home</a></li>
+                <li><a href="../../#topics" class="nav-link">Topics</a></li>
+            </ul>
+            <div class="hamburger"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+    </nav>
+
+    <header class="topic-hero devops-theme">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="index.html">Senior DevOps Interview</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>DevOps Practices</span>
+            </div>
+            <div class="topic-hero-content">
+                <div class="topic-hero-text">
+                    <div class="topic-badge"><i class="fas fa-infinity"></i><span>Architect Level</span></div>
+                    <h1>DevOps Practices Q&A</h1>
+                    <p>Master DevOps methodology questions covering CI/CD, GitOps, SRE, platform engineering, and cultural aspects.</p>
+                </div>
+                <div class="topic-hero-icon"><i class="fas fa-infinity"></i></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="topic-main">
+        <div class="container">
+            <div class="topic-layout">
+                <aside class="topic-sidebar">
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-list"></i> Categories</h3>
+                        <ul class="day-list">
+                            <li><a href="system-design.html"><span class="day-number"><i class="fas fa-sitemap"></i></span><span class="day-title">System Design</span></a></li>
+                            <li><a href="infrastructure-scalability.html"><span class="day-number"><i class="fas fa-server"></i></span><span class="day-title">Infrastructure</span></a></li>
+                            <li class="current"><a href="devops-practices.html"><span class="day-number"><i class="fas fa-infinity"></i></span><span class="day-title">DevOps Practices</span></a></li>
+                            <li><a href="monitoring-observability.html"><span class="day-number"><i class="fas fa-chart-line"></i></span><span class="day-title">Monitoring</span></a></li>
+                            <li><a href="security-compliance.html"><span class="day-number"><i class="fas fa-shield-alt"></i></span><span class="day-title">Security</span></a></li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <div class="topic-content">
+                    <div class="qa-section">
+                        <h2><i class="fas fa-question-circle"></i> DevOps Practices Questions</h2>
+                        
+                        <div class="qa-list">
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">1</span>
+                                    <h4>What is DevOps? How does it differ from traditional IT?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>DevOps</strong> is a culture and set of practices that unifies software development (Dev) and IT operations (Ops).</p>
+                                    <p><strong>Key differences from traditional IT:</strong></p>
+                                    <ul>
+                                        <li><strong>Culture:</strong> Collaboration vs. silos; shared responsibility</li>
+                                        <li><strong>Speed:</strong> Continuous delivery vs. quarterly releases</li>
+                                        <li><strong>Automation:</strong> Everything as code vs. manual processes</li>
+                                        <li><strong>Feedback:</strong> Fast loops vs. long cycles</li>
+                                        <li><strong>Risk:</strong> Small, frequent changes vs. big-bang releases</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">2</span>
+                                    <h4>What is SRE (Site Reliability Engineering)? How does it relate to DevOps?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>SRE</strong> is Google's approach to operations, treating operations as a software engineering problem.</p>
+                                    <p><strong>Key concepts:</strong></p>
+                                    <ul>
+                                        <li><strong>Error budgets:</strong> Acceptable level of unreliability (100% - SLO)</li>
+                                        <li><strong>SLIs/SLOs/SLAs:</strong> Measurable reliability targets</li>
+                                        <li><strong>Toil reduction:</strong> Automate repetitive operational work</li>
+                                        <li><strong>Blameless postmortems:</strong> Learn from failures</li>
+                                    </ul>
+                                    <p><strong>Relationship to DevOps:</strong> SRE is one implementation of DevOps. "DevOps is what you do, SRE is how Google does it."</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">3</span>
+                                    <h4>What is GitOps? Benefits and challenges?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>GitOps</strong> uses Git as the single source of truth for declarative infrastructure and applications.</p>
+                                    <p><strong>Principles:</strong></p>
+                                    <ul>
+                                        <li>Declarative descriptions in Git</li>
+                                        <li>Desired state versioned and immutable</li>
+                                        <li>Automated agents pull changes (ArgoCD, Flux)</li>
+                                        <li>Continuous reconciliation</li>
+                                    </ul>
+                                    <p><strong>Benefits:</strong> Audit trail, easy rollback, consistent environments, PR-based workflow.</p>
+                                    <p><strong>Challenges:</strong> Secrets management, handling drift, learning curve.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">4</span>
+                                    <h4>Explain Blue-Green vs. Canary vs. Rolling deployments.</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Blue-Green:</strong></p>
+                                    <ul>
+                                        <li>Two identical environments; switch traffic instantly</li>
+                                        <li>Pros: Instant rollback, no downtime</li>
+                                        <li>Cons: 2x infrastructure cost</li>
+                                    </ul>
+                                    <p><strong>Canary:</strong></p>
+                                    <ul>
+                                        <li>Gradually shift traffic (1% → 10% → 50% → 100%)</li>
+                                        <li>Pros: Lower risk, real-world testing</li>
+                                        <li>Cons: Longer deployment, complex traffic management</li>
+                                    </ul>
+                                    <p><strong>Rolling:</strong></p>
+                                    <ul>
+                                        <li>Replace instances one by one</li>
+                                        <li>Pros: No extra infrastructure</li>
+                                        <li>Cons: Mixed versions during deployment</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">5</span>
+                                    <h4>What is Platform Engineering? How does it differ from DevOps?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Platform Engineering</strong> builds internal developer platforms (IDPs) to reduce cognitive load on developers.</p>
+                                    <p><strong>Key aspects:</strong></p>
+                                    <ul>
+                                        <li>Self-service infrastructure</li>
+                                        <li>Golden paths and templates</li>
+                                        <li>Developer experience focus</li>
+                                        <li>Internal product mindset</li>
+                                    </ul>
+                                    <p><strong>Difference from DevOps:</strong> DevOps focuses on culture and practices; Platform Engineering creates products that enable DevOps at scale.</p>
+                                    <p><strong>Tools:</strong> Backstage, Port, Humanitec</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">6</span>
+                                    <h4>What is Continuous Integration? Best practices?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Continuous Integration (CI)</strong> is the practice of frequently merging code changes into a shared repository with automated testing.</p>
+                                    <p><strong>Best practices:</strong></p>
+                                    <ul>
+                                        <li>Commit frequently (at least daily)</li>
+                                        <li>Automated builds on every commit</li>
+                                        <li>Fast feedback (< 10 minutes for basic tests)</li>
+                                        <li>Fix broken builds immediately</li>
+                                        <li>Keep main branch always deployable</li>
+                                        <li>Test in production-like environments</li>
+                                        <li>Make build status visible to team</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">7</span>
+                                    <h4>Continuous Delivery vs. Continuous Deployment?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Continuous Delivery:</strong></p>
+                                    <ul>
+                                        <li>Every change is releasable to production</li>
+                                        <li>Manual approval gate before production</li>
+                                        <li>Business decides when to release</li>
+                                    </ul>
+                                    <p><strong>Continuous Deployment:</strong></p>
+                                    <ul>
+                                        <li>Every change that passes tests goes to production automatically</li>
+                                        <li>No manual intervention</li>
+                                        <li>Requires mature testing and monitoring</li>
+                                    </ul>
+                                    <p><strong>Key:</strong> CD (Delivery) is about capability; CD (Deployment) is about actually doing it.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">8</span>
+                                    <h4>What types of testing should be in a CI/CD pipeline?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Testing pyramid (bottom to top):</strong></p>
+                                    <ul>
+                                        <li><strong>Unit tests:</strong> Fast, isolated, high coverage</li>
+                                        <li><strong>Integration tests:</strong> Component interactions</li>
+                                        <li><strong>API/Contract tests:</strong> Service boundaries</li>
+                                        <li><strong>E2E tests:</strong> Full user journeys (fewer, slower)</li>
+                                    </ul>
+                                    <p><strong>Additional tests:</strong></p>
+                                    <ul>
+                                        <li><strong>Static analysis:</strong> Linting, code quality</li>
+                                        <li><strong>Security scanning:</strong> SAST, dependency checks</li>
+                                        <li><strong>Performance tests:</strong> Load testing on critical paths</li>
+                                        <li><strong>Smoke tests:</strong> Quick post-deployment verification</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">9</span>
+                                    <h4>What is "Shift Left"? How do you implement it?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Shift Left</strong> means moving testing, security, and quality checks earlier in the development lifecycle.</p>
+                                    <p><strong>Implementation:</strong></p>
+                                    <ul>
+                                        <li><strong>Pre-commit hooks:</strong> Linting, formatting, basic tests</li>
+                                        <li><strong>IDE integration:</strong> Security scanners, code analysis</li>
+                                        <li><strong>PR checks:</strong> Required tests before merge</li>
+                                        <li><strong>Early security:</strong> SAST in CI, dependency scanning</li>
+                                        <li><strong>Design reviews:</strong> Threat modeling, architecture review</li>
+                                    </ul>
+                                    <p><strong>Benefits:</strong> Cheaper to fix (10x cost increase per stage), faster feedback, better quality.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">10</span>
+                                    <h4>What are Feature Flags? When to use them?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Feature flags</strong> (toggles) are runtime switches to enable/disable features without deploying.</p>
+                                    <p><strong>Use cases:</strong></p>
+                                    <ul>
+                                        <li><strong>Release flags:</strong> Deploy code but enable later</li>
+                                        <li><strong>Experiment flags:</strong> A/B testing</li>
+                                        <li><strong>Operational flags:</strong> Kill switch for problematic features</li>
+                                        <li><strong>Permission flags:</strong> Enable for specific users/groups</li>
+                                    </ul>
+                                    <p><strong>Best practices:</strong> Short-lived flags, track flag debt, remove after rollout, audit flag changes.</p>
+                                    <p><strong>Tools:</strong> LaunchDarkly, Split, Flagsmith, custom implementations.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">11</span>
+                                    <h4>What is Trunk-Based Development?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Trunk-Based Development</strong> is a branching model where developers commit to a single branch (trunk/main).</p>
+                                    <p><strong>Characteristics:</strong></p>
+                                    <ul>
+                                        <li>Short-lived feature branches (< 1 day)</li>
+                                        <li>No long-running branches</li>
+                                        <li>Feature flags for incomplete features</li>
+                                        <li>Requires strong CI and testing</li>
+                                    </ul>
+                                    <p><strong>Benefits:</strong> Reduced merge conflicts, faster integration, always-releasable main.</p>
+                                    <p><strong>Contrast:</strong> GitFlow has multiple long-lived branches (develop, release, hotfix).</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">12</span>
+                                    <h4>How do you handle database migrations in CI/CD?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Best practices:</strong></p>
+                                    <ul>
+                                        <li><strong>Versioned migrations:</strong> Sequential, idempotent scripts</li>
+                                        <li><strong>Backward compatible:</strong> New code works with old schema</li>
+                                        <li><strong>Expand/Contract pattern:</strong> Add new, migrate data, remove old</li>
+                                        <li><strong>Blue-green for DB:</strong> Shadow database for testing</li>
+                                    </ul>
+                                    <p><strong>Tools:</strong> Flyway, Liquibase, Rails migrations, Alembic</p>
+                                    <p><strong>Key rule:</strong> Deploy migrations separately from application changes; never make breaking schema changes.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">13</span>
+                                    <h4>What is a blameless postmortem?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Blameless postmortem</strong> is a retrospective after an incident focusing on systemic improvements, not individual blame.</p>
+                                    <p><strong>Structure:</strong></p>
+                                    <ul>
+                                        <li><strong>Timeline:</strong> What happened and when</li>
+                                        <li><strong>Impact:</strong> Users affected, duration</li>
+                                        <li><strong>Root cause:</strong> 5 Whys analysis</li>
+                                        <li><strong>Contributing factors:</strong> What made it worse</li>
+                                        <li><strong>Action items:</strong> Preventive measures with owners</li>
+                                    </ul>
+                                    <p><strong>Philosophy:</strong> "How did the system allow this to happen?" not "Who caused this?"</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">14</span>
+                                    <h4>What is Chaos Engineering?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Chaos Engineering</strong> is the discipline of experimenting on systems to build confidence in their resilience.</p>
+                                    <p><strong>Principles:</strong></p>
+                                    <ul>
+                                        <li>Define steady state (normal behavior)</li>
+                                        <li>Hypothesize steady state continues during experiment</li>
+                                        <li>Introduce real-world failures</li>
+                                        <li>Minimize blast radius</li>
+                                    </ul>
+                                    <p><strong>Examples:</strong> Kill random pods, inject latency, simulate AZ failure, exhaust resources.</p>
+                                    <p><strong>Tools:</strong> Chaos Monkey, Gremlin, Litmus, Chaos Mesh.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">15</span>
+                                    <h4>How do you measure DevOps success?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>DORA Metrics (from "Accelerate" book):</strong></p>
+                                    <ul>
+                                        <li><strong>Deployment Frequency:</strong> How often you deploy to production</li>
+                                        <li><strong>Lead Time for Changes:</strong> Commit to production time</li>
+                                        <li><strong>Mean Time to Recovery (MTTR):</strong> Time to restore service</li>
+                                        <li><strong>Change Failure Rate:</strong> % of deployments causing failures</li>
+                                    </ul>
+                                    <p><strong>Additional metrics:</strong></p>
+                                    <ul>
+                                        <li>Availability/SLO attainment</li>
+                                        <li>Developer satisfaction</li>
+                                        <li>Time to onboard new developers</li>
+                                        <li>Security vulnerability remediation time</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons">
+                        <a href="infrastructure-scalability.html" class="nav-btn"><i class="fas fa-arrow-left"></i><span>Infrastructure</span></a>
+                        <a href="monitoring-observability.html" class="nav-btn next"><span>Monitoring & Observability</span><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <a href="../../" class="footer-logo"><i class="fas fa-terminal"></i><span>DevOps Hub</span></a>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2024 DevOps Learning Hub.</p></div>
+    </footer>
+
+    <style>
+        .qa-section { background: var(--bg); border-radius: var(--radius-lg); padding: 32px; border: 1px solid var(--border); }
+        .qa-section h2 { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; margin-bottom: 24px; color: var(--secondary); }
+        .qa-section h2 i { color: var(--primary); }
+        .qa-list { display: flex; flex-direction: column; gap: 12px; }
+        .qa-item { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: all 0.3s ease; }
+        .qa-item:hover { border-color: var(--primary); }
+        .qa-item.active { border-color: #3b82f6; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15); }
+        .qa-question { display: flex; align-items: center; gap: 16px; padding: 20px; cursor: pointer; background: var(--bg); transition: background 0.2s; }
+        .qa-question:hover { background: var(--bg-secondary); }
+        .qa-number { width: 36px; height: 36px; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; flex-shrink: 0; }
+        .qa-question h4 { flex: 1; font-size: 1rem; font-weight: 600; color: var(--secondary); }
+        .toggle-icon { color: var(--text-light); transition: transform 0.3s; }
+        .qa-item.active .toggle-icon { transform: rotate(180deg); }
+        .qa-answer { display: none; padding: 0 20px 20px 72px; color: var(--text-secondary); line-height: 1.7; }
+        .qa-item.active .qa-answer { display: block; }
+        .qa-answer ul, .qa-answer ol { padding-left: 20px; margin: 12px 0; }
+        .qa-answer li { margin-bottom: 8px; }
+        .qa-answer strong { color: var(--text); }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+        .nav-btn { display: flex; align-items: center; gap: 8px; padding: 12px 20px; background: var(--bg-secondary); border-radius: var(--radius); text-decoration: none; color: var(--text-secondary); font-weight: 500; transition: all 0.2s; }
+        .nav-btn:hover { background: var(--primary); color: white; }
+        .nav-btn.next { margin-left: auto; }
+        .devops-theme { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); }
+        .topic-hero-icon i { font-size: 6rem; color: #3b82f6; opacity: 0.2; }
+        .day-list li.current a { background: var(--primary); color: white; }
+    </style>
+
+    <script>
+        function toggleAnswer(element) { element.parentElement.classList.toggle('active'); }
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

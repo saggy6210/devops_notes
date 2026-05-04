@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Security and Compliance Interview Questions for Senior DevOps Architects - DevSecOps, Zero Trust, Secrets Management">
+    <title>Security & Compliance | Senior DevOps Interview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/topic.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo"><i class="fas fa-terminal"></i><span>DevOps Hub</span></a>
+            <ul class="nav-menu">
+                <li><a href="../../" class="nav-link">Home</a></li>
+                <li><a href="../../#topics" class="nav-link">Topics</a></li>
+            </ul>
+            <div class="hamburger"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+    </nav>
+
+    <header class="topic-hero security-theme">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="index.html">Senior DevOps Interview</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Security & Compliance</span>
+            </div>
+            <div class="topic-hero-content">
+                <div class="topic-hero-text">
+                    <div class="topic-badge"><i class="fas fa-shield-alt"></i><span>Architect Level</span></div>
+                    <h1>Security & Compliance Q&A</h1>
+                    <p>Master security questions covering DevSecOps, zero trust, secrets management, container security, and compliance.</p>
+                </div>
+                <div class="topic-hero-icon"><i class="fas fa-shield-alt"></i></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="topic-main">
+        <div class="container">
+            <div class="topic-layout">
+                <aside class="topic-sidebar">
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-list"></i> Categories</h3>
+                        <ul class="day-list">
+                            <li><a href="system-design.html"><span class="day-number"><i class="fas fa-sitemap"></i></span><span class="day-title">System Design</span></a></li>
+                            <li><a href="infrastructure-scalability.html"><span class="day-number"><i class="fas fa-server"></i></span><span class="day-title">Infrastructure</span></a></li>
+                            <li><a href="devops-practices.html"><span class="day-number"><i class="fas fa-infinity"></i></span><span class="day-title">DevOps Practices</span></a></li>
+                            <li><a href="monitoring-observability.html"><span class="day-number"><i class="fas fa-chart-line"></i></span><span class="day-title">Monitoring</span></a></li>
+                            <li class="current"><a href="security-compliance.html"><span class="day-number"><i class="fas fa-shield-alt"></i></span><span class="day-title">Security</span></a></li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <div class="topic-content">
+                    <div class="qa-section">
+                        <h2><i class="fas fa-question-circle"></i> Security & Compliance Questions</h2>
+                        
+                        <div class="qa-list">
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">1</span>
+                                    <h4>What is DevSecOps? How is it different from DevOps?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>DevSecOps</strong> integrates security practices into every phase of the DevOps lifecycle.</p>
+                                    <p><strong>Key principles:</strong></p>
+                                    <ul>
+                                        <li><strong>Security as code:</strong> Security policies defined and enforced through code</li>
+                                        <li><strong>Shift left:</strong> Security testing early in development</li>
+                                        <li><strong>Automation:</strong> Automated security scanning in CI/CD</li>
+                                        <li><strong>Shared responsibility:</strong> Everyone owns security, not just security team</li>
+                                    </ul>
+                                    <p><strong>Difference:</strong> DevOps focuses on speed and collaboration; DevSecOps adds security without sacrificing velocity.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">2</span>
+                                    <h4>What is Zero Trust Architecture?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Zero Trust</strong> is a security model based on "never trust, always verify" - no implicit trust based on network location.</p>
+                                    <p><strong>Principles:</strong></p>
+                                    <ul>
+                                        <li><strong>Verify explicitly:</strong> Authenticate and authorize every request</li>
+                                        <li><strong>Least privilege:</strong> Minimum access required for the task</li>
+                                        <li><strong>Assume breach:</strong> Segment access, verify end-to-end</li>
+                                    </ul>
+                                    <p><strong>Implementation:</strong></p>
+                                    <ul>
+                                        <li>Identity-based access (not network-based)</li>
+                                        <li>Micro-segmentation</li>
+                                        <li>mTLS between services</li>
+                                        <li>Continuous verification</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">3</span>
+                                    <h4>How do you manage secrets in a DevOps environment?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Never store secrets in:</strong> Source code, environment variables (visible in process list), config files in repos.</p>
+                                    <p><strong>Solutions:</strong></p>
+                                    <ul>
+                                        <li><strong>HashiCorp Vault:</strong> Dynamic secrets, encryption as a service, audit logging</li>
+                                        <li><strong>Cloud providers:</strong> AWS Secrets Manager, Azure Key Vault, GCP Secret Manager</li>
+                                        <li><strong>Kubernetes:</strong> Sealed Secrets, External Secrets Operator</li>
+                                    </ul>
+                                    <p><strong>Best practices:</strong></p>
+                                    <ul>
+                                        <li>Rotate secrets regularly</li>
+                                        <li>Use short-lived credentials when possible</li>
+                                        <li>Audit access to secrets</li>
+                                        <li>Encrypt secrets at rest and in transit</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">4</span>
+                                    <h4>What security scanning should be in a CI/CD pipeline?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <ul>
+                                        <li><strong>SAST (Static Application Security Testing):</strong> Analyze source code for vulnerabilities (SonarQube, Checkmarx, Semgrep)</li>
+                                        <li><strong>SCA (Software Composition Analysis):</strong> Scan dependencies for known CVEs (Snyk, Dependabot, OWASP Dependency-Check)</li>
+                                        <li><strong>Secret scanning:</strong> Detect committed secrets (GitLeaks, TruffleHog)</li>
+                                        <li><strong>Container scanning:</strong> Image vulnerabilities (Trivy, Clair, Anchore)</li>
+                                        <li><strong>IaC scanning:</strong> Terraform/CloudFormation misconfigurations (Checkov, tfsec)</li>
+                                        <li><strong>DAST (Dynamic):</strong> Runtime testing in staging (OWASP ZAP)</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">5</span>
+                                    <h4>How do you secure container images?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Build time:</strong></p>
+                                    <ul>
+                                        <li>Use minimal base images (distroless, Alpine)</li>
+                                        <li>Don't run as root</li>
+                                        <li>Multi-stage builds to reduce attack surface</li>
+                                        <li>Scan images for vulnerabilities</li>
+                                        <li>Pin base image versions (avoid :latest)</li>
+                                    </ul>
+                                    <p><strong>Registry:</strong></p>
+                                    <ul>
+                                        <li>Private registry with authentication</li>
+                                        <li>Image signing (Cosign, Notary)</li>
+                                        <li>Admission controllers to enforce signed images</li>
+                                    </ul>
+                                    <p><strong>Runtime:</strong></p>
+                                    <ul>
+                                        <li>Read-only file systems</li>
+                                        <li>Drop capabilities</li>
+                                        <li>Network policies</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">6</span>
+                                    <h4>What is Pod Security in Kubernetes?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Pod Security Standards</strong> (replaced PodSecurityPolicies):</p>
+                                    <ul>
+                                        <li><strong>Privileged:</strong> Unrestricted (for system components)</li>
+                                        <li><strong>Baseline:</strong> Minimally restrictive, prevents known privilege escalations</li>
+                                        <li><strong>Restricted:</strong> Heavily restricted, security best practices</li>
+                                    </ul>
+                                    <p><strong>Key controls:</strong></p>
+                                    <ul>
+                                        <li>runAsNonRoot: true</li>
+                                        <li>readOnlyRootFilesystem: true</li>
+                                        <li>allowPrivilegeEscalation: false</li>
+                                        <li>Drop all capabilities, add only needed</li>
+                                        <li>seccompProfile: RuntimeDefault</li>
+                                    </ul>
+                                    <p><strong>Alternatives:</strong> OPA Gatekeeper, Kyverno for custom policies.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">7</span>
+                                    <h4>Explain RBAC in Kubernetes. Best practices?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>RBAC (Role-Based Access Control)</strong> controls who can do what in Kubernetes.</p>
+                                    <p><strong>Components:</strong></p>
+                                    <ul>
+                                        <li><strong>Role/ClusterRole:</strong> Define permissions (verbs on resources)</li>
+                                        <li><strong>RoleBinding/ClusterRoleBinding:</strong> Grant roles to users/groups/service accounts</li>
+                                    </ul>
+                                    <p><strong>Best practices:</strong></p>
+                                    <ul>
+                                        <li>Least privilege: Start with minimal permissions</li>
+                                        <li>Namespace isolation: Use Roles over ClusterRoles</li>
+                                        <li>Avoid wildcard permissions (*)</li>
+                                        <li>Regular audit: kubectl auth can-i</li>
+                                        <li>Group-based access: Bind to groups, not users</li>
+                                        <li>Restrict cluster-admin: Only for emergencies</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">8</span>
+                                    <h4>What is mTLS? When should you use it?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>mTLS (Mutual TLS)</strong> authenticates both client and server, not just server (standard TLS).</p>
+                                    <p><strong>How it works:</strong></p>
+                                    <ol>
+                                        <li>Server presents certificate to client</li>
+                                        <li>Client verifies server certificate</li>
+                                        <li>Client presents certificate to server</li>
+                                        <li>Server verifies client certificate</li>
+                                    </ol>
+                                    <p><strong>Use cases:</strong></p>
+                                    <ul>
+                                        <li>Service-to-service communication in microservices</li>
+                                        <li>Zero Trust networks</li>
+                                        <li>API authentication</li>
+                                    </ul>
+                                    <p><strong>Implementation:</strong> Service mesh (Istio, Linkerd) handles mTLS automatically.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">9</span>
+                                    <h4>How do you implement network segmentation in Kubernetes?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Network Policies:</strong> Define allowed traffic between pods.</p>
+                                    <p><strong>Default deny example:</strong></p>
+                                    <ul>
+                                        <li>Deny all ingress by default</li>
+                                        <li>Explicitly allow needed traffic</li>
+                                        <li>Label-based selection</li>
+                                    </ul>
+                                    <p><strong>Best practices:</strong></p>
+                                    <ul>
+                                        <li>Start with deny-all policy</li>
+                                        <li>Namespace isolation</li>
+                                        <li>Separate environments (dev/staging/prod)</li>
+                                        <li>Restrict egress to known destinations</li>
+                                    </ul>
+                                    <p><strong>Requirements:</strong> CNI that supports Network Policies (Calico, Cilium, Weave Net).</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">10</span>
+                                    <h4>What is supply chain security? SLSA framework?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Supply chain security</strong> protects the entire software delivery pipeline from source to deployment.</p>
+                                    <p><strong>Threats:</strong> Compromised dependencies, tampered builds, malicious insiders.</p>
+                                    <p><strong>SLSA (Supply chain Levels for Software Artifacts):</strong></p>
+                                    <ul>
+                                        <li><strong>Level 1:</strong> Documentation of build process</li>
+                                        <li><strong>Level 2:</strong> Tamper resistance (signed provenance)</li>
+                                        <li><strong>Level 3:</strong> Hardened builds (isolated, reproducible)</li>
+                                        <li><strong>Level 4:</strong> Two-person review, hermetic builds</li>
+                                    </ul>
+                                    <p><strong>Tools:</strong> Sigstore (Cosign, Fulcio, Rekor), in-toto, SBOM generators.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">11</span>
+                                    <h4>What is an SBOM? Why is it important?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>SBOM (Software Bill of Materials)</strong> is a complete inventory of all components in software.</p>
+                                    <p><strong>Contents:</strong></p>
+                                    <ul>
+                                        <li>Direct and transitive dependencies</li>
+                                        <li>Version information</li>
+                                        <li>Licenses</li>
+                                        <li>Supplier information</li>
+                                    </ul>
+                                    <p><strong>Why important:</strong></p>
+                                    <ul>
+                                        <li>Vulnerability management (quickly identify affected systems)</li>
+                                        <li>License compliance</li>
+                                        <li>Regulatory requirements (US Executive Order)</li>
+                                        <li>Incident response</li>
+                                    </ul>
+                                    <p><strong>Formats:</strong> SPDX, CycloneDX. Tools: Syft, Trivy, FOSSA.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">12</span>
+                                    <h4>How do you handle compliance in cloud-native environments?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Policy as Code:</strong></p>
+                                    <ul>
+                                        <li>OPA/Rego policies for Kubernetes</li>
+                                        <li>Cloud security posture management (CSPM)</li>
+                                        <li>Infrastructure compliance scanning</li>
+                                    </ul>
+                                    <p><strong>Audit and logging:</strong></p>
+                                    <ul>
+                                        <li>Kubernetes audit logs</li>
+                                        <li>Cloud trail/activity logs</li>
+                                        <li>Immutable audit storage</li>
+                                    </ul>
+                                    <p><strong>Continuous compliance:</strong></p>
+                                    <ul>
+                                        <li>Automated compliance checks in CI/CD</li>
+                                        <li>Real-time drift detection</li>
+                                        <li>Automated remediation</li>
+                                    </ul>
+                                    <p><strong>Frameworks:</strong> CIS Benchmarks, SOC 2, PCI-DSS, HIPAA, GDPR.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">13</span>
+                                    <h4>What is runtime security for containers?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Runtime security</strong> monitors and protects containers during execution.</p>
+                                    <p><strong>Capabilities:</strong></p>
+                                    <ul>
+                                        <li><strong>Behavioral monitoring:</strong> Detect anomalous activity</li>
+                                        <li><strong>System call filtering:</strong> Seccomp profiles</li>
+                                        <li><strong>File integrity:</strong> Detect unexpected changes</li>
+                                        <li><strong>Network monitoring:</strong> Unexpected connections</li>
+                                        <li><strong>Process monitoring:</strong> Unexpected processes</li>
+                                    </ul>
+                                    <p><strong>Tools:</strong> Falco (CNCF), Sysdig, Aqua, Prisma Cloud.</p>
+                                    <p><strong>Example threats detected:</strong> Shell in container, crypto mining, privilege escalation attempts.</p>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">14</span>
+                                    <h4>How do you secure the CI/CD pipeline itself?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Pipeline security measures:</strong></p>
+                                    <ul>
+                                        <li><strong>Access control:</strong> RBAC for pipeline modifications</li>
+                                        <li><strong>Secrets:</strong> External secrets management, no hardcoded credentials</li>
+                                        <li><strong>Ephemeral runners:</strong> Fresh environment each build</li>
+                                        <li><strong>Signed commits:</strong> GPG signing, branch protection</li>
+                                        <li><strong>Artifact signing:</strong> Sign build outputs</li>
+                                        <li><strong>Isolated builds:</strong> Sandboxed build environments</li>
+                                    </ul>
+                                    <p><strong>Additional controls:</strong></p>
+                                    <ul>
+                                        <li>Required reviewers for pipeline changes</li>
+                                        <li>Audit logging for all pipeline activities</li>
+                                        <li>Network isolation for build agents</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">15</span>
+                                    <h4>What is the principle of least privilege? How do you implement it?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Least privilege:</strong> Grant only the minimum access required to perform a task.</p>
+                                    <p><strong>Implementation:</strong></p>
+                                    <ul>
+                                        <li><strong>IAM:</strong> Specific policies, not admin access</li>
+                                        <li><strong>Service accounts:</strong> Dedicated accounts with minimal permissions</li>
+                                        <li><strong>Just-in-time access:</strong> Temporary elevated permissions</li>
+                                        <li><strong>Network:</strong> Restrict to needed ports/destinations</li>
+                                        <li><strong>Containers:</strong> Non-root, dropped capabilities</li>
+                                        <li><strong>Databases:</strong> Read-only accounts where possible</li>
+                                    </ul>
+                                    <p><strong>Audit:</strong> Regular access reviews, remove unused permissions.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons">
+                        <a href="monitoring-observability.html" class="nav-btn"><i class="fas fa-arrow-left"></i><span>Monitoring & Observability</span></a>
+                        <a href="index.html" class="nav-btn next"><span>Back to Index</span><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <a href="../../" class="footer-logo"><i class="fas fa-terminal"></i><span>DevOps Hub</span></a>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2024 DevOps Learning Hub.</p></div>
+    </footer>
+
+    <style>
+        .qa-section { background: var(--bg); border-radius: var(--radius-lg); padding: 32px; border: 1px solid var(--border); }
+        .qa-section h2 { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; margin-bottom: 24px; color: var(--secondary); }
+        .qa-section h2 i { color: var(--primary); }
+        .qa-list { display: flex; flex-direction: column; gap: 12px; }
+        .qa-item { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: all 0.3s ease; }
+        .qa-item:hover { border-color: var(--primary); }
+        .qa-item.active { border-color: #ef4444; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15); }
+        .qa-question { display: flex; align-items: center; gap: 16px; padding: 20px; cursor: pointer; background: var(--bg); transition: background 0.2s; }
+        .qa-question:hover { background: var(--bg-secondary); }
+        .qa-number { width: 36px; height: 36px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; flex-shrink: 0; }
+        .qa-question h4 { flex: 1; font-size: 1rem; font-weight: 600; color: var(--secondary); }
+        .toggle-icon { color: var(--text-light); transition: transform 0.3s; }
+        .qa-item.active .toggle-icon { transform: rotate(180deg); }
+        .qa-answer { display: none; padding: 0 20px 20px 72px; color: var(--text-secondary); line-height: 1.7; }
+        .qa-item.active .qa-answer { display: block; }
+        .qa-answer ul, .qa-answer ol { padding-left: 20px; margin: 12px 0; }
+        .qa-answer li { margin-bottom: 8px; }
+        .qa-answer strong { color: var(--text); }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+        .nav-btn { display: flex; align-items: center; gap: 8px; padding: 12px 20px; background: var(--bg-secondary); border-radius: var(--radius); text-decoration: none; color: var(--text-secondary); font-weight: 500; transition: all 0.2s; }
+        .nav-btn:hover { background: var(--primary); color: white; }
+        .nav-btn.next { margin-left: auto; }
+        .security-theme { background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); }
+        .topic-hero-icon i { font-size: 6rem; color: #ef4444; opacity: 0.2; }
+        .day-list li.current a { background: var(--primary); color: white; }
+    </style>
+
+    <script>
+        function toggleAnswer(element) { element.parentElement.classList.toggle('active'); }
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

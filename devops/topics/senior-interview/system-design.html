@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="System Design Interview Questions for Senior DevOps - Distributed Systems, Microservices, Architecture">
+    <title>System Design | Senior DevOps Interview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/topic.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo">
+                <i class="fas fa-terminal"></i>
+                <span>DevOps Hub</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="../../" class="nav-link">Home</a></li>
+                <li><a href="../../#topics" class="nav-link">Topics</a></li>
+                <li><a href="../../#learning-path" class="nav-link">Learning Path</a></li>
+                <li><a href="../../#about" class="nav-link">About</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Topic Header -->
+    <header class="topic-hero design-theme">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="index.html">Senior DevOps Interview</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>System Design</span>
+            </div>
+            <div class="topic-hero-content">
+                <div class="topic-hero-text">
+                    <div class="topic-badge">
+                        <i class="fas fa-sitemap"></i>
+                        <span>Architect Level</span>
+                    </div>
+                    <h1>System Design Interview Q&A</h1>
+                    <p>Master system design questions covering distributed systems, microservices, caching, message queues, and architectural patterns.</p>
+                </div>
+                <div class="topic-hero-icon">
+                    <i class="fas fa-sitemap"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="topic-main">
+        <div class="container">
+            <div class="topic-layout">
+                <!-- Sidebar -->
+                <aside class="topic-sidebar">
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-list"></i> Categories</h3>
+                        <ul class="day-list">
+                            <li class="current">
+                                <a href="system-design.html">
+                                    <span class="day-number"><i class="fas fa-sitemap"></i></span>
+                                    <span class="day-title">System Design</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="infrastructure-scalability.html">
+                                    <span class="day-number"><i class="fas fa-server"></i></span>
+                                    <span class="day-title">Infrastructure</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="devops-practices.html">
+                                    <span class="day-number"><i class="fas fa-infinity"></i></span>
+                                    <span class="day-title">DevOps Practices</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="monitoring-observability.html">
+                                    <span class="day-number"><i class="fas fa-chart-line"></i></span>
+                                    <span class="day-title">Monitoring</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="security-compliance.html">
+                                    <span class="day-number"><i class="fas fa-shield-alt"></i></span>
+                                    <span class="day-title">Security</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <!-- Content Area -->
+                <div class="topic-content">
+                    <div class="qa-section">
+                        <h2><i class="fas fa-question-circle"></i> System Design Questions</h2>
+                        
+                        <div class="qa-list">
+                            <!-- Q1 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">1</span>
+                                    <h4>What is a "single point of failure"? How do you eliminate it?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p>A <strong>single point of failure (SPOF)</strong> is any component whose failure brings down the entire system.</p>
+                                    <p><strong>Elimination strategies:</strong></p>
+                                    <ul>
+                                        <li>Redundancy at every layer (multiple instances, multi-AZ, multi-region)</li>
+                                        <li>Load balancers with health checks</li>
+                                        <li>Database replication (primary-replica, multi-master)</li>
+                                        <li>Stateless application design</li>
+                                        <li>Circuit breakers and graceful degradation</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Q2 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">2</span>
+                                    <h4>Explain CAP Theorem. How does it affect system design?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>CAP Theorem</strong> states that a distributed system can only guarantee two of three properties:</p>
+                                    <ul>
+                                        <li><strong>Consistency:</strong> Every read receives the most recent write</li>
+                                        <li><strong>Availability:</strong> Every request receives a response</li>
+                                        <li><strong>Partition Tolerance:</strong> System operates despite network failures</li>
+                                    </ul>
+                                    <p><strong>In practice:</strong> Since network partitions are inevitable, you choose between CP (consistent but may be unavailable) or AP (available but may return stale data).</p>
+                                    <p><strong>Examples:</strong> MongoDB (CP), Cassandra (AP), Traditional RDBMS (CA - no partition tolerance)</p>
+                                </div>
+                            </div>
+
+                            <!-- Q3 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">3</span>
+                                    <h4>What is a CDN? Explain Multi-CDN architecture.</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>CDN (Content Delivery Network)</strong> is a geographically distributed network of servers that cache content close to end users.</p>
+                                    <p><strong>Multi-CDN Benefits:</strong></p>
+                                    <ul>
+                                        <li>Better global coverage and performance</li>
+                                        <li>Increased redundancy and availability</li>
+                                        <li>Cost optimization through traffic steering</li>
+                                        <li>Protection against vendor outages</li>
+                                    </ul>
+                                    <p><strong>Implementation:</strong> Use DNS-based load balancing or a CDN orchestrator to route traffic to the optimal CDN based on performance, cost, or availability.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q4 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">4</span>
+                                    <h4>Explain "3-Tier Architecture" with pros and cons.</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Three tiers:</strong></p>
+                                    <ul>
+                                        <li><strong>Presentation Tier:</strong> Web servers, UI (Nginx, React)</li>
+                                        <li><strong>Application Tier:</strong> Business logic (API servers, microservices)</li>
+                                        <li><strong>Data Tier:</strong> Databases, storage (PostgreSQL, Redis)</li>
+                                    </ul>
+                                    <p><strong>Pros:</strong> Separation of concerns, independent scaling, better security isolation, easier maintenance.</p>
+                                    <p><strong>Cons:</strong> Added complexity, potential latency between tiers, more infrastructure to manage.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q5 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">5</span>
+                                    <h4>Mono-repo vs. Multi-repo: When to use each?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Mono-repo (single repository for all code):</strong></p>
+                                    <ul>
+                                        <li>Pros: Atomic changes across services, unified tooling, easier code sharing</li>
+                                        <li>Cons: Requires specialized tooling (Bazel), can become slow, complex permissions</li>
+                                        <li>Used by: Google, Facebook, Microsoft</li>
+                                    </ul>
+                                    <p><strong>Multi-repo (separate repo per service):</strong></p>
+                                    <ul>
+                                        <li>Pros: Clear ownership, independent versioning, simpler CI/CD per repo</li>
+                                        <li>Cons: Dependency management challenges, harder cross-service changes</li>
+                                        <li>Better for: Distributed teams, microservices with clear boundaries</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Q6 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">6</span>
+                                    <h4>What are the drawbacks of monolithic architecture?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <ul>
+                                        <li><strong>Scaling limitations:</strong> Must scale entire application even if only one component needs it</li>
+                                        <li><strong>Deployment risk:</strong> Single change requires full deployment</li>
+                                        <li><strong>Technology lock-in:</strong> Entire app uses same tech stack</li>
+                                        <li><strong>Team bottlenecks:</strong> Multiple teams work on same codebase</li>
+                                        <li><strong>Reliability:</strong> Bug in one module can crash entire application</li>
+                                        <li><strong>Slow builds:</strong> As codebase grows, build times increase</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Q7 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">7</span>
+                                    <h4>What is a Service Mesh? When would you use it?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p>A <strong>service mesh</strong> is a dedicated infrastructure layer for handling service-to-service communication with features like:</p>
+                                    <ul>
+                                        <li>Traffic management (routing, load balancing)</li>
+                                        <li>Security (mTLS, authentication)</li>
+                                        <li>Observability (metrics, tracing, logging)</li>
+                                        <li>Resiliency (retries, circuit breaking, timeouts)</li>
+                                    </ul>
+                                    <p><strong>Popular options:</strong> Istio, Linkerd, Consul Connect</p>
+                                    <p><strong>Use when:</strong> You have many microservices and need standardized communication patterns, security, and observability without modifying application code.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q8 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">8</span>
+                                    <h4>Explain "Loose Coupling" and why it matters.</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Loose coupling</strong> means components have minimal dependencies on each other and communicate through well-defined interfaces.</p>
+                                    <p><strong>Techniques:</strong></p>
+                                    <ul>
+                                        <li>Event-driven architecture (pub/sub)</li>
+                                        <li>API contracts and versioning</li>
+                                        <li>Message queues between services</li>
+                                        <li>Service discovery instead of hardcoded endpoints</li>
+                                    </ul>
+                                    <p><strong>Benefits:</strong> Independent deployments, easier testing, better fault isolation, team autonomy.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q9 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">9</span>
+                                    <h4>What is a message queue? When is it used?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p>A <strong>message queue</strong> is an asynchronous communication mechanism between services.</p>
+                                    <p><strong>Use cases:</strong></p>
+                                    <ul>
+                                        <li>Decoupling producers and consumers</li>
+                                        <li>Handling traffic spikes (buffering)</li>
+                                        <li>Background job processing</li>
+                                        <li>Event-driven architectures</li>
+                                        <li>Cross-service communication</li>
+                                    </ul>
+                                    <p><strong>Examples:</strong> RabbitMQ, Apache Kafka, AWS SQS, Redis Streams</p>
+                                </div>
+                            </div>
+
+                            <!-- Q10 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">10</span>
+                                    <h4>What are cache replacement policies? Explain LRU.</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Cache replacement policies</strong> determine which items to evict when cache is full:</p>
+                                    <ul>
+                                        <li><strong>LRU (Least Recently Used):</strong> Evicts items not accessed for longest time. Best for temporal locality.</li>
+                                        <li><strong>LFU (Least Frequently Used):</strong> Evicts items with fewest accesses. Good for popularity-based access.</li>
+                                        <li><strong>FIFO (First In, First Out):</strong> Evicts oldest items. Simple but not optimal.</li>
+                                        <li><strong>TTL (Time To Live):</strong> Items expire after set duration.</li>
+                                    </ul>
+                                    <p><strong>LRU implementation:</strong> Typically uses a hash map + doubly linked list for O(1) get/put operations.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q11 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">11</span>
+                                    <h4>Design a URL shortener. What are the key considerations?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Key components:</strong></p>
+                                    <ul>
+                                        <li><strong>URL encoding:</strong> Base62 encoding (a-z, A-Z, 0-9) for short codes</li>
+                                        <li><strong>ID generation:</strong> Counter-based, UUID, or distributed ID generator (Snowflake)</li>
+                                        <li><strong>Storage:</strong> Key-value store (Redis) for hot data, database for persistence</li>
+                                        <li><strong>Caching:</strong> Cache popular URLs at edge/CDN level</li>
+                                    </ul>
+                                    <p><strong>Considerations:</strong></p>
+                                    <ul>
+                                        <li>Custom aliases vs. auto-generated</li>
+                                        <li>Analytics and click tracking</li>
+                                        <li>Rate limiting and abuse prevention</li>
+                                        <li>Expiration policies</li>
+                                        <li>Scale: Reads >> Writes (cache heavily)</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Q12 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">12</span>
+                                    <h4>Explain the Sidecar Pattern. Give examples.</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p>The <strong>sidecar pattern</strong> deploys a helper container alongside the main application container to provide supporting features.</p>
+                                    <p><strong>Use cases:</strong></p>
+                                    <ul>
+                                        <li><strong>Logging:</strong> Fluentd sidecar collecting logs</li>
+                                        <li><strong>Proxy:</strong> Envoy sidecar for service mesh (Istio)</li>
+                                        <li><strong>Monitoring:</strong> Prometheus exporter sidecar</li>
+                                        <li><strong>Security:</strong> Vault agent for secrets injection</li>
+                                        <li><strong>Sync:</strong> Git-sync sidecar for config updates</li>
+                                    </ul>
+                                    <p><strong>Benefits:</strong> Separation of concerns, independent lifecycle, language-agnostic features.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q13 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">13</span>
+                                    <h4>What is "Consistent Hashing"? Where is it used?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Consistent hashing</strong> is a technique for distributing data across nodes where adding/removing nodes only requires remapping a small portion of keys.</p>
+                                    <p><strong>How it works:</strong> Nodes and keys are placed on a virtual ring. Each key is assigned to the first node clockwise from its position.</p>
+                                    <p><strong>Used in:</strong></p>
+                                    <ul>
+                                        <li>Distributed caches (Memcached, Redis Cluster)</li>
+                                        <li>Load balancers (sticky sessions)</li>
+                                        <li>Distributed databases (Cassandra, DynamoDB)</li>
+                                        <li>CDNs for content routing</li>
+                                    </ul>
+                                    <p><strong>Improvement:</strong> Virtual nodes (vnodes) for better load distribution.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q14 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">14</span>
+                                    <h4>What is "Branch by Abstraction" for migrations?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Branch by Abstraction</strong> is a technique for making large-scale changes gradually without long-lived feature branches.</p>
+                                    <p><strong>Steps:</strong></p>
+                                    <ol>
+                                        <li>Create an abstraction layer over the code to be replaced</li>
+                                        <li>Migrate all clients to use the abstraction</li>
+                                        <li>Build new implementation behind the abstraction</li>
+                                        <li>Gradually switch traffic to new implementation</li>
+                                        <li>Remove old implementation and abstraction</li>
+                                    </ol>
+                                    <p><strong>Benefits:</strong> Continuous integration, easy rollback, parallel development.</p>
+                                </div>
+                            </div>
+
+                            <!-- Q15 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">15</span>
+                                    <h4>What is "Shared-Nothing" architecture?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Shared-Nothing</strong> architecture means each node is independent and self-sufficient with its own CPU, memory, and storage.</p>
+                                    <p><strong>Characteristics:</strong></p>
+                                    <ul>
+                                        <li>No shared state between nodes</li>
+                                        <li>Communication only through network</li>
+                                        <li>Horizontal scalability by adding nodes</li>
+                                        <li>No single point of failure</li>
+                                    </ul>
+                                    <p><strong>Examples:</strong> Cassandra, ScyllaDB, Citus, most microservices architectures</p>
+                                    <p><strong>Contrast:</strong> Shared-disk (Oracle RAC), Shared-memory architectures</p>
+                                </div>
+                            </div>
+
+                            <!-- Q16 -->
+                            <div class="qa-item">
+                                <div class="qa-question" onclick="toggleAnswer(this)">
+                                    <span class="qa-number">16</span>
+                                    <h4>How would you design a video streaming platform?</h4>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                                <div class="qa-answer">
+                                    <p><strong>Key components:</strong></p>
+                                    <ul>
+                                        <li><strong>Ingestion:</strong> Video upload, transcoding pipeline (different resolutions/codecs)</li>
+                                        <li><strong>Storage:</strong> Object storage (S3) for video files, metadata in database</li>
+                                        <li><strong>CDN:</strong> Global edge caching for low latency playback</li>
+                                        <li><strong>Adaptive bitrate:</strong> HLS/DASH protocols for quality adjustment</li>
+                                        <li><strong>APIs:</strong> Catalog service, user service, recommendation engine</li>
+                                    </ul>
+                                    <p><strong>Scaling considerations:</strong></p>
+                                    <ul>
+                                        <li>Read-heavy: Cache aggressively at CDN and application layer</li>
+                                        <li>Separate upload and streaming paths</li>
+                                        <li>Async processing for transcoding (queue-based)</li>
+                                        <li>Regional deployments for latency</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="nav-buttons">
+                        <a href="index.html" class="nav-btn">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Back to Index</span>
+                        </a>
+                        <a href="infrastructure-scalability.html" class="nav-btn next">
+                            <span>Infrastructure & Scalability</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <a href="../../" class="footer-logo">
+                    <i class="fas fa-terminal"></i>
+                    <span>DevOps Hub</span>
+                </a>
+                <p>Senior DevOps Architect interview preparation.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 DevOps Learning Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <style>
+        .qa-section {
+            background: var(--bg);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            border: 1px solid var(--border);
+        }
+
+        .qa-section h2 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+            color: var(--secondary);
+        }
+
+        .qa-section h2 i { color: var(--primary); }
+
+        .qa-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .qa-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .qa-item:hover { border-color: var(--primary); }
+
+        .qa-item.active {
+            border-color: #8b5cf6;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+        }
+
+        .qa-question {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            cursor: pointer;
+            background: var(--bg);
+            transition: background 0.2s;
+        }
+
+        .qa-question:hover { background: var(--bg-secondary); }
+
+        .qa-number {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .qa-question h4 {
+            flex: 1;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .toggle-icon {
+            color: var(--text-light);
+            transition: transform 0.3s;
+        }
+
+        .qa-item.active .toggle-icon { transform: rotate(180deg); }
+
+        .qa-answer {
+            display: none;
+            padding: 0 20px 20px 72px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .qa-item.active .qa-answer { display: block; }
+
+        .qa-answer ul, .qa-answer ol {
+            padding-left: 20px;
+            margin: 12px 0;
+        }
+
+        .qa-answer li { margin-bottom: 8px; }
+        .qa-answer strong { color: var(--text); }
+
+        .code-block {
+            background: var(--secondary);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            color: #22d3ee;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-btn.next { margin-left: auto; }
+
+        .design-theme {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+        }
+
+        .topic-hero-icon i {
+            font-size: 6rem;
+            color: #8b5cf6;
+            opacity: 0.2;
+        }
+
+        .day-list li.current a {
+            background: var(--primary);
+            color: white;
+        }
+    </style>
+
+    <script>
+        function toggleAnswer(element) {
+            const qaItem = element.parentElement;
+            qaItem.classList.toggle('active');
+        }
+
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
