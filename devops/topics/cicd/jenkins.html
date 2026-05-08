@@ -1,0 +1,2316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Jenkins Complete Guide - Installation, Pipelines, Architecture, and Interview Questions for DevOps Engineers.">
+    <title>Jenkins | DevOps Learning Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #d33833;
+            --primary-dark: #a82b27;
+            --secondary: #0f172a;
+            --accent: #f0d6b4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --bg: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-dark: #0f172a;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            z-index: 9999;
+            transition: width 0.3s;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        .nav-logo i {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            padding: 8px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            background: var(--bg-secondary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 24px 80px;
+            background: linear-gradient(180deg, #fef2f2 0%, var(--bg) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 100px;
+            right: -200px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(211,56,51,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.875rem;
+            margin-bottom: 24px;
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb i { font-size: 0.7rem; color: var(--text-light); }
+        .breadcrumb span { color: var(--text); font-weight: 500; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 32px;
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: var(--bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .meta-item i {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, rgba(211,56,51,0.1), rgba(168,43,39,0.1));
+            color: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .meta-item span {
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .meta-item small {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        /* Section Card */
+        .section-card {
+            background: var(--bg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            margin-bottom: 40px;
+            overflow: hidden;
+            transition: box-shadow 0.3s;
+        }
+
+        .section-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px 28px;
+            background: linear-gradient(135deg, rgba(211,56,51,0.05), rgba(168,43,39,0.02));
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .section-body {
+            padding: 28px;
+        }
+
+        /* Info Box */
+        .info-box {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: linear-gradient(135deg, #fef2f2, #fef7ed);
+            border-radius: var(--radius);
+            margin-bottom: 24px;
+        }
+
+        .info-box i {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .info-box p {
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        .info-box strong {
+            color: var(--secondary);
+        }
+
+        /* Analogy Card */
+        .analogy-card {
+            display: flex;
+            gap: 20px;
+            padding: 24px;
+            background: linear-gradient(135deg, #fef3c7, #fef9c3);
+            border-radius: var(--radius);
+            border-left: 4px solid var(--warning);
+        }
+
+        .analogy-card .icon {
+            width: 50px;
+            height: 50px;
+            background: var(--warning);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .analogy-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .analogy-card p {
+            color: var(--text-secondary);
+        }
+
+        /* Architecture Visual */
+        .arch-visual {
+            background: var(--bg-dark);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            margin: 24px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .arch-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .arch-diagram {
+            position: relative;
+            z-index: 1;
+        }
+
+        .arch-row {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-bottom: 40px;
+        }
+
+        .arch-box {
+            text-align: center;
+            color: white;
+        }
+
+        .arch-box .box {
+            padding: 20px 30px;
+            border-radius: var(--radius);
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            min-width: 140px;
+        }
+
+        .arch-box .box.master { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
+        .arch-box .box.agent { background: linear-gradient(135deg, #10b981, #059669); }
+        .arch-box .box.plugin { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .arch-box .box.scm { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .arch-box .box.artifact { background: #64748b; }
+
+        .arch-box small {
+            display: block;
+            color: var(--text-light);
+            font-size: 0.75rem;
+        }
+
+        .arch-arrow {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            margin: 20px 0;
+        }
+
+        .arch-legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        .legend-item .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        /* Concept Grid */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .concept-card {
+            padding: 24px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .concept-card .icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+        }
+
+        .concept-card h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--secondary);
+        }
+
+        .concept-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .concept-card code {
+            display: block;
+            padding: 10px 14px;
+            background: var(--bg-dark);
+            color: var(--success);
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--bg-dark);
+            border-radius: var(--radius);
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .code-header span {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .code-header .copy-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .code-header .copy-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .code-block pre {
+            padding: 20px;
+            margin: 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .code-block .keyword { color: #c792ea; }
+        .code-block .string { color: #c3e88d; }
+        .code-block .comment { color: #546e7a; }
+        .code-block .function { color: #82aaff; }
+
+        /* Command Cards */
+        .command-category {
+            margin-bottom: 30px;
+        }
+
+        .command-category h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--secondary);
+        }
+
+        .command-category h4 i {
+            color: var(--primary);
+        }
+
+        .command-cards {
+            display: grid;
+            gap: 12px;
+        }
+
+        .command-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .command-card:hover {
+            border-color: var(--primary);
+            background: var(--bg);
+        }
+
+        .command-card code {
+            flex: 1;
+            padding: 10px 14px;
+            background: var(--bg-dark);
+            color: #22d3ee;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+
+        .command-card .desc {
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .copy-btn {
+            padding: 8px 12px;
+            background: var(--bg-dark);
+            border: none;
+            border-radius: 6px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            color: var(--primary);
+        }
+
+        /* Q&A Section */
+        .qa-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .qa-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .qa-item:hover {
+            border-color: var(--primary);
+        }
+
+        .qa-item.active {
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .qa-question {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            cursor: pointer;
+            background: var(--bg);
+            transition: background 0.2s;
+        }
+
+        .qa-question:hover {
+            background: var(--bg-secondary);
+        }
+
+        .qa-number {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .qa-question h4 {
+            flex: 1;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .qa-question .toggle {
+            color: var(--text-light);
+            transition: transform 0.3s;
+        }
+
+        .qa-item.active .qa-question .toggle {
+            transform: rotate(180deg);
+        }
+
+        .qa-answer {
+            display: none;
+            padding: 0 20px 20px 72px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .qa-item.active .qa-answer {
+            display: block;
+        }
+
+        .qa-answer ul {
+            margin: 12px 0;
+            padding-left: 20px;
+        }
+
+        .qa-answer li {
+            margin-bottom: 8px;
+        }
+
+        .qa-answer strong {
+            color: var(--text);
+        }
+
+        .qa-answer code {
+            background: var(--bg-dark);
+            color: var(--success);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .highlight-box {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(211,56,51,0.1), rgba(168,43,39,0.05));
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .highlight-box i {
+            color: var(--primary);
+        }
+
+        .highlight-box.warning {
+            background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.05));
+        }
+
+        .highlight-box.warning i {
+            color: var(--warning);
+        }
+
+        /* Scenario Section */
+        .scenario-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(6,182,212,0.05));
+            border-bottom: 1px solid var(--border);
+        }
+
+        .scenario-header .icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scenario-header h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .scenario-body {
+            padding: 20px;
+        }
+
+        .scenario-body h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 16px 0 12px;
+        }
+
+        .scenario-body h5:first-child {
+            margin-top: 0;
+        }
+
+        .scenario-body ol, .scenario-body ul {
+            padding-left: 24px;
+        }
+
+        .scenario-body li {
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .scenario-body code {
+            background: var(--bg-dark);
+            color: var(--success);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        /* Tips Section */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .tip-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(6,182,212,0.05));
+            border-radius: var(--radius);
+            border: 1px solid rgba(16,185,129,0.2);
+        }
+
+        .tip-item i {
+            color: var(--success);
+            font-size: 1.1rem;
+        }
+
+        .tip-item p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .tip-item code {
+            background: var(--bg-dark);
+            color: var(--success);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        /* Plugin Table */
+        .plugin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .plugin-table th,
+        .plugin-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .plugin-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        .plugin-table td {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .plugin-table tr:hover td {
+            background: var(--bg-secondary);
+        }
+
+        .plugin-table .plugin-name {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover:not(.disabled) {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--secondary);
+            color: var(--text-light);
+            padding: 60px 24px;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+            text-decoration: none;
+        }
+
+        .footer-logo i {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-links h4 {
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom i { color: var(--danger); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2rem; }
+            .hero-meta { flex-direction: column; gap: 12px; }
+            .concept-grid { grid-template-columns: 1fr; }
+            .tips-grid { grid-template-columns: 1fr; }
+            .command-card { flex-direction: column; align-items: stretch; }
+            .footer-content { flex-direction: column; }
+            .nav-buttons { flex-direction: column; }
+            .arch-row { flex-direction: column; gap: 20px; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../" class="nav-logo">
+                <i class="fas fa-terminal"></i>
+                <span>DevOps Hub</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="../../">Home</a></li>
+                <li><a href="../../#topics">Topics</a></li>
+                <li><a href="./">CI/CD</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="breadcrumb">
+                <a href="../../"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="./">CI/CD</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Jenkins</span>
+            </div>
+            <div class="hero-badge">
+                <i class="fab fa-jenkins"></i>
+                CI/CD Automation
+            </div>
+            <h1><span>Jenkins</span> Complete Guide</h1>
+            <p class="hero-description">Master Jenkins - the leading open-source automation server. Learn pipelines, architecture, best practices, and ace your interviews.</p>
+            <div class="hero-meta">
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <div><span>45-60 min</span><small>Reading time</small></div>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-question-circle"></i>
+                    <div><span>25+ Q&amp;A</span><small>Interview prep</small></div>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-code"></i>
+                    <div><span>Hands-on</span><small>Pipeline examples</small></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+
+        <!-- What is Jenkins -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fab fa-jenkins"></i></div>
+                <h2>What is Jenkins?</h2>
+            </div>
+            <div class="section-body">
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <p><strong>Jenkins</strong> is an open-source automation server written in Java. It helps automate building, testing, and deploying software, enabling continuous integration and continuous delivery (CI/CD).</p>
+                </div>
+                <div class="analogy-card">
+                    <div class="icon">🏭</div>
+                    <div>
+                        <h4>Factory Analogy</h4>
+                        <p>Think of Jenkins as a factory manager. It receives raw materials (code), orchestrates assembly lines (pipelines), quality checks (tests), and ships finished products (deployments) - all automatically!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-sitemap"></i></div>
+                <h2>Jenkins Architecture</h2>
+            </div>
+            <div class="section-body">
+                <div class="arch-visual">
+                    <div class="arch-diagram">
+                        <div class="arch-row">
+                            <div class="arch-box">
+                                <div class="box scm">Git / SCM</div>
+                                <small>Source Code</small>
+                            </div>
+                            <div class="arch-box">
+                                <div class="box master">Jenkins Master</div>
+                                <small>Controller Node</small>
+                            </div>
+                            <div class="arch-box">
+                                <div class="box artifact">Artifact Store</div>
+                                <small>Nexus / S3</small>
+                            </div>
+                        </div>
+                        <div class="arch-arrow">
+                            <i class="fas fa-arrows-alt-v"></i>
+                        </div>
+                        <div class="arch-row">
+                            <div class="arch-box">
+                                <div class="box agent">Agent 1</div>
+                                <small>Linux Build</small>
+                            </div>
+                            <div class="arch-box">
+                                <div class="box agent">Agent 2</div>
+                                <small>Windows Build</small>
+                            </div>
+                            <div class="arch-box">
+                                <div class="box agent">Agent 3</div>
+                                <small>Docker Agent</small>
+                            </div>
+                        </div>
+                        <div class="arch-legend">
+                            <div class="legend-item">
+                                <div class="dot" style="background: var(--primary)"></div>
+                                <span>Master (Controller)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="dot" style="background: #10b981"></div>
+                                <span>Agents (Workers)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="dot" style="background: #3b82f6"></div>
+                                <span>External Systems</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="margin-top: 24px; margin-bottom: 16px;">Architecture Components:</h4>
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <div class="icon"><i class="fas fa-crown"></i></div>
+                        <h4>Master (Controller)</h4>
+                        <p>Schedules builds, dispatches to agents, monitors agents, records results, serves UI</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="icon"><i class="fas fa-robot"></i></div>
+                        <h4>Agent (Node)</h4>
+                        <p>Executes build jobs. Can be permanent or dynamic (Docker, Kubernetes, Cloud)</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="icon"><i class="fas fa-cog"></i></div>
+                        <h4>Executor</h4>
+                        <p>A slot for running a job on an agent. Each agent can have multiple executors</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="icon"><i class="fas fa-puzzle-piece"></i></div>
+                        <h4>Plugins</h4>
+                        <p>Extend Jenkins functionality: Git, Docker, Kubernetes, Slack, SonarQube, and 1800+ more</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Installation -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-download"></i></div>
+                <h2>Installation Methods</h2>
+            </div>
+            <div class="section-body">
+                <div class="command-category">
+                    <h4><i class="fab fa-docker"></i> Docker (Recommended)</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>docker-compose.yml</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>docker run -d \
+  --name jenkins \
+  -p 8080:8080 -p 50000:50000 \
+  -v jenkins_home:/var/jenkins_home \
+  jenkins/jenkins:lts</code></pre>
+                    </div>
+                </div>
+
+                <div class="command-category">
+                    <h4><i class="fab fa-linux"></i> Ubuntu/Debian</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code># Add Jenkins repo key and source
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+# Install
+sudo apt update && sudo apt install jenkins -y
+sudo systemctl start jenkins && sudo systemctl enable jenkins
+
+# Get initial admin password
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword</code></pre>
+                    </div>
+                </div>
+
+                <div class="command-category">
+                    <h4><i class="fab fa-redhat"></i> RHEL/CentOS</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>sudo wget -O /etc/yum.repos.d/jenkins.repo \
+  https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo yum install jenkins java-11-openjdk -y
+sudo systemctl start jenkins && sudo systemctl enable jenkins</code></pre>
+                    </div>
+                </div>
+
+                <div class="command-category">
+                    <h4><i class="fab fa-java"></i> WAR File (Any OS)</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code># Download and run
+wget https://get.jenkins.io/war-stable/latest/jenkins.war
+java -jar jenkins.war --httpPort=8080</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Concepts -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-key"></i></div>
+                <h2>Key Concepts</h2>
+            </div>
+            <div class="section-body">
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <div class="icon"><i class="fas fa-briefcase"></i></div>
+                        <h4>Job / Project</h4>
+                        <p>A runnable task configured in Jenkins - Freestyle, Pipeline, Multi-branch, etc.</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="icon"><i class="fas fa-hammer"></i></div>
+                        <h4>Build</h4>
+                        <p>A single execution of a job. Has a number, status, logs, and artifacts</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="icon"><i class="fas fa-stream"></i></div>
+                        <h4>Pipeline</h4>
+                        <p>Suite of plugins for implementing CI/CD as code (Jenkinsfile)</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="icon"><i class="fas fa-layer-group"></i></div>
+                        <h4>Stage</h4>
+                        <p>A logical grouping of steps (Build, Test, Deploy) shown in Blue Ocean</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="icon"><i class="fas fa-shoe-prints"></i></div>
+                        <h4>Step</h4>
+                        <p>A single task: checkout code, run shell, build Docker image</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="icon"><i class="fas fa-folder"></i></div>
+                        <h4>Workspace</h4>
+                        <p>Directory on agent where build executes. Contains source, artifacts</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="icon"><i class="fas fa-bolt"></i></div>
+                        <h4>Trigger</h4>
+                        <p>Event that starts a build: SCM poll, webhook, cron, upstream job</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="icon"><i class="fas fa-box"></i></div>
+                        <h4>Artifact</h4>
+                        <p>Files produced by a build: JARs, Docker images, test reports</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pipeline Syntax -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-code"></i></div>
+                <h2>Pipeline Syntax</h2>
+            </div>
+            <div class="section-body">
+                <h4 style="margin-bottom: 16px;">Declarative Pipeline (Recommended)</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Jenkinsfile</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code>pipeline {
+    agent any
+    
+    environment {
+        DOCKER_REGISTRY = 'registry.example.com'
+        APP_NAME = 'my-app'
+    }
+    
+    options {
+        timeout(time: 30, unit: 'MINUTES')
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+        
+        stage('Test') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        sh 'mvn test'
+                    }
+                }
+                stage('Integration Tests') {
+                    steps {
+                        sh 'mvn verify -Pintegration'
+                    }
+                }
+            }
+        }
+        
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${DOCKER_REGISTRY}/${APP_NAME}:${BUILD_NUMBER}")
+                }
+            }
+        }
+        
+        stage('Deploy to Staging') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                sh 'kubectl apply -f k8s/staging/'
+            }
+        }
+        
+        stage('Deploy to Production') {
+            when {
+                branch 'main'
+            }
+            input {
+                message "Deploy to production?"
+                ok "Yes, deploy!"
+            }
+            steps {
+                sh 'kubectl apply -f k8s/production/'
+            }
+        }
+    }
+    
+    post {
+        always {
+            junit '**/target/surefire-reports/*.xml'
+            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+        }
+        success {
+            slackSend channel: '#deployments', color: 'good',
+                      message: "Build ${BUILD_NUMBER} succeeded"
+        }
+        failure {
+            slackSend channel: '#deployments', color: 'danger',
+                      message: "Build ${BUILD_NUMBER} failed"
+        }
+        cleanup {
+            cleanWs()
+        }
+    }
+}</code></pre>
+                </div>
+
+                <h4 style="margin-top: 32px; margin-bottom: 16px;">Scripted Pipeline</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Jenkinsfile (Scripted)</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code>node('linux') {
+    try {
+        stage('Checkout') {
+            checkout scm
+        }
+        
+        stage('Build') {
+            sh 'mvn clean package'
+        }
+        
+        stage('Test') {
+            sh 'mvn test'
+        }
+        
+        stage('Deploy') {
+            if (env.BRANCH_NAME == 'main') {
+                sh 'kubectl apply -f deployment.yaml'
+            }
+        }
+    } catch (Exception e) {
+        currentBuild.result = 'FAILURE'
+        throw e
+    } finally {
+        junit '**/target/surefire-reports/*.xml'
+        cleanWs()
+    }
+}</code></pre>
+                </div>
+
+                <div class="tips-grid" style="margin-top: 24px;">
+                    <div class="tip-item">
+                        <i class="fas fa-lightbulb"></i>
+                        <p><strong>Declarative</strong> - Structured, easier to read, better error handling, recommended for most cases</p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-lightbulb"></i>
+                        <p><strong>Scripted</strong> - Full Groovy power, more flexible, useful for complex logic</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Essential Plugins -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-puzzle-piece"></i></div>
+                <h2>Essential Plugins</h2>
+            </div>
+            <div class="section-body">
+                <table class="plugin-table">
+                    <thead>
+                        <tr>
+                            <th>Plugin</th>
+                            <th>Purpose</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="plugin-name">Pipeline</td>
+                            <td>Jenkins Pipeline support</td>
+                            <td>CI/CD as code with Jenkinsfile</td>
+                        </tr>
+                        <tr>
+                            <td class="plugin-name">Git</td>
+                            <td>Git SCM integration</td>
+                            <td>Clone, checkout, branches</td>
+                        </tr>
+                        <tr>
+                            <td class="plugin-name">Blue Ocean</td>
+                            <td>Modern UI for pipelines</td>
+                            <td>Visual pipeline editor & viewer</td>
+                        </tr>
+                        <tr>
+                            <td class="plugin-name">Docker Pipeline</td>
+                            <td>Docker in pipelines</td>
+                            <td>Build/push images, run containers</td>
+                        </tr>
+                        <tr>
+                            <td class="plugin-name">Kubernetes</td>
+                            <td>Dynamic K8s agents</td>
+                            <td>Spin up pods as build agents</td>
+                        </tr>
+                        <tr>
+                            <td class="plugin-name">Credentials Binding</td>
+                            <td>Secret management</td>
+                            <td>Inject credentials safely</td>
+                        </tr>
+                        <tr>
+                            <td class="plugin-name">SonarQube Scanner</td>
+                            <td>Code quality</td>
+                            <td>Static analysis integration</td>
+                        </tr>
+                        <tr>
+                            <td class="plugin-name">Slack Notification</td>
+                            <td>Notifications</td>
+                            <td>Build status alerts</td>
+                        </tr>
+                        <tr>
+                            <td class="plugin-name">Job DSL</td>
+                            <td>Jobs as code</td>
+                            <td>Programmatically create jobs</td>
+                        </tr>
+                        <tr>
+                            <td class="plugin-name">Configuration as Code</td>
+                            <td>Jenkins config as YAML</td>
+                            <td>Version control Jenkins config</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Common Commands -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-terminal"></i></div>
+                <h2>Common Pipeline Steps</h2>
+            </div>
+            <div class="section-body">
+                <div class="command-category">
+                    <h4><i class="fas fa-code-branch"></i> Source Control</h4>
+                    <div class="command-cards">
+                        <div class="command-card">
+                            <code>checkout scm</code>
+                            <span class="desc">Checkout from configured SCM</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                        </div>
+                        <div class="command-card">
+                            <code>git branch: 'main', url: 'https://github.com/repo.git'</code>
+                            <span class="desc">Clone specific branch</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-category">
+                    <h4><i class="fas fa-lock"></i> Credentials</h4>
+                    <div class="command-cards">
+                        <div class="command-card">
+                            <code>withCredentials([usernamePassword(credentialsId: 'my-creds', usernameVariable: 'USER', passwordVariable: 'PASS')])</code>
+                            <span class="desc">Inject username/password</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                        </div>
+                        <div class="command-card">
+                            <code>withCredentials([string(credentialsId: 'api-key', variable: 'API_KEY')])</code>
+                            <span class="desc">Inject secret text</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-category">
+                    <h4><i class="fab fa-docker"></i> Docker</h4>
+                    <div class="command-cards">
+                        <div class="command-card">
+                            <code>docker.build("myimage:${BUILD_NUMBER}")</code>
+                            <span class="desc">Build Docker image</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                        </div>
+                        <div class="command-card">
+                            <code>docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') { img.push() }</code>
+                            <span class="desc">Push to registry</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-category">
+                    <h4><i class="fas fa-archive"></i> Artifacts & Reports</h4>
+                    <div class="command-cards">
+                        <div class="command-card">
+                            <code>archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true</code>
+                            <span class="desc">Archive build artifacts</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                        </div>
+                        <div class="command-card">
+                            <code>junit '**/target/surefire-reports/*.xml'</code>
+                            <span class="desc">Publish test results</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                        </div>
+                        <div class="command-card">
+                            <code>publishHTML([reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Coverage'])</code>
+                            <span class="desc">Publish HTML reports</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Shared Libraries -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-book"></i></div>
+                <h2>Shared Libraries</h2>
+            </div>
+            <div class="section-body">
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <p><strong>Shared Libraries</strong> allow you to define reusable pipeline code in a separate repository, promoting DRY principles and standardization across teams.</p>
+                </div>
+
+                <h4 style="margin: 20px 0 16px;">Library Structure:</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Directory Structure</span>
+                    </div>
+                    <pre><code>shared-library/
+├── vars/
+│   ├── buildJavaApp.groovy    # Global variables
+│   └── deployToK8s.groovy
+├── src/
+│   └── com/company/
+│       └── Utils.groovy       # Classes
+└── resources/
+    └── templates/             # Static files</code></pre>
+                </div>
+
+                <h4 style="margin: 20px 0 16px;">Custom Step (vars/buildJavaApp.groovy):</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>vars/buildJavaApp.groovy</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code>def call(Map config = [:]) {
+    pipeline {
+        agent any
+        stages {
+            stage('Build') {
+                steps {
+                    sh "mvn clean package -DskipTests=${config.skipTests ?: false}"
+                }
+            }
+            stage('Test') {
+                when { expression { !config.skipTests } }
+                steps {
+                    sh 'mvn test'
+                }
+            }
+        }
+    }
+}</code></pre>
+                </div>
+
+                <h4 style="margin: 20px 0 16px;">Usage in Jenkinsfile:</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Jenkinsfile</span>
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code>@Library('my-shared-library') _
+
+buildJavaApp(skipTests: false)</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security Best Practices -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-shield-alt"></i></div>
+                <h2>Security Best Practices</h2>
+            </div>
+            <div class="section-body">
+                <div class="tips-grid">
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i>
+                        <p><strong>Use Credentials Plugin</strong> - Never hardcode secrets in Jenkinsfiles or job configs</p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i>
+                        <p><strong>Enable CSRF Protection</strong> - Manage Jenkins → Configure Global Security</p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i>
+                        <p><strong>Role-Based Access Control</strong> - Use Role Strategy Plugin for fine-grained permissions</p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i>
+                        <p><strong>Agent-to-Master Security</strong> - Enable in security settings to restrict agent access</p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i>
+                        <p><strong>Audit Trail</strong> - Enable audit logging plugin to track changes</p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i>
+                        <p><strong>Script Approval</strong> - Review and approve Groovy scripts in sandbox</p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i>
+                        <p><strong>Network Isolation</strong> - Run Jenkins in private subnet, expose via reverse proxy</p>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i>
+                        <p><strong>Regular Updates</strong> - Keep Jenkins and plugins updated for security patches</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Real-world Scenarios -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-project-diagram"></i></div>
+                <h2>Real-World Scenarios</h2>
+            </div>
+            <div class="section-body">
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div class="icon"><i class="fas fa-code-branch"></i></div>
+                        <h4>Multi-Branch Pipeline for Microservices</h4>
+                    </div>
+                    <div class="scenario-body">
+                        <h5>Problem:</h5>
+                        <p>Team has 20+ microservices, each with multiple feature branches. Need automated CI for all branches.</p>
+                        <h5>Solution:</h5>
+                        <ol>
+                            <li>Create <code>Jenkinsfile</code> in each repo root</li>
+                            <li>Configure Multi-branch Pipeline job in Jenkins</li>
+                            <li>Set branch discovery: all branches</li>
+                            <li>Configure webhook in GitHub/GitLab</li>
+                            <li>Jenkins auto-discovers branches and creates jobs</li>
+                        </ol>
+                        <h5>Result:</h5>
+                        <p>Every push triggers CI, branches are tested in isolation, PRs show build status.</p>
+                    </div>
+                </div>
+
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div class="icon"><i class="fas fa-server"></i></div>
+                        <h4>Dynamic Kubernetes Agents</h4>
+                    </div>
+                    <div class="scenario-body">
+                        <h5>Problem:</h5>
+                        <p>Static agents are expensive and don't scale with build demand.</p>
+                        <h5>Solution:</h5>
+                        <div class="code-block" style="margin: 16px 0;">
+                            <pre><code>pipeline {
+    agent {
+        kubernetes {
+            yaml '''
+            apiVersion: v1
+            kind: Pod
+            spec:
+              containers:
+              - name: maven
+                image: maven:3.8-openjdk-11
+                command: ['sleep', 'infinity']
+              - name: docker
+                image: docker:dind
+                securityContext:
+                  privileged: true
+            '''
+        }
+    }
+    stages {
+        stage('Build') {
+            steps {
+                container('maven') {
+                    sh 'mvn package'
+                }
+            }
+        }
+    }
+}</code></pre>
+                        </div>
+                        <h5>Result:</h5>
+                        <p>Agents spin up on demand, costs reduced by 60%, infinite parallelism.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interview Questions -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon"><i class="fas fa-user-tie"></i></div>
+                <h2>Interview Questions</h2>
+            </div>
+            <div class="section-body">
+                <div class="qa-accordion">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">1</span>
+                            <h4>What is the difference between Declarative and Scripted Pipeline?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>Declarative:</strong> Structured syntax with predefined sections (pipeline, stages, steps). Easier to read, built-in validation, better error messages. Recommended for most use cases.</li>
+                                <li><strong>Scripted:</strong> Full Groovy DSL, more flexible, uses node/stage blocks. Better for complex logic but harder to maintain.</li>
+                            </ul>
+                            <div class="highlight-box">
+                                <i class="fas fa-lightbulb"></i>
+                                <p><strong>Pro Tip:</strong> Start with Declarative, use <code>script {}</code> blocks when you need Groovy flexibility.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">2</span>
+                            <h4>How do you secure sensitive credentials in Jenkins?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li>Use <strong>Credentials Plugin</strong> to store secrets encrypted</li>
+                                <li>Access via <code>withCredentials()</code> block - secrets are masked in logs</li>
+                                <li>Use <strong>Vault</strong> or <strong>AWS Secrets Manager</strong> for enterprise</li>
+                                <li>Never echo credentials: <code>set +x</code> in shell scripts</li>
+                                <li>Use credential types: Username/Password, Secret Text, SSH Key, Certificate</li>
+                            </ul>
+                            <code style="display: block; margin-top: 12px; padding: 12px; background: var(--bg-dark); border-radius: 6px;">withCredentials([string(credentialsId: 'api-key', variable: 'TOKEN')]) {
+    sh 'curl -H "Authorization: Bearer $TOKEN" https://api.example.com'
+}</code>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">3</span>
+                            <h4>Explain Jenkins Master-Agent architecture.</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>Master (Controller):</strong> Schedules builds, monitors agents, serves UI, stores config. Should NOT run builds in production.</li>
+                                <li><strong>Agent (Node):</strong> Executes builds. Can be permanent (VM) or ephemeral (Docker/K8s pod).</li>
+                                <li><strong>Communication:</strong> Agent connects to master via JNLP (port 50000) or SSH.</li>
+                                <li><strong>Executors:</strong> Number of concurrent builds per agent.</li>
+                            </ul>
+                            <div class="highlight-box warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p><strong>Best Practice:</strong> Set master executors to 0. All builds should run on agents for security and scalability.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">4</span>
+                            <h4>What are Shared Libraries and why use them?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>Definition:</strong> Reusable Groovy code stored in Git, loaded into pipelines.</li>
+                                <li><strong>Benefits:</strong> DRY principle, standardization, version control, easier maintenance.</li>
+                                <li><strong>Structure:</strong> <code>vars/</code> for global functions, <code>src/</code> for classes, <code>resources/</code> for static files.</li>
+                                <li><strong>Usage:</strong> <code>@Library('my-lib') _</code> at top of Jenkinsfile.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">5</span>
+                            <h4>How do you implement GitOps with Jenkins?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ol>
+                                <li>Store Jenkinsfile in application repo (CI config as code)</li>
+                                <li>Use Multi-branch Pipeline to auto-discover branches</li>
+                                <li>Configure webhooks for push-triggered builds</li>
+                                <li>Store K8s manifests in Git, apply via pipeline</li>
+                                <li>Use <code>git tag</code> for release versioning</li>
+                                <li>Infrastructure changes via PR + pipeline approval</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">6</span>
+                            <h4>How do you handle pipeline failures and retries?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>post block:</strong> Define actions for success, failure, always, cleanup</li>
+                                <li><strong>retry:</strong> <code>retry(3) { sh 'flaky-command' }</code></li>
+                                <li><strong>timeout:</strong> <code>timeout(time: 10, unit: 'MINUTES') { ... }</code></li>
+                                <li><strong>catchError:</strong> Continue pipeline even if stage fails</li>
+                                <li><strong>input:</strong> Manual intervention for critical failures</li>
+                            </ul>
+                            <code style="display: block; margin-top: 12px; padding: 12px; background: var(--bg-dark); border-radius: 6px;">stage('Deploy') {
+    steps {
+        retry(3) {
+            timeout(time: 5, unit: 'MINUTES') {
+                sh 'kubectl apply -f deployment.yaml'
+            }
+        }
+    }
+}</code>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">7</span>
+                            <h4>What is Blue Ocean and when would you use it?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>Blue Ocean:</strong> Modern, visual UI for Jenkins pipelines</li>
+                                <li><strong>Features:</strong> Pipeline visualization, visual editor, GitHub/Bitbucket integration, personalized dashboard</li>
+                                <li><strong>Use when:</strong> Creating pipelines visually, debugging complex multi-branch pipelines, presenting to stakeholders</li>
+                                <li><strong>Limitation:</strong> Some advanced features only in classic UI</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">8</span>
+                            <h4>How do you optimize Jenkins performance?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>Distributed builds:</strong> Use agents, never build on master</li>
+                                <li><strong>Build discarder:</strong> Limit build history retention</li>
+                                <li><strong>Workspace cleanup:</strong> <code>cleanWs()</code> in post section</li>
+                                <li><strong>Parallel stages:</strong> Run independent stages concurrently</li>
+                                <li><strong>Artifact management:</strong> Use external artifact storage (Nexus, S3)</li>
+                                <li><strong>Plugin hygiene:</strong> Remove unused plugins, keep updated</li>
+                                <li><strong>JVM tuning:</strong> Increase heap size for large instances</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">9</span>
+                            <h4>Explain the difference between Freestyle and Pipeline jobs.</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>Freestyle:</strong> UI-configured, single build task, limited flexibility, hard to version control</li>
+                                <li><strong>Pipeline:</strong> Code-defined (Jenkinsfile), complex workflows, version controlled, reusable</li>
+                            </ul>
+                            <div class="highlight-box">
+                                <i class="fas fa-lightbulb"></i>
+                                <p><strong>Recommendation:</strong> Always use Pipeline for new projects. Freestyle is legacy.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">10</span>
+                            <h4>How do you implement approval gates in Jenkins?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <code style="display: block; margin-bottom: 12px; padding: 12px; background: var(--bg-dark); border-radius: 6px;">stage('Deploy to Prod') {
+    input {
+        message "Deploy to production?"
+        ok "Yes, deploy!"
+        submitter "admin,release-team"
+        parameters {
+            choice(name: 'ENV', choices: ['us-east', 'eu-west'], description: 'Target region')
+        }
+    }
+    steps {
+        sh "kubectl apply -f k8s/${ENV}/"
+    }
+}</code>
+                            <ul>
+                                <li><strong>input:</strong> Pauses pipeline for manual approval</li>
+                                <li><strong>submitter:</strong> Restrict who can approve</li>
+                                <li><strong>timeout:</strong> Auto-abort if not approved in time</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">11</span>
+                            <h4>What is Jenkins Configuration as Code (JCasC)?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>JCasC:</strong> Plugin to configure Jenkins via YAML files</li>
+                                <li><strong>Benefits:</strong> Reproducible setup, version controlled, disaster recovery, no manual UI config</li>
+                                <li><strong>Covers:</strong> Security realm, authorization, credentials, tools, system settings, plugins</li>
+                            </ul>
+                            <code style="display: block; margin-top: 12px; padding: 12px; background: var(--bg-dark); border-radius: 6px;">jenkins:
+  systemMessage: "Jenkins configured by JCasC"
+  securityRealm:
+    ldap:
+      server: "ldap.company.com"
+  authorizationStrategy:
+    roleBased:
+      roles:
+        global:
+          - name: "admin"
+            permissions:
+              - "Overall/Administer"</code>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">12</span>
+                            <h4>How do you troubleshoot a failed Jenkins build?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ol>
+                                <li><strong>Check console output:</strong> Full build log with error details</li>
+                                <li><strong>Pipeline Steps:</strong> View individual step durations and failures</li>
+                                <li><strong>Replay:</strong> Re-run with modified Jenkinsfile for debugging</li>
+                                <li><strong>Workspace:</strong> Inspect files on agent</li>
+                                <li><strong>Blue Ocean:</strong> Visual pipeline view shows failed stage</li>
+                                <li><strong>System logs:</strong> Manage Jenkins → System Log</li>
+                                <li><strong>SSH to agent:</strong> Debug environment issues directly</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">13</span>
+                            <h4>What are Jenkins webhooks and how do they work?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>Purpose:</strong> Trigger builds immediately on code push (vs. polling)</li>
+                                <li><strong>Setup:</strong> Configure webhook URL in GitHub/GitLab pointing to Jenkins</li>
+                                <li><strong>URL format:</strong> <code>https://jenkins.example.com/github-webhook/</code></li>
+                                <li><strong>Authentication:</strong> Use personal access token or dedicated user</li>
+                                <li><strong>Events:</strong> Push, PR opened, tag created, etc.</li>
+                            </ul>
+                            <div class="highlight-box">
+                                <i class="fas fa-lightbulb"></i>
+                                <p><strong>Tip:</strong> Webhooks are more efficient than SCM polling. Builds start instantly and reduce Jenkins load.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">14</span>
+                            <h4>How do you run parallel stages in Jenkins Pipeline?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <code style="display: block; margin-bottom: 12px; padding: 12px; background: var(--bg-dark); border-radius: 6px;">stage('Test') {
+    parallel {
+        stage('Unit Tests') {
+            agent { label 'linux' }
+            steps { sh 'npm run test:unit' }
+        }
+        stage('Integration Tests') {
+            agent { label 'linux' }
+            steps { sh 'npm run test:integration' }
+        }
+        stage('E2E Tests') {
+            agent { label 'chrome' }
+            steps { sh 'npm run test:e2e' }
+        }
+    }
+    failFast true  // Fail immediately if any parallel stage fails
+}</code>
+                            <ul>
+                                <li><strong>failFast:</strong> Stop all parallel stages if one fails</li>
+                                <li><strong>Different agents:</strong> Each parallel stage can use different agents</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">15</span>
+                            <h4>What is the Groovy Sandbox in Jenkins?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>Purpose:</strong> Security layer that restricts what Groovy code can do</li>
+                                <li><strong>How it works:</strong> Pipeline scripts run in sandbox by default, blocking dangerous operations</li>
+                                <li><strong>Script Approval:</strong> Admin must approve scripts that need elevated permissions</li>
+                                <li><strong>Location:</strong> Manage Jenkins → In-process Script Approval</li>
+                            </ul>
+                            <div class="highlight-box warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p><strong>Security:</strong> Be cautious approving scripts. Malicious code can compromise Jenkins server.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">16</span>
+                            <h4>How do you back up Jenkins?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>JENKINS_HOME:</strong> Backup entire directory (<code>/var/lib/jenkins</code>)</li>
+                                <li><strong>Critical folders:</strong> jobs/, config.xml, users/, secrets/, plugins/</li>
+                                <li><strong>Exclude:</strong> workspace/, builds/ (large, reproducible)</li>
+                                <li><strong>Plugins:</strong> ThinBackup, Periodic Backup for automated backups</li>
+                                <li><strong>JCasC:</strong> Export config to YAML, store in Git</li>
+                            </ul>
+                            <code style="display: block; margin-top: 12px; padding: 12px; background: var(--bg-dark); border-radius: 6px;"># Backup script
+tar -czvf jenkins-backup-$(date +%F).tar.gz \
+  --exclude='workspace' --exclude='builds' \
+  /var/lib/jenkins/</code>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">17</span>
+                            <h4>How do you integrate Jenkins with SonarQube?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ol>
+                                <li>Install SonarQube Scanner plugin</li>
+                                <li>Configure SonarQube server in Manage Jenkins → Configure System</li>
+                                <li>Add SonarQube token as credentials</li>
+                                <li>Use in pipeline:</li>
+                            </ol>
+                            <code style="display: block; margin-top: 12px; padding: 12px; background: var(--bg-dark); border-radius: 6px;">stage('SonarQube Analysis') {
+    steps {
+        withSonarQubeEnv('SonarQube') {
+            sh 'mvn sonar:sonar'
+        }
+    }
+}
+stage('Quality Gate') {
+    steps {
+        timeout(time: 5, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: true
+        }
+    }
+}</code>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">18</span>
+                            <h4>What is the difference between agent any, agent none, and agent label?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <ul>
+                                <li><strong>agent any:</strong> Run on any available agent</li>
+                                <li><strong>agent none:</strong> No global agent; each stage must specify its own</li>
+                                <li><strong>agent { label 'linux' }:</strong> Run only on agents with matching label</li>
+                                <li><strong>agent { docker 'maven:3.8' }:</strong> Run in Docker container</li>
+                                <li><strong>agent { kubernetes { ... } }:</strong> Dynamic K8s pod</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">19</span>
+                            <h4>How do you implement blue-green deployment with Jenkins?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <code style="display: block; margin-bottom: 12px; padding: 12px; background: var(--bg-dark); border-radius: 6px;">stage('Deploy Green') {
+    steps {
+        sh 'kubectl apply -f green-deployment.yaml'
+        sh 'kubectl wait --for=condition=available deployment/app-green'
+    }
+}
+stage('Smoke Test Green') {
+    steps {
+        sh 'curl -f http://green.internal/health'
+    }
+}
+stage('Switch Traffic') {
+    input { message "Switch traffic to green?" }
+    steps {
+        sh 'kubectl patch service app -p \'{"spec":{"selector":{"version":"green"}}}\''
+    }
+}
+stage('Cleanup Blue') {
+    steps {
+        sh 'kubectl delete deployment app-blue'
+    }
+}</code>
+                        </div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)">
+                            <span class="qa-number">20</span>
+                            <h4>How do you handle environment-specific configurations?</h4>
+                            <i class="fas fa-chevron-down toggle"></i>
+                        </div>
+                        <div class="qa-answer">
+                            <code style="display: block; margin-bottom: 12px; padding: 12px; background: var(--bg-dark); border-radius: 6px;">pipeline {
+    agent any
+    parameters {
+        choice(name: 'ENV', choices: ['dev', 'staging', 'prod'], description: 'Target environment')
+    }
+    environment {
+        CONFIG_FILE = "config-${params.ENV}.yaml"
+    }
+    stages {
+        stage('Deploy') {
+            steps {
+                withCredentials([file(credentialsId: "${params.ENV}-kubeconfig", variable: 'KUBECONFIG')]) {
+                    sh "kubectl apply -f k8s/${params.ENV}/"
+                }
+            }
+        }
+    }
+}</code>
+                            <ul>
+                                <li>Use parameters for environment selection</li>
+                                <li>Store environment-specific credentials separately</li>
+                                <li>Keep config in separate folders or files per environment</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <a href="day-02-pipelines.html" class="nav-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>Day 2: Pipelines</span>
+            </a>
+            <a href="./" class="nav-btn">
+                <span>Back to CI/CD</span>
+                <i class="fas fa-th-large"></i>
+            </a>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="../../" class="footer-logo">
+                    <i class="fas fa-terminal"></i>
+                    <span>DevOps Hub</span>
+                </a>
+                <p>Your complete guide to DevOps tools and practices. Learn, practice, and ace your interviews.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="../../">Home</a></li>
+                    <li><a href="../../#topics">Topics</a></li>
+                    <li><a href="./">CI/CD</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="https://www.jenkins.io/doc/" target="_blank">Jenkins Docs</a></li>
+                    <li><a href="https://www.jenkins.io/doc/book/pipeline/" target="_blank">Pipeline Syntax</a></li>
+                    <li><a href="https://plugins.jenkins.io/" target="_blank">Plugin Index</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Made with <i class="fas fa-heart"></i> for DevOps Engineers</p>
+        </div>
+    </footer>
+
+    <script>
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Toggle Q&A
+        function toggleQA(element) {
+            const item = element.parentElement;
+            item.classList.toggle('active');
+        }
+
+        // Copy code
+        function copyCode(button) {
+            const codeBlock = button.closest('.command-card')?.querySelector('code') || 
+                             button.closest('.code-block')?.querySelector('code');
+            if (codeBlock) {
+                navigator.clipboard.writeText(codeBlock.textContent);
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
